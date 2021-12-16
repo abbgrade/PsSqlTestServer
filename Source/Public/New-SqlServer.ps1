@@ -20,25 +20,14 @@ function New-SqlServer {
     [CmdletBinding()]
     param ()
 
-    Invoke-Command {
-        & sqllocaldb info
-    } -ErrorVariable localDbError -ErrorAction 'SilentlyContinue' | Out-Null
+    $localDb = Get-LocalDb -ErrorVariable localDbError -ErrorAction SilentlyContinue
 
-    if ( -not $localDbError ) {
-        $localBbInfo = & sqllocaldb info
-
-        $server = @{
-            DataSource = '(LocalDb)\MSSQLLocalDB'
-        }
-        $server.ConnectionString = "Data Source=$( $server.DataSource );Integrated Security=True"
-
-        [PSCustomObject] $server
+    if ( -Not $localDbError ) {
+        Write-Output $localDb
     }
     else
     {
-        [string] $script:password = 'Pa$$w0rd!'
-        [securestring] $script:securePassword = ConvertTo-SecureString $script:password -AsPlainText -Force
-
-        New-DockerSqlServer -ServerAdminPassword $script:password -DockerContainerName 'PsSqlTestServer' -AcceptEula
+        New-DockerSqlServer -AcceptEula |
+            Write-Output
     }
 }
