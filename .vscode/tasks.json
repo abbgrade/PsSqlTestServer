@@ -40,13 +40,6 @@
             "problemMatcher": []
         },
         {
-            "label": "Rebuild",
-            "type": "shell",
-            "group": "build",
-            "command": "Invoke-Build Clean,Build",
-            "problemMatcher": []
-        },
-        {
             "label": "Clean",
             "type": "shell",
             "command": "Invoke-Build Clean",
@@ -55,7 +48,7 @@
         {
             "label": "Install",
             "type": "shell",
-            "command": "Invoke-Build Clean, Install",
+            "command": "Invoke-Build Install",
             "problemMatcher": []
         },
         {
