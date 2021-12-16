@@ -13,21 +13,19 @@ Returns connection parameter for a SQL server in a new Docker container.
 ## SYNTAX
 
 ```
-New-DockerSqlServer [-ServerAdminPassword] <String> [-DockerContainerName] <String> [-AcceptEula]
+New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Creates a Docker container with a SQL server installed.
-Returns a object with the properties `DataSource` and `ConnectionString`.
+Returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Import-Module PsSqlTestServer
-PS C:\> New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-
+### EXAMPLE 1
+```
+New-DockerSqlServer -AcceptEula
 Name             : Sandbox
 Hostname         : localhost
 UserId           : sa
@@ -50,21 +48,6 @@ Size             : 0B (virtual 1.54GB)
 
 ## PARAMETERS
 
-### -AcceptEula
-Confirms your acceptance of the [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698).
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DockerContainerName
 Specifies the name of the new Docker container.
 
@@ -73,9 +56,9 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
-Default value: None
+Required: False
+Position: Named
+Default value: ( ( New-Guid ).ToString().Substring(0, 8) )
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -88,9 +71,24 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
+Required: False
+Position: Named
+Default value: Pa$$w0rd!
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AcceptEula
+Confirms your acceptance of the \[End-User Licensing Agreement\](https://go.microsoft.com/fwlink/?linkid=857698).
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
 Required: True
-Position: 0
-Default value: None
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -100,11 +98,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

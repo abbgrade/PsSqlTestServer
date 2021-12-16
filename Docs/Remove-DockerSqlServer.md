@@ -13,35 +13,35 @@ Removes a test SQL server Docker container.
 ## SYNTAX
 
 ```
-Remove-DockerSqlServer [-DockerContainerName] <String> [<CommonParameters>]
+Remove-DockerSqlServer -Server <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server Docker container, in case it was created with `New-DockerSqlServer`.
+Removes a SQL server Docker container, in case it was created with \`New-DockerSqlServer\`.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Import-Module PsSqlTestServer
-PS C:\> $server = New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-PS C:\> Remove-DockerSqlServer -DockerContainerName $server.Name
+### EXAMPLE 1
+```
+$server = New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+PS> Remove-DockerSqlServer -DockerContainerName $server.Name
 ```
 
 ## PARAMETERS
 
-### -DockerContainerName
-Specifies the name of the new Docker container.
+### -Server
+Specifies the server to remove.
+Requires the name of the Docker container.
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -50,11 +50,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

@@ -18,15 +18,13 @@ New-SqlServer [<CommonParameters>]
 
 ## DESCRIPTION
 Checks different versions of local db or creates a Docker container with a SQL server installed.
-Returns a object with the properties `DataSource` and `ConnectionString`.
+Returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Import-Module PsSqlTestServer
-PS C:\> New-SqlServer
-
+### EXAMPLE 1
+```
+New-SqlServer
 ConnectionString                                            DataSource
 ----------------                                            ----------
 Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
@@ -39,11 +37,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

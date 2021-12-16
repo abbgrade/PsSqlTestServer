@@ -13,19 +13,18 @@ Removes a test SQL server.
 ## SYNTAX
 
 ```
-Remove-SqlServer [[-Server] <Object>] [<CommonParameters>]
+Remove-SqlServer -Server <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with `New-SqlServer`.
+Removes a SQL server, in case it was created with \`New-SqlServer\`.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Import-Module PsSqlTestServer
-PS C:\> $server = New-SqlServer
-PS C:\> Remove-SqlServer -Server $server
+### EXAMPLE 1
+```
+$server = New-SqlServer
+PS> Remove-SqlServer -Server $server
 ```
 
 ## PARAMETERS
@@ -38,10 +37,10 @@ Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -50,11 +49,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
