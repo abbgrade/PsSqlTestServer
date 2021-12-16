@@ -13,7 +13,7 @@ Returns connection parameter for a SQL server in a new Docker container.
 ## SYNTAX
 
 ```
-New-DockerSqlServer -DockerContainerName <String> -ServerAdminPassword <String> [-AcceptEula]
+New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
  [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Returns a object with the properties DataSource and ConnectionString.
 
 ### EXAMPLE 1
 ```
-New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+New-DockerSqlServer -AcceptEula
 Name             : Sandbox
 Hostname         : localhost
 UserId           : sa
@@ -56,9 +56,9 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: ( ( New-Guid ).ToString().Substring(0, 8) )
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -71,9 +71,9 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: Pa$$w0rd!
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

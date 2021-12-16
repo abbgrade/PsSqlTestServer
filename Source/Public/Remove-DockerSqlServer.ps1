@@ -18,13 +18,14 @@ function Remove-DockerSqlServer {
     [CmdletBinding( PositionalBinding=$false )]
     param (
 
-        # Specifies the name of the new Docker container.
-        [Parameter( Mandatory )]
-        [string] $DockerContainerName
+        # Specifies the server to remove. Requires the name of the Docker container.
+        [Parameter( Mandatory, ValueFromPipeline )]
+        [ValidateScript({ $_.Name })]
+        $Server
 
     )
 
     Import-Module PsDocker -MinimumVersion 1.5.0 -ErrorAction Stop
 
-    Remove-DockerContainer -Name $DockerContainerName -Force
+    Remove-DockerContainer -Name $Server.Name -Force
 }

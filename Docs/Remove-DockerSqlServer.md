@@ -13,7 +13,7 @@ Removes a test SQL server Docker container.
 ## SYNTAX
 
 ```
-Remove-DockerSqlServer -DockerContainerName <String> [<CommonParameters>]
+Remove-DockerSqlServer -Server <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,18 +29,19 @@ PS> Remove-DockerSqlServer -DockerContainerName $server.Name
 
 ## PARAMETERS
 
-### -DockerContainerName
-Specifies the name of the new Docker container.
+### -Server
+Specifies the server to remove.
+Requires the name of the Docker container.
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

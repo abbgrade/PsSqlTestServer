@@ -11,7 +11,7 @@ function New-DockerSqlServer {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+    PS> New-DockerSqlServer -AcceptEula
     Name             : Sandbox
     Hostname         : localhost
     UserId           : sa
@@ -37,13 +37,13 @@ function New-DockerSqlServer {
     param (
 
         # Specifies the name of the new Docker container.
-        [Parameter( Mandatory )]
-        [string] $DockerContainerName,
+        [Parameter()]
+        [string] $DockerContainerName = ( ( New-Guid ).ToString().Substring(0, 8) ),
 
         # Specifies the password for the sa user.
-        [Parameter( Mandatory )]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $ServerAdminPassword,
+        [string] $ServerAdminPassword = 'Pa$$w0rd!',
 
         # Confirms your acceptance of the [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698).
         [Parameter( Mandatory )]
@@ -111,6 +111,7 @@ function New-DockerSqlServer {
 
     $container | Add-Member 'Hostname' 'localhost'
     $container | Add-Member 'UserId' 'sa'
+    $container | Add-Member 'SecurePassword' ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force )
     $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
     $container | Add-Member 'IsDocker' $true
 

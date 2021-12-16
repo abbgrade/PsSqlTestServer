@@ -18,8 +18,7 @@ function New-SqlServer {
     #>
 
     [CmdletBinding()]
-    param (
-    )
+    param ()
 
     Invoke-Command {
         & sqllocaldb info
@@ -37,7 +36,7 @@ function New-SqlServer {
     }
     else
     {
-        [string] $script:password = 'Passw0rd!'
+        [string] $script:password = 'Pa$$w0rd!'
         [securestring] $script:securePassword = ConvertTo-SecureString $script:password -AsPlainText -Force
 
         New-DockerSqlServer -ServerAdminPassword $script:password -DockerContainerName 'PsSqlTestServer' -AcceptEula
