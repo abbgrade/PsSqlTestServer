@@ -23,6 +23,6 @@ function Remove-SqlServer {
     )
 
     if ( $Server.IsDocker ) {
-        Remove-DockerSqlServer -DockerContainerName 'PsSqlTestServer'
+        $Server | Remove-DockerSqlServer
     }
 }
