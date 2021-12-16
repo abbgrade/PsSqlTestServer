@@ -4,11 +4,11 @@
 [System.IO.FileInfo] $global:Manifest = "$sourcePath\PsSqlTestServer.psd1"
 [System.IO.DirectoryInfo] $moduleBuildPath = "$buildPath\PsSqlTestServer"
 
-task Build -Jobs CopyArtefacts
-
 task Clean {
-	Remove-Item $buildPath -Recurse -ErrorAction 'Continue'
+	Remove-Item $buildPath -Recurse -ErrorAction Continue
 }
+
+task Build -Jobs Clean, CopyArtefacts
 
 task PrepareBuildPath -If ( -Not ( Test-Path $buildPath )) -Jobs {
 	New-Item -Path $buildPath -ItemType Directory | Out-Null

@@ -110,6 +110,7 @@ function New-DockerSqlServer {
     }
 
     $container | Add-Member 'Hostname' 'localhost'
+    $container | Add-Member 'DataSource' 'localhost'
     $container | Add-Member 'UserId' 'sa'
     $container | Add-Member 'SecurePassword' ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force )
     $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
