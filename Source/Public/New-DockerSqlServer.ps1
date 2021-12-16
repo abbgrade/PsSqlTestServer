@@ -37,11 +37,11 @@ function New-DockerSqlServer {
     param (
 
         # Specifies the name of the new Docker container.
-        [Parameter( Mandatory )]
-        [string] $DockerContainerName = ( ( New-Guid ).Substring(0, 8) ),
+        [Parameter()]
+        [string] $DockerContainerName = ( ( New-Guid ).ToString().Substring(0, 8) ),
 
         # Specifies the password for the sa user.
-        [Parameter( Mandatory )]
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string] $ServerAdminPassword = 'Pa$$w0rd!',
 
@@ -111,6 +111,7 @@ function New-DockerSqlServer {
 
     $container | Add-Member 'Hostname' 'localhost'
     $container | Add-Member 'UserId' 'sa'
+    $container | Add-Member 'SecurePassword' ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force )
     $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
     $container | Add-Member 'IsDocker' $true
 
