@@ -11,7 +11,6 @@
     AliasesToExport = '*'
     PrivateData = @{
         PSData = @{
-            Prerelease = 'beta'
             Tags = @('sql-server')
             LicenseUri = 'https://github.com/abbgrade/PsSqlTestServer/blob/master/LICENSE'
             ProjectUri = 'https://github.com/abbgrade/PsSqlTestServer'
