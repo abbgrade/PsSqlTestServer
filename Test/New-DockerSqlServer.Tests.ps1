@@ -11,6 +11,7 @@ Describe 'New-DockerSqlServer' {
     It 'Returns values' {
         $Script:Container | Should -Not -BeNullOrEmpty
         $Script:Container.ConnectionString | Should -Not -BeNullOrEmpty
+        $Script:Container.DataSource | Should -Not -BeNullOrEmpty
         $Script:Container.SecurePassword | Should -Not -BeNullOrEmpty
         $Script:Container.UserId | Should -Not -BeNullOrEmpty
     }
@@ -25,7 +26,7 @@ Describe 'New-DockerSqlServer' {
 
     Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
         It 'Connects by Properties' {
-            $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.Hostname -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
+            $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.DataSource -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
         }
 
         It 'Connects by ConnectionString' {
