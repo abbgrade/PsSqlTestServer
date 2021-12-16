@@ -1,15 +1,51 @@
 
 function New-DockerSqlServer {
 
-    [CmdletBinding()]
+    <#
+
+    .SYNOPSIS
+    Returns connection parameter for a SQL server in a new Docker container.
+
+    .DESCRIPTION
+    Creates a Docker container with a SQL server installed.
+    Returns a object with the properties DataSource and ConnectionString.
+
+    .EXAMPLE
+    PS> New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+    Name             : Sandbox
+    Hostname         : localhost
+    UserId           : sa
+    ConnectionString : Server='localhost';Encrypt=False;User Id='sa';Password='pa$$w0rd'
+    IsDocker         : True
+    Id               : 693d5e79169c50af4ab5b10e1af9069a987ec8902033f3c55f325e12199a61c1
+    Names            : {Sandbox}
+    Image            : mcr.microsoft.com/mssql/server
+    Command          : "/opt/mssql/bin/permissions_check.sh /opt/mssql/bin/sqlservr"
+    LocalVolumes     : {0}
+    Labels           : {com.microsoft.product=Microsoft SQL Server, com.microsoft.version=15.0.4153.1, vendor=Microsoft}
+    Mounts           : {}
+    Networks         : {bridge}
+    Ports            : {0.0.0.0:1433->1433/tcp}
+    CreatedAt        : 2021-12-01 00:00:00 +0100 CET
+    RunningFor       : 2 seconds ago
+    Status           : Up 1 second
+    Size             : 0B (virtual 1.54GB)
+
+    #>
+
+    [CmdletBinding( PositionalBinding=$false )]
     param (
+
+        # Specifies the name of the new Docker container.
+        [Parameter( Mandatory )]
+        [string] $DockerContainerName,
+
+        # Specifies the password for the sa user.
         [Parameter( Mandatory )]
         [ValidateNotNullOrEmpty()]
         [string] $ServerAdminPassword,
 
-        [Parameter( Mandatory )]
-        [string] $DockerContainerName,
-
+        # Confirms your acceptance of the [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698).
         [Parameter( Mandatory )]
         [switch] $AcceptEula
     )
