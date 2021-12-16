@@ -16,8 +16,8 @@ function Get-LocalDb {
 
     Name                           Value
     ----                           -----
-    DataSource                     MSSQLLocalDB
-    ConnectionString               Data Source=MSSQLLocalDB;Integrated Security=True
+    DataSource                     (LocalDb)\MSSQLLocalDB
+    ConnectionString               Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True
     Version                        v11.0
 
     #>
@@ -29,9 +29,9 @@ function Get-LocalDb {
         & sqllocaldb info
     }
 
-    Write-Output [PSCustomObject] @{
-        ConnectionString = "Data Source=$instanceName;Integrated Security=True"
-        DataSource = $instanceName
+    [PSCustomObject] @{
+        ConnectionString = "Data Source=(LocalDb)\$instanceName;Integrated Security=True"
+        DataSource = "(LocalDb)\$instanceName"
         Version = $version
-    }
+    } | Write-Output
 }
