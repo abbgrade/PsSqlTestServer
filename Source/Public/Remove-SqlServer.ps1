@@ -17,6 +17,8 @@ function Remove-SqlServer {
     [CmdletBinding( PositionalBinding=$false )]
     param (
         # Specifies the server to remove.
+        [Parameter( Mandatory, ValueFromPipeline )]
+        [ValidateNotNullOrEmpty()]
         $Server
     )
 

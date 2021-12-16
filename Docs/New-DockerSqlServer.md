@@ -25,7 +25,7 @@ Returns a object with the properties DataSource and ConnectionString.
 
 ### EXAMPLE 1
 ```
-New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+New-DockerSqlServer -AcceptEula
 Name             : Sandbox
 Hostname         : localhost
 UserId           : sa
@@ -58,7 +58,7 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: ( ( New-Guid ).Substring(0, 8) )
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -73,7 +73,7 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: Pa$$w0rd!
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
