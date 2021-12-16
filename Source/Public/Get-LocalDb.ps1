@@ -2,7 +2,6 @@ function Get-LocalDb {
 
     <#
 
-
     .SYNOPSIS
     Returns connection parameters to a available localDb.
 
