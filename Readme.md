@@ -4,8 +4,10 @@
 
 ### From PowerShell Gallery
 
+Install PsSqlTestServer from [PowerShell Gallery](https://www.powershellgallery.com/packages/PsSqlTestServer) using a PowerShell command line:
+
 ```powershell
-Install-Module -Name PsSqlTestServer
+Install-Module -Name PsSqlTestServer -Scope CurrentUser
 ```
 
 ### From Source
