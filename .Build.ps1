@@ -6,7 +6,7 @@
 	Invoke-Build Install
 
 .Example
-    Invoke-Build Publish
+    Invoke-Build Publish -NuGetApiKey xyz
 #>
 
 param(
