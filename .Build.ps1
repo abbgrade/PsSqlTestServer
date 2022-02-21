@@ -31,3 +31,9 @@ $ModuleName = 'PsSqlTestServer'
 
 # Synopsis: Default task.
 task . Build
+
+task UpdateBuildTasks {
+	Invoke-WebRequest `
+		-Uri 'https://raw.githubusercontent.com/abbgrade/PsBuildTasks/main/Powershell/Build.Tasks.ps1' `
+		-OutFile "$PSScriptRoot\tasks\Build.Tasks.ps1"
+}
