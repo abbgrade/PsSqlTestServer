@@ -27,7 +27,8 @@ param(
 
 $ModuleName = 'PsSqlTestServer'
 
-. $PSScriptRoot\tasks\Build.Tasks.ps1
+. $PSScriptRoot\Tasks\Dependencies.Tasks.ps1
+. $PSScriptRoot\Tasks\Build.Tasks.ps1
 
 # Synopsis: Default task.
 task . Build
