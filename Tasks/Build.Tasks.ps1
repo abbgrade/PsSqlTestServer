@@ -2,7 +2,7 @@ requires ModuleName
 
 [System.IO.DirectoryInfo] $SourceDirectory = "$PsScriptRoot\..\Source"
 [System.IO.DirectoryInfo] $SourceManifest = "$SourceDirectory\$ModuleName.psd1"
-[System.IO.DirectoryInfo] $PublishDirectory = "$PsScriptRoot\..\Publish"
+[System.IO.DirectoryInfo] $PublishDirectory = "$PsScriptRoot\..\publish"
 [System.IO.DirectoryInfo] $DocumentationDirectory = "$PsScriptRoot\..\Docs"
 [System.IO.DirectoryInfo] $ModulePublishDirectory = "$PublishDirectory\$ModuleName"
 
@@ -16,10 +16,14 @@ task Import -Jobs {
     Import-Module $SourceManifest -Force
 }
 
+# Synopsis: Initialize the documentation directory.
+task Doc.Init.Directory -If { $DocumentationDirectory.Exists -eq $false} -Jobs {
+	New-Item $DocumentationDirectory -ItemType Directory
+}
+
 # Synopsis: Initialize the documentation.
-task Doc.Init -If { $DocumentationDirectory.Exists -eq $false -Or $ForceDocInit -eq $true } -Jobs Import, {
-	New-Item $DocumentationDirectory -ItemType Directory -ErrorAction SilentlyContinue
-    New-MarkdownHelp -Module $ModuleName -OutputFolder $DocumentationDirectory -Force:$ForceDocInit -ErrorAction Stop
+task Doc.Init -Jobs Import, Doc.Init.Directory, {
+    New-MarkdownHelp -Module $ModuleName -OutputFolder $DocumentationDirectory -Force:$ForceDocInit -ErrorAction Continue
 }
 
 # Synopsis: Update the markdown documentation.
@@ -31,11 +35,17 @@ task PreparePublishDirectory -If ( -Not ( Test-Path $PublishDirectory )) -Jobs {
 	New-Item -Path $PublishDirectory -ItemType Directory | Out-Null
 }
 
+# Synopsis: Set the prerelease in the manifest based on the build number.
+task SetPrerelease -If $BuildNumber {
+	$Global:PreRelease = "alpha$( '{0:d4}' -f $BuildNumber )"
+	Update-ModuleManifest -Path $Global:Manifest -Prerelease $Global:PreRelease
+}
+
 # Synopsis: Build the module.
-task Build -Jobs Doc.Update, PreparePublishDirectory, {
+task Build -Jobs Clean, Doc.Update, PreparePublishDirectory, {
 	Copy-Item -Path $SourceDirectory -Destination $ModulePublishDirectory -Recurse
     [System.IO.FileInfo] $Global:Manifest = "$ModulePublishDirectory\$ModuleName.psd1"
-}
+}, SetPrerelease
 
 # Synopsis: Install the module.
 task Install -Jobs Build, {
