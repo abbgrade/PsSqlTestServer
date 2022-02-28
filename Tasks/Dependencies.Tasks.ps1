@@ -4,7 +4,7 @@ task InstallBuildDependencies -Jobs {
 
 task InstallTestDependencies -Jobs {
     Install-Module psdocker, Invoke-MsBuild -ErrorAction Stop
-}, Testdata.Create
+}
 
 task InstallReleaseDependencies -Jobs {
 }
