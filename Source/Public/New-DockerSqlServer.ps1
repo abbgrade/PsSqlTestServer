@@ -50,7 +50,7 @@ function New-DockerSqlServer {
         [switch] $AcceptEula
     )
 
-    Import-Module PsDocker -MinimumVersion 1.5.0 -ErrorAction Stop
+    Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
 
     if ( -not $AcceptEula ) {
         throw "Accept the Microsoft EULA with -AcceptEula"

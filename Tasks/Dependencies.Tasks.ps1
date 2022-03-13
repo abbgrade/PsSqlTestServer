@@ -3,7 +3,7 @@ task InstallBuildDependencies -Jobs {
 }
 
 task InstallTestDependencies -Jobs {
-    Install-Module psdocker -ErrorAction Stop -Verbose
+    Install-Module psdocker -ErrorAction Stop -Verbose -AllowPrerelease
 }
 
 task InstallReleaseDependencies -Jobs {
