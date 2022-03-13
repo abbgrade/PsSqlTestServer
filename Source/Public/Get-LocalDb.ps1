@@ -26,6 +26,14 @@ function Get-LocalDb {
 
     $instanceName, $version = sqllocaldb info
 
+    if ( -Not $instanceName ) {
+        Write-Error "'sqllocaldb info' did not return a instance name"
+    }
+
+    if ( -Not $version ) {
+        Write-Error "'sqllocaldb info' did not return a version"
+    }
+
     [PSCustomObject] @{
         ConnectionString = "Data Source=(LocalDb)\$instanceName;Integrated Security=True"
         DataSource       = "(LocalDb)\$instanceName"
