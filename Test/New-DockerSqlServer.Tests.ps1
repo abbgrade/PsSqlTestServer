@@ -17,7 +17,9 @@ Describe 'New-DockerSqlServer' {
         }
 
         AfterAll {
-            $Script:Container | Remove-DockerSqlServer
+            if ( $Script:Container ) {
+                $Script:Container | Remove-DockerSqlServer
+            }
         }
 
         It 'Returns values' {
