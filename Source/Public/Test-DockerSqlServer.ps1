@@ -21,8 +21,16 @@ function Test-DockerSqlServer {
     [CmdletBinding()]
     param ()
 
-    if ( Import-Module psdocker -PassThru -ErrorAction SilentlyContinue ) {
-        if ( ( Get-DockerVersion -ErrorAction SilentlyContinue ).Server ) {
+    $psDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
+
+    if ( $psDockerModule ) {
+        Write-Verbose "psdocker $( $psDockerModule.Version ) is installed."
+
+        $dockerVersion = Get-DockerVersion -ErrorAction SilentlyContinue
+        Write-Verbose "docker client $( $dockerVersion.Client.Version ) is installed."
+
+        if ( ( $dockerVersion ).Server ) {
+            Write-Verbose "docker server $( $dockerVersion.Server.Engine.Version ) is running."
             return $true
         }
     }
