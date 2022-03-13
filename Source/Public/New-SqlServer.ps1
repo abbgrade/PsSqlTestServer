@@ -22,7 +22,7 @@ function New-SqlServer {
 
     if ( Test-LocalDb ) {
         Get-LocalDb |
-            Write-Output $localDb
+            Write-Output
     }
     elseif ( Test-DockerSqlServer )
     {
