@@ -14,7 +14,7 @@ Returns connection parameter for a SQL server in a new Docker container.
 
 ```
 New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
- [<CommonParameters>]
+ [-Timeout <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -89,6 +89,21 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+Specifies the seconds to wait for the SQL service.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 30
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
