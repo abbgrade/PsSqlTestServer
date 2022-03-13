@@ -7,7 +7,7 @@ Describe 'Test-LocalDb' {
     }
 
     It 'works' {
-        Test-LocalDb | Should -Be $true
+        Test-LocalDb | Should -BeIn $true, $false
     }
 
 }
