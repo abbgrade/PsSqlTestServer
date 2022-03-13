@@ -2,20 +2,26 @@
 
 Describe 'Remove-SqlServer' {
 
-    BeforeAll {
-        Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
-        Import-Module PsDocker
+    BeforeDiscovery {
+        $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
     }
 
-    Context 'Container' {
-        BeforeAll {
-            $Script:Container = New-DockerSqlServer -AcceptEula
-        }
+    BeforeAll {
+        Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+    }
 
-        It 'Removes the Docker container' {
-            $Script:Container | Remove-SqlServer
+    Context 'PsDocker' -Skip:(-Not $Script:PsDockerModule) {
 
-            Get-DockerContainer -Name $Script:Container.Name | Should -BeNullOrEmpty
+        Context 'Container' {
+            BeforeAll {
+                $Script:Container = New-DockerSqlServer -AcceptEula
+            }
+
+            It 'Removes the Docker container' {
+                $Script:Container | Remove-SqlServer
+
+                Get-DockerContainer -Name $Script:Container.Name | Should -BeNullOrEmpty
+            }
         }
     }
 }
