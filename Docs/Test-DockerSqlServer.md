@@ -17,7 +17,7 @@ Test-DockerSqlServer [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks if PsDocker is installed, and if the Docker service is running.
+Checks if psdocker is installed, and if the Docker service is running.
 
 ## EXAMPLES
 

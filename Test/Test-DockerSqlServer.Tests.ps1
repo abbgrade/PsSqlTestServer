@@ -2,13 +2,18 @@
 
 Describe 'Test-DockerSqlServer' {
 
+    BeforeDiscovery {
+        $Script:PsDockerModule = Import-Module psdocker -PassThru
+    }
+
     BeforeAll {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
-        Import-Module PsDocker
     }
 
-    It 'works' {
-        Test-DockerSqlServer | Should -Be $true
-    }
+    Context 'PsDocker' -Skip:(-Not $Script:PsDockerModule) {
 
+        It 'works' {
+            Test-DockerSqlServer | Should -Be $true
+        }
+    }
 }

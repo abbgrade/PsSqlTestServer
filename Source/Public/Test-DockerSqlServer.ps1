@@ -6,7 +6,7 @@ function Test-DockerSqlServer {
     Tests if a Docker-based SQL Server can be created.
 
     .DESCRIPTION
-    Checks if PsDocker is installed, and if the Docker service is running.
+    Checks if psdocker is installed, and if the Docker service is running.
 
     .EXAMPLE
     PS> Test-DockerSqlServer
@@ -21,7 +21,7 @@ function Test-DockerSqlServer {
     [CmdletBinding()]
     param ()
 
-    if ( Import-Module PSDocker -PassThru -ErrorAction SilentlyContinue ) {
+    if ( Import-Module psdocker -PassThru -ErrorAction SilentlyContinue ) {
         if ( ( Get-DockerVersion -ErrorAction SilentlyContinue ).Server ) {
             return $true
         }
