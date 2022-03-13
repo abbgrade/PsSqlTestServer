@@ -24,13 +24,23 @@ function Get-LocalDb {
     [CmdletBinding()]
     param ()
 
-    $instanceName, $version = Invoke-Command {
-        & sqllocaldb info
+    $instanceName, $version = sqllocaldb info
+
+    if ( -Not $instanceName ) {
+        Write-Error "'sqllocaldb info' did not return a instance name"
+    } else {
+        Write-Verbose "Found LocalDb instance $instanceName."
+    }
+
+    if ( -Not $version ) {
+        Write-Error "'sqllocaldb info' did not return a version"
+    } else {
+        Write-Verbose "Found LocalDb version $version."
     }
 
     [PSCustomObject] @{
         ConnectionString = "Data Source=(LocalDb)\$instanceName;Integrated Security=True"
-        DataSource = "(LocalDb)\$instanceName"
-        Version = $version
+        DataSource       = "(LocalDb)\$instanceName"
+        Version          = $version
     } | Write-Output
 }

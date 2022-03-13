@@ -25,7 +25,7 @@ function Remove-DockerSqlServer {
 
     )
 
-    Import-Module PsDocker -MinimumVersion 1.5.0 -ErrorAction Stop
+    Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
 
     Remove-DockerContainer -Name $Server.Name -Force
 }
