@@ -2,40 +2,43 @@
 
 Describe 'Get-LocalDb' {
 
-    BeforeAll {
+    BeforeDiscovery {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    It 'Returns values' {
-        $result = Get-LocalDb
+    Context 'LocalDb' -Skip:( -Not ( Test-LocalDb )) {
 
-        $result | Should -Not -BeNullOrEmpty
-        $result.DataSource | Should -Not -BeNullOrEmpty
-        $result.ConnectionString | Should -Not -BeNullOrEmpty
-        $result.Version | Should -Not -BeNullOrEmpty
-    }
+        It 'Returns values' {
+            $result = Get-LocalDb
 
-    BeforeDiscovery {
-        $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
-    }
-
-    Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
-
-        BeforeAll {
-            $Script:LocalDb = Get-LocalDb
+            $result | Should -Not -BeNullOrEmpty
+            $result.DataSource | Should -Not -BeNullOrEmpty
+            $result.ConnectionString | Should -Not -BeNullOrEmpty
+            $result.Version | Should -Not -BeNullOrEmpty
         }
 
-        It 'Connects by DataSource' {
-            $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource
+        BeforeDiscovery {
+            $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
         }
 
-        It 'Connects by ConnectionString' {
-            $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString
-        }
+        Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
 
-        AfterEach {
-            if ( $Script:SqlConnection ) {
-                Disconnect-TSqlInstance -Connection $Script:SqlConnection
+            BeforeAll {
+                $Script:LocalDb = Get-LocalDb
+            }
+
+            It 'Connects by DataSource' {
+                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource
+            }
+
+            It 'Connects by ConnectionString' {
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString
+            }
+
+            AfterEach {
+                if ( $Script:SqlConnection ) {
+                    Disconnect-TSqlInstance -Connection $Script:SqlConnection
+                }
             }
         }
     }
