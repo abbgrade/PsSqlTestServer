@@ -13,7 +13,7 @@ Describe 'New-DockerSqlServer' {
         }
 
         BeforeAll {
-            $Script:Container = New-DockerSqlServer -AcceptEula
+            $Script:Container = New-DockerSqlServer -AcceptEula -Verbose
         }
 
         AfterAll {
