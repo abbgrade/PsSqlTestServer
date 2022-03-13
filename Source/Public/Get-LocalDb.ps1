@@ -28,10 +28,14 @@ function Get-LocalDb {
 
     if ( -Not $instanceName ) {
         Write-Error "'sqllocaldb info' did not return a instance name"
+    } else {
+        Write-Verbose "Found LocalDb instance $instanceName."
     }
 
     if ( -Not $version ) {
         Write-Error "'sqllocaldb info' did not return a version"
+    } else {
+        Write-Verbose "Found LocalDb version $version."
     }
 
     [PSCustomObject] @{
