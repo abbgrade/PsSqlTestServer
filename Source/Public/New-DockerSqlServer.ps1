@@ -60,7 +60,9 @@ function New-DockerSqlServer {
         'ACCEPT_EULA' = "Y"
     }
 
-    switch ( ( Get-DockerVersion -ErrorAction Stop ).Server.Engine.OSArch ) {
+    $osArch = ( Get-DockerVersion -ErrorAction Stop ).Server.Engine.OSArch
+    Write-Verbose "Create $osArch container."
+    switch ( $osArch ) {
         'linux/amd64' {
             $environment['MSSQL_SA_PASSWORD'] = $ServerAdminPassword
 
