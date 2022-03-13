@@ -3,7 +3,7 @@
 Describe 'Test-DockerSqlServer' {
 
     BeforeDiscovery {
-        $Script:PsDockerModule = Import-Module psdocker -PassThru
+        $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {
