@@ -20,14 +20,16 @@ function New-SqlServer {
     [CmdletBinding()]
     param ()
 
-    $localDb = Get-LocalDb -ErrorVariable localDbError -ErrorAction SilentlyContinue
-
-    if ( -Not $localDbError ) {
-        Write-Output $localDb
+    if ( Test-LocalDb ) {
+        Get-LocalDb |
+            Write-Output $localDb
     }
-    else
+    elseif ( Test-DockerSqlServer )
     {
         New-DockerSqlServer -AcceptEula |
             Write-Output
+    }
+    else {
+        Write-Error 'No SQL server provider like Docker or LocalDb is available.'
     }
 }
