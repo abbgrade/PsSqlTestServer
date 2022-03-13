@@ -19,3 +19,13 @@ Invoke-Build Install
 ## Usage
 
 See [the documentation](./Docs) for description and examples.
+
+## Commands
+
+## Changelog
+
+### v-next
+
+- Added Test-LocalDb command.
+
+## Development
