@@ -24,23 +24,13 @@ function Get-LocalDb {
     [CmdletBinding()]
     param ()
 
-    $instanceName, $version = sqllocaldb info
+    Import-Module PsSqlLocalDb -ErrorAction Stop
 
-    if ( -Not $instanceName ) {
-        Write-Error "'sqllocaldb info' did not return a instance name"
-    } else {
-        Write-Verbose "Found LocalDb instance $instanceName."
-    }
-
-    if ( -Not $version ) {
-        Write-Error "'sqllocaldb info' did not return a version"
-    } else {
-        Write-Verbose "Found LocalDb version $version."
-    }
+    $instance = Get-LocalDbInstance
 
     [PSCustomObject] @{
-        ConnectionString = "Data Source=(LocalDb)\$instanceName;Integrated Security=True"
-        DataSource       = "(LocalDb)\$instanceName"
-        Version          = $version
+        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Integrated Security=True"
+        DataSource       = "(LocalDb)\$( $instance.Name )"
+        Version          = $instance.Version
     } | Write-Output
 }

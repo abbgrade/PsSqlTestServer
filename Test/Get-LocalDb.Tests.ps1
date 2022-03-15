@@ -14,7 +14,6 @@ Describe 'Get-LocalDb' {
             $result | Should -Not -BeNullOrEmpty
             $result.DataSource | Should -Not -BeNullOrEmpty
             $result.ConnectionString | Should -Not -BeNullOrEmpty
-            $result.Version | Should -Not -BeNullOrEmpty
         }
 
         BeforeDiscovery {
