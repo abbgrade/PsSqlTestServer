@@ -9,11 +9,12 @@ Describe 'New-DockerSqlServer' {
     Context 'Docker' -Skip:( -Not ( Test-DockerSqlServer )) {
 
         BeforeDiscovery {
-            $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+            $Script:PsSqlClient = Import-Module PsSqlClient -MinimumVersion 1.1.0 -PassThru -ErrorAction SilentlyContinue
         }
 
         BeforeAll {
-            $Script:Container = New-DockerSqlServer -AcceptEula -Verbose
+            $Script:Port = 7027 # just a unassigned port
+            $Script:Container = New-DockerSqlServer -Port $Script:Port -AcceptEula -Verbose
         }
 
         AfterAll {
@@ -26,17 +27,18 @@ Describe 'New-DockerSqlServer' {
             $Script:Container | Should -Not -BeNullOrEmpty
             $Script:Container.ConnectionString | Should -Not -BeNullOrEmpty
             $Script:Container.DataSource | Should -Not -BeNullOrEmpty
+            $Script:Container.Port | Should -Be $Script:Port
             $Script:Container.SecurePassword | Should -Not -BeNullOrEmpty
             $Script:Container.UserId | Should -Not -BeNullOrEmpty
         }
 
         Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
             It 'Connects by Properties' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.DataSource -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
+                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.DataSource -Port $Script:Container.Port -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString -Verbose
             }
 
             AfterEach {

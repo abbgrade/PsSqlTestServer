@@ -51,7 +51,11 @@ function New-DockerSqlServer {
 
         # Specifies the seconds to wait for the SQL service.
         [Parameter()]
-        [int] $Timeout = 30
+        [int] $Timeout = 30,
+
+        # Specifies the port to map the sql server to.
+        [Parameter()]
+        [int] $Port = 1433
     )
 
     Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
@@ -73,7 +77,7 @@ function New-DockerSqlServer {
             $dockerParameter.ServerAdminPasswordVariable = $ServerAdminPassword
         } `
         -Ports @{
-            1433 = 1433
+            "$Port" = 1433
         } -Detach -ErrorAction Stop
 
     # await the service
@@ -82,9 +86,10 @@ function New-DockerSqlServer {
     # add metadata
     $container | Add-Member 'Hostname' 'localhost'
     $container | Add-Member 'DataSource' 'localhost'
+    $container | Add-Member 'Port' $Port
     $container | Add-Member 'UserId' 'sa'
     $container | Add-Member 'SecurePassword' ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force )
-    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
+    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname ),$( $container.Port )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
     $container | Add-Member 'IsDocker' $true
 
     # return
