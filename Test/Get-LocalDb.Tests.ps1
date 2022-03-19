@@ -27,7 +27,7 @@ Describe 'Get-LocalDb' {
             }
 
             It 'Connects by DataSource' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource
+                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource -ConnectTimeout 30
             }
 
             It 'Connects by ConnectionString' {
