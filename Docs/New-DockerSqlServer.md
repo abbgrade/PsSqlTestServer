@@ -14,7 +14,7 @@ Returns connection parameter for a SQL server in a new Docker container.
 
 ```
 New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
- [-Timeout <Int32>] [<CommonParameters>]
+ [-Timeout <Int32>] [-Port <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,6 +104,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: 30
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Port
+Specifies the port to map the sql server to.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1433
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
