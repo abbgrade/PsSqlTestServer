@@ -14,7 +14,7 @@ Describe 'Remove-DockerSqlServer' {
 
         Context 'Container' {
             BeforeAll {
-                $Script:Container = New-DockerSqlServer -AcceptEula
+                $Script:Container = New-DockerSqlServer -Port 7027 -AcceptEula
             }
 
             It 'Removes the Docker container' {
