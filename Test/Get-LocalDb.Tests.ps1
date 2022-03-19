@@ -31,7 +31,7 @@ Describe 'Get-LocalDb' {
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString -ConnectTimeout 30
             }
 
             AfterEach {
