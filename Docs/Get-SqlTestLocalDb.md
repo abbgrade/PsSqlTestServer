@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LocalDb
+# Get-SqlTestLocalDb
 
 ## SYNOPSIS
 Returns connection parameters to a available localDb.
@@ -13,7 +13,7 @@ Returns connection parameters to a available localDb.
 ## SYNTAX
 
 ```
-Get-LocalDb [<CommonParameters>]
+Get-SqlTestLocalDb [<CommonParameters>]
 ```
 
 ## DESCRIPTION

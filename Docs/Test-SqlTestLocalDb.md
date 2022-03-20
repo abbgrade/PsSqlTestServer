@@ -5,25 +5,25 @@ online version:
 schema: 2.0.0
 ---
 
-# Test-DockerSqlServer
+# Test-SqlTestLocalDb
 
 ## SYNOPSIS
-Tests if a Docker-based SQL Server can be created.
+Tests if a localDb-based SQL Server can be created.
 
 ## SYNTAX
 
 ```
-Test-DockerSqlServer [<CommonParameters>]
+Test-SqlTestLocalDb [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks if psdocker is installed, and if the Docker service is running.
+Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15).
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-DockerSqlServer
+Test-LocalDb
 ```
 
 True

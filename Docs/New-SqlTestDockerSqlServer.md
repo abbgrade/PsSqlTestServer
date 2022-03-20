@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# New-DockerSqlServer
+# New-SqlTestDockerSqlServer
 
 ## SYNOPSIS
 Returns connection parameter for a SQL server in a new Docker container.
@@ -13,7 +13,7 @@ Returns connection parameter for a SQL server in a new Docker container.
 ## SYNTAX
 
 ```
-New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
+New-SqlTestDockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
  [-Timeout <Int32>] [-Port <Int32>] [<CommonParameters>]
 ```
 
