@@ -87,5 +87,20 @@
             },
             "dependsOn": "Build"
         },
+        {
+            "label": "Test Docker",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' }} -Verbose",
+            "options": {
+                "cwd": "test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
     ]
 }

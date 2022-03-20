@@ -1,12 +1,12 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'New-DockerSqlServer' {
+Describe 'New-DockerSqlServer' -Tag Docker {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'Docker' -Skip:( -Not ( Test-DockerSqlServer )) {
+    Context 'Docker' -Skip:( -Not ( Test-SqlTestDockerSqlServer )) {
 
         BeforeDiscovery {
             $Script:PsSqlClient = Import-Module PsSqlClient -MinimumVersion 1.1.0 -PassThru -ErrorAction SilentlyContinue
@@ -14,12 +14,12 @@ Describe 'New-DockerSqlServer' {
 
         BeforeAll {
             $Script:Port = 7027 # just a unassigned port
-            $Script:Container = New-DockerSqlServer -Port $Script:Port -AcceptEula -Verbose
+            $Script:Container = New-SqlTestDockerSqlServer -Port $Script:Port -AcceptEula -Verbose
         }
 
         AfterAll {
             if ( $Script:Container ) {
-                $Script:Container | Remove-DockerSqlServer
+                $Script:Container | Remove-SqlTestDockerSqlServer
             }
         }
 
