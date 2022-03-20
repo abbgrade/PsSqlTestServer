@@ -1,11 +1,11 @@
 task InstallBuildDependencies -Jobs {
-    Install-Module platyPs -ErrorAction Stop -Verbose
+    Install-Module platyPs -Scope CurrentUser -ErrorAction Stop -Verbose
 }
 
 task InstallTestDependencies -Jobs {
-    Install-Module psdocker -ErrorAction Stop -Verbose -AllowPrerelease
-    Install-Module PsSqlLocalDb -ErrorAction Stop -Verbose -AllowPrerelease
-    Install-Module PsSqlClient -ErrorAction Stop -Verbose -AllowPrerelease -AllowClobber
+    Install-Module psdocker -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease
+    Install-Module PsSqlLocalDb -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease
+    Install-Module PsSqlClient -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease -AllowClobber
 }
 
 task InstallReleaseDependencies -Jobs {
