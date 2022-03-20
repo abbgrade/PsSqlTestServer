@@ -72,5 +72,20 @@
             },
             "dependsOn": "Build"
         },
+        {
+            "label": "Test SqlLocalDB",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' }} -Verbose",
+            "options": {
+                "cwd": "test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
     ]
 }

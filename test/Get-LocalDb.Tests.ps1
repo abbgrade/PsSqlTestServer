@@ -1,15 +1,15 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Get-LocalDb' {
+Describe 'Get-LocalDb' -Tag SqlLocalDB {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'LocalDb' -Skip:( -Not ( Test-LocalDb )) {
+    Context 'LocalDb' -Skip:( -Not ( Test-SqlTestLocalDb )) {
 
         It 'Returns values' {
-            $result = Get-LocalDb -Verbose
+            $result = Get-SqlTestLocalDb -Verbose
 
             $result | Should -Not -BeNullOrEmpty
             $result.DataSource | Should -Not -BeNullOrEmpty
@@ -23,7 +23,7 @@ Describe 'Get-LocalDb' {
         Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
 
             BeforeAll {
-                $Script:LocalDb = Get-LocalDb
+                $Script:LocalDb = Get-SqlTestLocalDb
             }
 
             It 'Connects by DataSource' {

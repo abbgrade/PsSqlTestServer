@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Test-LocalDb' {
+Describe 'Test-LocalDb' -Tag SqlLocalDB {
 
     BeforeDiscovery {
         $Script:PsSqlLocalDbModule = Import-Module PsSqlLocalDb -PassThru -ErrorAction SilentlyContinue
@@ -13,7 +13,7 @@ Describe 'Test-LocalDb' {
     Context 'PsSqlLocalDb' -Skip:(-Not $Script:PsSqlLocalDbModule) {
 
         It 'works' {
-            Test-LocalDb | Should -BeIn $true, $false
+            Test-SqlTestLocalDb | Should -BeIn $true, $false
         }
     }
 }
