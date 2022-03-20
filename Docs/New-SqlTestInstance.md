@@ -5,34 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LocalDb
+# New-SqlTestInstance
 
 ## SYNOPSIS
-Returns connection parameters to a available localDb.
+Returns connection parameter for a SQL server.
 
 ## SYNTAX
 
 ```
-Get-LocalDb [<CommonParameters>]
+New-SqlTestInstance [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
+Checks different versions of local db or creates a Docker container with a SQL server installed.
+Returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LocalDb
+New-SqlTestInstance
+ConnectionString                                            DataSource
+----------------                                            ----------
+Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
 ```
-
-\[PSCustomObject\]
-
-Name                           Value
-----                           -----
-DataSource                     (LocalDb)\MSSQLLocalDB
-ConnectionString               Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True
-Version                        v11.0
 
 ## PARAMETERS
 

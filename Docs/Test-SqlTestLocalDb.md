@@ -5,44 +5,30 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-SqlServer
+# Test-SqlTestLocalDb
 
 ## SYNOPSIS
-Removes a test SQL server.
+Tests if a localDb-based SQL Server can be created.
 
 ## SYNTAX
 
 ```
-Remove-SqlServer -Server <Object> [<CommonParameters>]
+Test-SqlTestLocalDb [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlServer\`.
+Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15).
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$server = New-SqlServer
-PS> Remove-SqlServer -Server $server
+Test-SqlTestLocalDb
 ```
+
+True
 
 ## PARAMETERS
-
-### -Server
-Specifies the server to remove.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
 
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -51,6 +37,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### bool
 ## NOTES
 
 ## RELATED LINKS

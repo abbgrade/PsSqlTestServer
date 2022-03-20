@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# New-DockerSqlServer
+# New-SqlTestDockerInstance
 
 ## SYNOPSIS
 Returns connection parameter for a SQL server in a new Docker container.
@@ -13,8 +13,8 @@ Returns connection parameter for a SQL server in a new Docker container.
 ## SYNTAX
 
 ```
-New-DockerSqlServer [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
- [<CommonParameters>]
+New-SqlTestDockerInstance [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
+ [-Timeout <Int32>] [-Port <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,7 +25,7 @@ Returns a object with the properties DataSource and ConnectionString.
 
 ### EXAMPLE 1
 ```
-New-DockerSqlServer -AcceptEula
+New-SqlTestDockerInstance -AcceptEula
 Name             : Sandbox
 Hostname         : localhost
 UserId           : sa
@@ -89,6 +89,36 @@ Aliases:
 Required: True
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timeout
+Specifies the seconds to wait for the SQL service.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 30
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Port
+Specifies the port to map the sql server to.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1433
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

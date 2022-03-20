@@ -1,4 +1,4 @@
-function New-SqlServer {
+function New-Instance {
 
     <#
 
@@ -10,7 +10,7 @@ function New-SqlServer {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-SqlServer
+    PS> New-SqlTestInstance
     ConnectionString                                            DataSource
     ----------------                                            ----------
     Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
@@ -20,14 +20,16 @@ function New-SqlServer {
     [CmdletBinding()]
     param ()
 
-    $localDb = Get-LocalDb -ErrorVariable localDbError -ErrorAction SilentlyContinue
-
-    if ( -Not $localDbError ) {
-        Write-Output $localDb
-    }
-    else
-    {
-        New-DockerSqlServer -AcceptEula |
+    if ( Test-LocalDb ) {
+        Get-LocalInstance |
             Write-Output
+    }
+    elseif ( Test-Docker )
+    {
+        New-DockerInstance -AcceptEula |
+            Write-Output
+    }
+    else {
+        Write-Error 'No SQL server provider like Docker or LocalDb is available.'
     }
 }

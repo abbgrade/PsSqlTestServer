@@ -1,4 +1,4 @@
-function Get-LocalDb {
+function Get-LocalInstance {
 
     <#
 
@@ -9,7 +9,7 @@ function Get-LocalDb {
     Uses [SqlLocalDB Utility](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
 
     .EXAMPLE
-    PS> Get-LocalDb
+    PS> Get-SqlTestLocalInstance
 
     [PSCustomObject]
 
@@ -24,13 +24,14 @@ function Get-LocalDb {
     [CmdletBinding()]
     param ()
 
-    $instanceName, $version = Invoke-Command {
-        & sqllocaldb info
-    }
+    Import-Module PsSqlLocalDb -ErrorAction Stop
+
+    $instance = Get-LocalDbInstance
 
     [PSCustomObject] @{
-        ConnectionString = "Data Source=(LocalDb)\$instanceName;Integrated Security=True"
-        DataSource = "(LocalDb)\$instanceName"
-        Version = $version
+        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Connect Timeout=30;Integrated Security=True"
+        DataSource       = "(LocalDb)\$( $instance.Name )"
+        ConnectTimeout   = 30
+        Version          = $instance.Version
     } | Write-Output
 }
