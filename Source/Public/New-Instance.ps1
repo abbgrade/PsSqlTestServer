@@ -26,7 +26,7 @@ function New-Instance {
     }
     elseif ( Test-Docker )
     {
-        New-DockerSqlServer -AcceptEula |
+        New-DockerInstance -AcceptEula |
             Write-Output
     }
     else {
