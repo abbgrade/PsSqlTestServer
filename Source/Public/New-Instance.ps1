@@ -24,7 +24,7 @@ function New-Instance {
         Get-LocalInstance |
             Write-Output
     }
-    elseif ( Test-DockerSqlServer )
+    elseif ( Test-Docker )
     {
         New-DockerSqlServer -AcceptEula |
             Write-Output
