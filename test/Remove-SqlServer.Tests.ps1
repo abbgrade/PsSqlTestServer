@@ -3,7 +3,7 @@
 Describe 'Remove-SqlServer' {
 
     BeforeDiscovery {
-        $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
+        $Script:PsDockerModule = Import-Module psdocker -MinimumVersion '1.7.0' -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {
