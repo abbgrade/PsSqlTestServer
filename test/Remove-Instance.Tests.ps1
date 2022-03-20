@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Remove-SqlServer' {
+Describe 'Remove-Instance' {
 
     BeforeDiscovery {
         $Script:PsDockerModule = Import-Module psdocker -MinimumVersion '1.7.0' -PassThru -ErrorAction SilentlyContinue
