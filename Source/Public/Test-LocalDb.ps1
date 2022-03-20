@@ -20,12 +20,10 @@ function Test-LocalDb {
     [CmdletBinding()]
     param ()
 
-    $psSqlLocalDbModule = Import-Module PsSqlLocalDb -PassThru -ErrorAction SilentlyContinue
-
-    if ( $psSqlLocalDbModule ) {
-        Write-Verbose "PsLocalDb $( $psSqlLocalDbModule.Version ) is installed."
-        return Test-LocalDbUtility
+    if ( -Not ( Import-Module PsSqlLocalDb -PassThru -ErrorAction SilentlyContinue )) {
+        Write-Warning 'PsSqlLocalDb is not installed.'
+        return $false
     }
 
-    return $false
+    return Test-LocalDbUtility
 }
