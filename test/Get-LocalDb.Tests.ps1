@@ -27,11 +27,11 @@ Describe 'Get-LocalDb' -Tag SqlLocalDB {
             }
 
             It 'Connects by DataSource' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource -ConnectTimeout 30
+                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource -ConnectTimeout $Script:LocalDb.ConnectTimeout
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString -ConnectTimeout 30
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString
             }
 
             AfterEach {

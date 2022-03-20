@@ -34,7 +34,13 @@ Describe 'New-DockerSqlServer' -Tag Docker {
 
         Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
             It 'Connects by Properties' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.DataSource -Port $Script:Container.Port -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
+                $Script:SqlConnection = Connect-TSqlInstance `
+                    -DataSource $Script:Container.DataSource `
+                    -Port $Script:Container.Port `
+                    -UserId $Script:Container.UserId `
+                    -Password $Script:Container.SecurePassword `
+                    -ConnectTimeout $Script:Container.ConnectTimeout `
+                    -RetryCount 3
             }
 
             It 'Connects by ConnectionString' {

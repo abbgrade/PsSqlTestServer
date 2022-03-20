@@ -61,7 +61,7 @@
             "label": "Test",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester",
+            "command": "Invoke-Pester -Output Detailed",
             "options": {
                 "cwd": "test"
             },
@@ -76,7 +76,7 @@
             "label": "Test SqlLocalDB",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' }} -Verbose",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' }; Output = 'Detailed' }",
             "options": {
                 "cwd": "test"
             },
@@ -91,7 +91,7 @@
             "label": "Test Docker",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' }} -Verbose",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' }; Output = 'Detailed' }",
             "options": {
                 "cwd": "test"
             },

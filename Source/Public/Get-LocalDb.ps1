@@ -29,8 +29,9 @@ function Get-LocalDb {
     $instance = Get-LocalDbInstance
 
     [PSCustomObject] @{
-        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Integrated Security=True"
+        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Connect Timeout=30;Integrated Security=True"
         DataSource       = "(LocalDb)\$( $instance.Name )"
+        ConnectTimeout   = 30
         Version          = $instance.Version
     } | Write-Output
 }

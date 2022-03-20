@@ -7,7 +7,7 @@ Describe 'New-SqlServer' {
     }
 
     It 'Provides a SQL server' {
-        $server = New-SqlTestSqlServer -Verbose
+        $server = New-SqlTestSqlServer
 
         $server | Should -Not -BeNullOrEmpty
         $server.ConnectionString | Should -Not -BeNullOrEmpty
