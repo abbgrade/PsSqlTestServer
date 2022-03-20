@@ -14,11 +14,11 @@ Describe 'Remove-SqlServer' {
 
         Context 'Container' {
             BeforeAll {
-                $Script:Container = New-DockerSqlServer -Port 7027 -AcceptEula
+                $Script:Container = New-SqlTestDockerSqlServer -Port 7027 -AcceptEula
             }
 
             It 'Removes the Docker container' {
-                $Script:Container | Remove-SqlServer
+                $Script:Container | Remove-SqlTestSqlServer
 
                 Get-DockerContainer -Name $Script:Container.Name | Should -BeNullOrEmpty
             }

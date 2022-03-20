@@ -9,7 +9,7 @@ Describe 'Get-LocalDb' -Tag SqlLocalDB {
     Context 'LocalDb' -Skip:( -Not ( Test-SqlTestLocalDb )) {
 
         It 'Returns values' {
-            $result = Get-SqlTestLocalDb -Verbose
+            $result = Get-SqlTestLocalDb
 
             $result | Should -Not -BeNullOrEmpty
             $result.DataSource | Should -Not -BeNullOrEmpty

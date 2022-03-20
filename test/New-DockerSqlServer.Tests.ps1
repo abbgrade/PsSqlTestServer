@@ -14,7 +14,7 @@ Describe 'New-DockerSqlServer' -Tag Docker {
 
         BeforeAll {
             $Script:Port = 7027 # just a unassigned port
-            $Script:Container = New-SqlTestDockerSqlServer -Port $Script:Port -AcceptEula -Verbose
+            $Script:Container = New-SqlTestDockerSqlServer -Port $Script:Port -AcceptEula
         }
 
         AfterAll {
@@ -38,7 +38,7 @@ Describe 'New-DockerSqlServer' -Tag Docker {
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString -Verbose
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString
             }
 
             AfterEach {
