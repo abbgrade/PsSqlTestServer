@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Test-SqlTestDockerSqlServer
+# Test-SqlTestDocker
 
 ## SYNOPSIS
 Tests if a Docker-based SQL Server can be created.
@@ -13,7 +13,7 @@ Tests if a Docker-based SQL Server can be created.
 ## SYNTAX
 
 ```
-Test-SqlTestDockerSqlServer [<CommonParameters>]
+Test-SqlTestDocker [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +23,7 @@ Checks if psdocker is installed, and if the Docker service is running.
 
 ### EXAMPLE 1
 ```
-Test-DockerSqlServer
+Test-SqlTestDocker
 ```
 
 True

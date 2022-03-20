@@ -5,33 +5,32 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-SqlTestDockerSqlServer
+# Remove-SqlTestInstance
 
 ## SYNOPSIS
-Removes a test SQL server Docker container.
+Removes a test SQL server.
 
 ## SYNTAX
 
 ```
-Remove-SqlTestDockerSqlServer -Server <Object> [<CommonParameters>]
+Remove-SqlTestInstance -Server <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server Docker container, in case it was created with \`New-DockerSqlServer\`.
+Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$server = New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-PS> Remove-DockerSqlServer -DockerContainerName $server.Name
+$server = New-SqlTestInstance
+PS> Remove-SqlTestInstance -Server $server
 ```
 
 ## PARAMETERS
 
 ### -Server
 Specifies the server to remove.
-Requires the name of the Docker container.
 
 ```yaml
 Type: Object

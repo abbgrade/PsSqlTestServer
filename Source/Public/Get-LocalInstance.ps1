@@ -1,4 +1,4 @@
-function Get-LocalDb {
+function Get-LocalInstance {
 
     <#
 
@@ -9,7 +9,7 @@ function Get-LocalDb {
     Uses [SqlLocalDB Utility](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
 
     .EXAMPLE
-    PS> Get-LocalDb
+    PS> Get-SqlTestLocalInstance
 
     [PSCustomObject]
 

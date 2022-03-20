@@ -23,7 +23,7 @@ Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocald
 
 ### EXAMPLE 1
 ```
-Test-LocalDb
+Test-SqlTestLocalDb
 ```
 
 True

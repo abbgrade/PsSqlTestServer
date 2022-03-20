@@ -1,4 +1,4 @@
-function Test-DockerSqlServer {
+function Test-Docker {
 
     <#
 
@@ -9,7 +9,7 @@ function Test-DockerSqlServer {
     Checks if psdocker is installed, and if the Docker service is running.
 
     .EXAMPLE
-    PS> Test-DockerSqlServer
+    PS> Test-SqlTestDocker
 
     True
 

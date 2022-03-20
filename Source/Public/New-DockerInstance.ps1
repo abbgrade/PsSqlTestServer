@@ -1,5 +1,5 @@
 
-function New-DockerSqlServer {
+function New-DockerInstance {
 
     <#
 
@@ -11,7 +11,7 @@ function New-DockerSqlServer {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-DockerSqlServer -AcceptEula
+    PS> New-SqlTestDockerInstance -AcceptEula
     Name             : Sandbox
     Hostname         : localhost
     UserId           : sa
