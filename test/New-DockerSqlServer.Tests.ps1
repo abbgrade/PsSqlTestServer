@@ -1,12 +1,12 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'New-DockerSqlServer' {
+Describe 'New-DockerInstance' -Tag Docker {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'Docker' -Skip:( -Not ( Test-DockerSqlServer )) {
+    Context 'Docker' -Skip:( -Not ( Test-SqlTestDocker )) {
 
         BeforeDiscovery {
             $Script:PsSqlClient = Import-Module PsSqlClient -MinimumVersion 1.1.0 -PassThru -ErrorAction SilentlyContinue
@@ -14,12 +14,12 @@ Describe 'New-DockerSqlServer' {
 
         BeforeAll {
             $Script:Port = 7027 # just a unassigned port
-            $Script:Container = New-DockerSqlServer -Port $Script:Port -AcceptEula -Verbose
+            $Script:Container = New-SqlTestDockerInstance -Port $Script:Port -AcceptEula
         }
 
         AfterAll {
             if ( $Script:Container ) {
-                $Script:Container | Remove-DockerSqlServer
+                $Script:Container | Remove-SqlTestDockerInstance
             }
         }
 
@@ -34,11 +34,17 @@ Describe 'New-DockerSqlServer' {
 
         Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
             It 'Connects by Properties' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Container.DataSource -Port $Script:Container.Port -UserId $Script:Container.UserId -Password $Script:Container.SecurePassword -RetryCount 3
+                $Script:SqlConnection = Connect-TSqlInstance `
+                    -DataSource $Script:Container.DataSource `
+                    -Port $Script:Container.Port `
+                    -UserId $Script:Container.UserId `
+                    -Password $Script:Container.SecurePassword `
+                    -ConnectTimeout $Script:Container.ConnectTimeout `
+                    -RetryCount 3
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString -Verbose
+                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Container.ConnectionString
             }
 
             AfterEach {

@@ -5,28 +5,34 @@ online version:
 schema: 2.0.0
 ---
 
-# Test-LocalDb
+# Get-SqlTestLocalInstance
 
 ## SYNOPSIS
-Tests if a localDb-based SQL Server can be created.
+Returns connection parameters to a available localDb.
 
 ## SYNTAX
 
 ```
-Test-LocalDb [<CommonParameters>]
+Get-SqlTestLocalInstance [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15).
+Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-LocalDb
+Get-SqlTestLocalInstance
 ```
 
-True
+\[PSCustomObject\]
+
+Name                           Value
+----                           -----
+DataSource                     (LocalDb)\MSSQLLocalDB
+ConnectionString               Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True
+Version                        v11.0
 
 ## PARAMETERS
 
@@ -37,7 +43,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### bool
 ## NOTES
 
 ## RELATED LINKS

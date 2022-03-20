@@ -1,9 +1,9 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Remove-DockerSqlServer' {
+Describe 'Remove-DockerInstance' -Tag Docker {
 
     BeforeDiscovery {
-        $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
+        $Script:PsDockerModule = Import-Module psdocker -MinimumVersion '1.7.0' -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {
@@ -14,11 +14,11 @@ Describe 'Remove-DockerSqlServer' {
 
         Context 'Container' {
             BeforeAll {
-                $Script:Container = New-DockerSqlServer -Port 7027 -AcceptEula
+                $Script:Container = New-SqlTestDockerInstance -Port 7027 -AcceptEula
             }
 
             It 'Removes the Docker container' {
-                $Script:Container | Remove-DockerSqlServer
+                $Script:Container | Remove-SqlTestDockerInstance
 
                 Get-DockerContainer -Name $Script:Container.Name | Should -BeNullOrEmpty
             }

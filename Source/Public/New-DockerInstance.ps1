@@ -1,5 +1,5 @@
 
-function New-DockerSqlServer {
+function New-DockerInstance {
 
     <#
 
@@ -11,7 +11,7 @@ function New-DockerSqlServer {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-DockerSqlServer -AcceptEula
+    PS> New-SqlTestDockerInstance -AcceptEula
     Name             : Sandbox
     Hostname         : localhost
     UserId           : sa
@@ -89,7 +89,8 @@ function New-DockerSqlServer {
     $container | Add-Member 'Port' $Port
     $container | Add-Member 'UserId' 'sa'
     $container | Add-Member 'SecurePassword' ( ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force )
-    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname ),$( $container.Port )';Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
+    $container | Add-Member 'ConnectTimeout' 30
+    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname ),$( $container.Port )';Connect Timeout=$( $container.ConnectTimeout );Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
     $container | Add-Member 'IsDocker' $true
 
     # return

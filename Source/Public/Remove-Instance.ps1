@@ -1,4 +1,4 @@
-function Remove-SqlServer {
+function Remove-Instance {
 
     <#
 
@@ -6,11 +6,11 @@ function Remove-SqlServer {
     Removes a test SQL server.
 
     .DESCRIPTION
-    Removes a SQL server, in case it was created with `New-SqlServer`.
+    Removes a SQL server, in case it was created with `New-SqlTestInstance`.
 
     .EXAMPLE
-    PS> $server = New-SqlServer
-    PS> Remove-SqlServer -Server $server
+    PS> $server = New-SqlTestInstance
+    PS> Remove-SqlTestInstance -Server $server
 
     #>
 
@@ -23,6 +23,6 @@ function Remove-SqlServer {
     )
 
     if ( $Server.IsDocker ) {
-        $Server | Remove-DockerSqlServer
+        $Server | Remove-DockerInstance
     }
 }

@@ -3,7 +3,7 @@
 Describe 'Remove-SqlServer' {
 
     BeforeDiscovery {
-        $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
+        $Script:PsDockerModule = Import-Module psdocker -MinimumVersion '1.7.0' -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {
@@ -12,13 +12,14 @@ Describe 'Remove-SqlServer' {
 
     Context 'PsDocker' -Skip:(-Not $Script:PsDockerModule) {
 
-        Context 'Container' {
-            BeforeAll {
-                $Script:Container = New-DockerSqlServer -Port 7027 -AcceptEula
+        Context 'Docker' -Tag 'Docker' {
+
+            BeforeEach {
+                $Script:Container = New-SqlTestDockerInstance -Port 7027 -AcceptEula
             }
 
             It 'Removes the Docker container' {
-                $Script:Container | Remove-SqlServer
+                $Script:Container | Remove-SqlTestInstance
 
                 Get-DockerContainer -Name $Script:Container.Name | Should -BeNullOrEmpty
             }
