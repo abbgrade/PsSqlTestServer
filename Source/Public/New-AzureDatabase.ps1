@@ -7,7 +7,7 @@ function New-AzureDatabase {
     )
 
     if ( $Subscription ) {
-        $azureContext = Set-AzContext -Subscription $Subscription -ErrorAction Stop -PassThru
+        $azureContext = Set-AzContext -Subscription $Subscription -ErrorAction Stop
     }
     else {
         $azureContext = Get-AzContext
@@ -29,7 +29,7 @@ function New-AzureDatabase {
         -ResourceGroupName $ResourceGroup.ResourceGroupName `
         -ServerName $Server.ServerName `
         -FirewallRuleName 'myIP' `
-        -StartIpAddress $myIp -EndIpAddress $myIp
+        -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
 
     $Database = New-AzSqlDatabase -ErrorAction Stop `
         -DatabaseName ( New-Guid ) `
@@ -37,9 +37,9 @@ function New-AzureDatabase {
         -ResourceGroupName $ResourceGroup.ResourceGroupName `
         -Edition GeneralPurpose -Vcore 1 -ComputeGeneration Gen5 -ComputeModel Serverless
 
-    $Database | Add-Member ConnectTimeout 30
-    $Database | Add-Member ConnectionString "Data Source=$( $Server.FullyQualifiedDomainName );Connect Timeout=30;InitialCatalog=$( $Database.DatabaseName );Integrated Security=True"
     $Database | Add-Member DataSource $Server.FullyQualifiedDomainName
     $Database | Add-Member InitialCatalog $Database.DatabaseName
+    $Database | Add-Member ConnectTimeout 30
+    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog );Authentication=Active Directory Integrated"
     $Database | Write-Output
 }

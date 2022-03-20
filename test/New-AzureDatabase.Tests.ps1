@@ -23,6 +23,8 @@ Describe 'New-AzureDatabase' -Tag Azure {
         It 'Returns values' {
             $Script:Database | Should -Not -BeNullOrEmpty
             $Script:Database.DataSource | Should -Not -BeNullOrEmpty
+            $Script:Database.InitialCatalog | Should -Not -BeNullOrEmpty
+            $Script:Database.ConnectTimeout | Should -Not -BeNullOrEmpty
             $Script:Database.ConnectionString | Should -Not -BeNullOrEmpty
         }
 
@@ -33,7 +35,10 @@ Describe 'New-AzureDatabase' -Tag Azure {
         Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
 
             It 'Connects by DataSource' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:Database.DataSource -ConnectTimeout 30
+                $Script:SqlConnection = Connect-TSqlInstance `
+                    -DataSource $Script:Database.DataSource `
+                    -InitialCatalog $Script:Database.InitialCatalog `
+                    -ConnectTimeout $Script:Database.ConnectTimeout
             }
 
             It 'Connects by ConnectionString' {

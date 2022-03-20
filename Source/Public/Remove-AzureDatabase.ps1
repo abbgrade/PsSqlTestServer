@@ -1,4 +1,4 @@
-function Remove-AzDatabase {
+function Remove-AzureDatabase {
 
     [CmdletBinding()]
     param(
