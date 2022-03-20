@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Test-DockerSqlServer' {
+Describe 'Test-Docker' -Tag Docker {
 
     BeforeDiscovery {
         $Script:PsDockerModule = Import-Module psdocker -PassThru -ErrorAction SilentlyContinue
@@ -13,7 +13,7 @@ Describe 'Test-DockerSqlServer' {
     Context 'PsDocker' -Skip:(-Not $Script:PsDockerModule) {
 
         It 'works' {
-            Test-DockerSqlServer | Should -Be $true
+            Test-SqlTestDocker | Should -Be $true
         }
     }
 }

@@ -1,4 +1,4 @@
-function New-SqlServer {
+function New-Instance {
 
     <#
 
@@ -10,7 +10,7 @@ function New-SqlServer {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-SqlServer
+    PS> New-SqlTestInstance
     ConnectionString                                            DataSource
     ----------------                                            ----------
     Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
@@ -21,7 +21,7 @@ function New-SqlServer {
     param ()
 
     if ( Test-LocalDb ) {
-        Get-LocalDb |
+        Get-LocalInstance |
             Write-Output
     }
     elseif ( Test-DockerSqlServer )

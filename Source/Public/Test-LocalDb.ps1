@@ -9,7 +9,7 @@ function Test-LocalDb {
     Uses [SqlLocalDB Utility](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15).
 
     .EXAMPLE
-    PS> Test-LocalDb
+    PS> Test-SqlTestLocalDb
 
     True
 

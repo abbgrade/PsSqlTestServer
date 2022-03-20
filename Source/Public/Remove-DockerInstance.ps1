@@ -1,5 +1,5 @@
 
-function Remove-DockerSqlServer {
+function Remove-DockerInstance {
 
     <#
 
@@ -10,8 +10,8 @@ function Remove-DockerSqlServer {
     Removes a SQL server Docker container, in case it was created with `New-DockerSqlServer`.
 
     .EXAMPLE
-    PS> $server = New-DockerSqlServer -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-    PS> Remove-DockerSqlServer -DockerContainerName $server.Name
+    PS> $server = New-SqlTestDockerInstance -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
+    PS> Remove-SqlTestDockerInstance -DockerContainerName $server.Name
 
     #>
 

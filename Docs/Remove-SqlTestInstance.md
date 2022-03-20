@@ -5,30 +5,44 @@ online version:
 schema: 2.0.0
 ---
 
-# Test-DockerSqlServer
+# Remove-SqlTestInstance
 
 ## SYNOPSIS
-Tests if a Docker-based SQL Server can be created.
+Removes a test SQL server.
 
 ## SYNTAX
 
 ```
-Test-DockerSqlServer [<CommonParameters>]
+Remove-SqlTestInstance -Server <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks if psdocker is installed, and if the Docker service is running.
+Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-DockerSqlServer
+$server = New-SqlTestInstance
+PS> Remove-SqlTestInstance -Server $server
 ```
 
-True
-
 ## PARAMETERS
+
+### -Server
+Specifies the server to remove.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
 
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -37,7 +51,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### bool
 ## NOTES
 
 ## RELATED LINKS

@@ -5,30 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# New-SqlServer
+# Test-SqlTestDocker
 
 ## SYNOPSIS
-Returns connection parameter for a SQL server.
+Tests if a Docker-based SQL Server can be created.
 
 ## SYNTAX
 
 ```
-New-SqlServer [<CommonParameters>]
+Test-SqlTestDocker [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks different versions of local db or creates a Docker container with a SQL server installed.
-Returns a object with the properties DataSource and ConnectionString.
+Checks if psdocker is installed, and if the Docker service is running.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SqlServer
-ConnectionString                                            DataSource
-----------------                                            ----------
-Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
+Test-SqlTestDocker
 ```
+
+True
 
 ## PARAMETERS
 
@@ -39,6 +37,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### bool
 ## NOTES
 
 ## RELATED LINKS
