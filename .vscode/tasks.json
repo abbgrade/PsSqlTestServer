@@ -102,5 +102,20 @@
             },
             "dependsOn": "Build"
         },
+        {
+            "label": "Test Azure",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' }; Output = 'Detailed' }",
+            "options": {
+                "cwd": "test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
     ]
 }

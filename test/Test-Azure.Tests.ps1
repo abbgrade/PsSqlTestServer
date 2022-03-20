@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Test-AzureSqlDatabase' {
+Describe 'Test-Azure' -Tag Azure {
 
     BeforeDiscovery {
         $Script:AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
@@ -13,7 +13,7 @@ Describe 'Test-AzureSqlDatabase' {
     Context 'Az.Sql' -Skip:(-Not $Script:AzSqlModule) {
 
         It 'works' {
-            Test-AzureSqlDatabase | Should -BeIn $true, $false
+            Test-SqlTestAzure | Should -BeIn $true, $false
         }
     }
 }
