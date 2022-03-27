@@ -13,7 +13,7 @@ Describe 'Test-Docker' -Tag Docker {
     Context 'PsDocker' -Skip:(-Not $Script:PsDockerModule) {
 
         It 'works' {
-            Test-SqlTestDocker | Should -Be $true
+            Test-SqlTestDocker | Should -BeIn $true, $false
         }
     }
 }

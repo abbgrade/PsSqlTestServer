@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Commands New-Database and Remove-Database.
+
 ## [1.0.0] - 2022-03-20
 
 ### Added
