@@ -10,4 +10,5 @@ task InstallTestDependencies -Jobs {
 }
 
 task InstallReleaseDependencies -Jobs {
+    Install-Module PsSqlClient -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease -AllowClobber
 }
