@@ -26,6 +26,10 @@ Describe 'Get-LocalInstance' -Tag SqlLocalDB {
                 $Script:LocalDb = Get-SqlTestLocalInstance
             }
 
+            It 'Connects by Pipeline' {
+                $Script:SqlConnection = $Script:LocalDb | Connect-TSqlInstance
+            }
+
             It 'Connects by DataSource' {
                 $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource -ConnectTimeout $Script:LocalDb.ConnectTimeout
             }

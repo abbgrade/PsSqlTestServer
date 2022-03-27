@@ -21,7 +21,7 @@ function New-Instance {
     param ()
 
     if ( Test-LocalDb ) {
-        Get-LocalInstance |
+        New-LocalInstance |
             Write-Output
     }
     elseif ( Test-Docker )
