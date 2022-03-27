@@ -9,8 +9,8 @@ function Remove-Instance {
     Removes a SQL server, in case it was created with `New-SqlTestInstance`.
 
     .EXAMPLE
-    PS> $server = New-SqlTestInstance
-    PS> Remove-SqlTestInstance -Server $server
+    PS> $Instance = New-SqlTestInstance
+    PS> Remove-SqlTestInstance -Server $Instance
 
     #>
 
@@ -19,10 +19,14 @@ function Remove-Instance {
         # Specifies the server to remove.
         [Parameter( Mandatory, ValueFromPipeline )]
         [ValidateNotNullOrEmpty()]
-        $Server
+        $Instance
     )
 
-    if ( $Server.IsDocker ) {
-        $Server | Remove-DockerInstance
+    if ( $Instance.IsDocker ) {
+        $Instance | Remove-DockerInstance
+    }
+
+    if ( $Instance.IsLocalDb ) {
+        $Instance | Remove-LocalInstance
     }
 }

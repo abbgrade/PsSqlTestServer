@@ -25,7 +25,11 @@ function Remove-DockerInstance {
 
     )
 
-    Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
+    begin {
+        Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
+    }
 
-    Remove-DockerContainer -Name $Server.Name -Force
+    process {
+        Remove-DockerContainer -Name $Server.Name -Force
+    }
 }

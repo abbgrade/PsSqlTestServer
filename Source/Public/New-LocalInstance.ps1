@@ -1,17 +1,24 @@
 function New-LocalInstance {
 
     [CmdletBinding()]
-    param ()
+    param (
+        # Specifies the name of the instance to create.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string] $Name = "test-$(( [string](New-Guid) ).Substring(0, 8))"
+    )
 
     Import-Module PsSqlLocalDb -ErrorAction Stop
 
-    $instance = Get-LocalDbInstance
+    # create instance
+    $instance = New-LocalDbInstance -Name $Name
 
-    [PSCustomObject] @{
-        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Connect Timeout=30;Integrated Security=True"
-        DataSource       = "(LocalDb)\$( $instance.Name )"
-        ConnectTimeout   = 30
-        Version          = $instance.Version
-    } | Write-Output
+    # add metadata
+    $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
+    $instance | Add-Member 'ConnectTimeout' 30
+    $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
+    $instance | Add-Member 'IsLocalDb' $true
 
+    # return
+    $instance | Write-Output
 }

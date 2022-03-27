@@ -24,8 +24,7 @@ function New-Instance {
         New-LocalInstance |
             Write-Output
     }
-    elseif ( Test-Docker )
-    {
+    elseif ( Test-Docker ) {
         New-DockerInstance -AcceptEula |
             Write-Output
     }
