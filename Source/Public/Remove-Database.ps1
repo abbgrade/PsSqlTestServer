@@ -1,5 +1,21 @@
 function Remove-Database {
 
+    <#
+
+    .SYNOPSIS
+    Removes a database.
+
+    .DESCRIPTION
+    Removes a database, created using `New-SqlTestInstance` command.
+
+    .EXAMPLE
+    PS> $Instance = New-SqlTestInstance
+    PS> $InstanceConnection = $Instance | Connect-TSqlInstance
+    PS> $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
+    PS> $Database | Remove-SqlTestDatabase
+
+    #>
+
     [CmdletBinding()]
     param (
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
