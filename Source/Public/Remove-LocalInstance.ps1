@@ -1,5 +1,19 @@
 function Remove-LocalInstance {
 
+    <#
+
+    .SYNOPSIS
+    Removes a test SQL server.
+
+    .DESCRIPTION
+    Removes a SQL server, in case it was created with `New-SqlTestLocalInstance`.
+
+    .EXAMPLE
+    PS> $Instance = New-SqlTestLocalInstance
+    PS> Remove-SqlTestLocalInstance -Server $Instance
+
+    #>
+
     [CmdletBinding()]
     param (
 
