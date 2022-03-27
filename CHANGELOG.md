@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2022-03-27
+
+### Added
+
+- Commands New-LocalInstance, Remove-LocalInstance and Get-Instance.
+- Parameter First Get-LocalInstance, to limit number or results.
+
+### Changed
+
+- New-Instance does not reuse a existing but creates a new localdb instance.
+- Remove-Instance removes local db instances.
+
 ## [1.1.0] - 2022-03-27
 
 ### Added
