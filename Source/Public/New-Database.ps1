@@ -42,6 +42,8 @@ function New-Database {
     )
 
     $Database = $Instance.PsObject.Copy()
+    $Database | Add-Member InstanceName $Database.Name
+    $Database.Name = $Name
 
     Invoke-TSqlCommand "CREATE DATABASE [$Name]" -Connection $InstanceConnection
 

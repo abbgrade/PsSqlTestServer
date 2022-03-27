@@ -5,15 +5,15 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-SqlTestLocalInstance
+# New-SqlTestLocalInstance
 
 ## SYNOPSIS
-Returns connection parameters to a available localDb.
+Returns connection parameters to new localDb.
 
 ## SYNTAX
 
 ```
-Get-SqlTestLocalInstance [[-First] <Int32>] [<CommonParameters>]
+New-SqlTestLocalInstance [[-Name] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,30 +23,30 @@ Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocald
 
 ### EXAMPLE 1
 ```
-Get-SqlTestLocalInstance
+New-SqlTestLocalInstance
 ```
 
 \[PSCustomObject\]
 
 Name                           Value
 ----                           -----
-DataSource                     (LocalDb)\MSSQLLocalDB
-ConnectionString               Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True
+DataSource                     (LocalDb)\test-18f57083
+ConnectionString               Data Source=(LocalDb)\test-18f57083;Integrated Security=True
 Version                        v11.0
 
 ## PARAMETERS
 
-### -First
-Specifies maximum number of returned instances.
+### -Name
+Specifies the name of the instance to create.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 1
-Default value: 1
+Default value: "test-$(( [string](New-Guid) ).Substring(0, 8))"
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

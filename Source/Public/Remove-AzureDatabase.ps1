@@ -15,7 +15,8 @@ function Remove-AzureDatabase {
         $DatabaseName
     )
 
-    Remove-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ServerName -DatabaseName $DatabaseName
-
-    Remove-AzSqlServer -ResourceGroupName $ResourceGroupName -ServerName $ServerName
+    process {
+        Remove-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ServerName -DatabaseName $DatabaseName
+        Remove-AzSqlServer -ResourceGroupName $ResourceGroupName -ServerName $ServerName
+    }
 }

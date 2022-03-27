@@ -1,4 +1,4 @@
-function New-Instance {
+function Get-Instance {
 
     <#
 
@@ -10,7 +10,7 @@ function New-Instance {
     Returns a object with the properties DataSource and ConnectionString.
 
     .EXAMPLE
-    PS> New-SqlTestInstance
+    PS> Get-SqlTestInstance
     ConnectionString                                            DataSource
     ----------------                                            ----------
     Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
@@ -21,14 +21,10 @@ function New-Instance {
     param ()
 
     if ( Test-LocalDb ) {
-        New-LocalInstance |
-            Write-Output
-    }
-    elseif ( Test-Docker ) {
-        New-DockerInstance -AcceptEula |
+        Get-LocalInstance |
             Write-Output
     }
     else {
-        Write-Error 'No SQL server provider like Docker or LocalDb is available.'
+        Write-Error 'No SQL server provider like LocalDb is available.'
     }
 }

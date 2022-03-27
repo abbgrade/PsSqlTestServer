@@ -6,6 +6,14 @@ Describe 'Remove-Instance' {
         Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
+    It 'removes all instances' {
+        $Script:Instance = New-SqlTestInstance
+        $Script:Instance | Remove-SqlTestInstance
+        {
+            $Script:Instance | Connect-TSqlInstance
+        } | Should -Throw
+    }
+
     Context 'Docker' -Tag 'Docker' -Skip:( -Not ( Test-SqlTestDocker )) {
 
         BeforeEach {

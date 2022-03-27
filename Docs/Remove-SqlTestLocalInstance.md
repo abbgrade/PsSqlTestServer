@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-SqlTestInstance
+# Remove-SqlTestLocalInstance
 
 ## SYNOPSIS
 Removes a test SQL server.
@@ -13,34 +13,34 @@ Removes a test SQL server.
 ## SYNTAX
 
 ```
-Remove-SqlTestInstance -Instance <Object> [<CommonParameters>]
+Remove-SqlTestLocalInstance [-Name] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
+Removes a SQL server, in case it was created with \`New-SqlTestLocalInstance\`.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$Instance = New-SqlTestInstance
-PS> Remove-SqlTestInstance -Server $Instance
+$Instance = New-SqlTestLocalInstance
+PS> Remove-SqlTestLocalInstance -Server $Instance
 ```
 
 ## PARAMETERS
 
-### -Instance
-Specifies the server to remove.
+### -Name
+Specifies the name of the instance to remove.
 
 ```yaml
-Type: Object
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

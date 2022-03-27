@@ -12,6 +12,7 @@ Describe 'Get-LocalInstance' -Tag SqlLocalDB {
             $result = Get-SqlTestLocalInstance
 
             $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 1
             $result.DataSource | Should -Not -BeNullOrEmpty
             $result.ConnectionString | Should -Not -BeNullOrEmpty
         }
@@ -24,6 +25,10 @@ Describe 'Get-LocalInstance' -Tag SqlLocalDB {
 
             BeforeAll {
                 $Script:LocalDb = Get-SqlTestLocalInstance
+            }
+
+            It 'Connects by Pipeline' {
+                $Script:SqlConnection = $Script:LocalDb | Connect-TSqlInstance
             }
 
             It 'Connects by DataSource' {
