@@ -22,16 +22,24 @@ function Get-LocalInstance {
     #>
 
     [CmdletBinding()]
-    param ()
+    param (
+        # Specifies maximum number of returned instances.
+        [Parameter()]
+        [int] $First = 1
+    )
 
     Import-Module PsSqlLocalDb -ErrorAction Stop
 
-    $instance = Get-LocalDbInstance
+    Get-LocalDbInstance | Select-Object -First $First | ForEach-Object {
+        $instance = $PSItem
 
-    [PSCustomObject] @{
-        ConnectionString = "Data Source=(LocalDb)\$( $instance.Name );Connect Timeout=30;Integrated Security=True"
-        DataSource       = "(LocalDb)\$( $instance.Name )"
-        ConnectTimeout   = 30
-        Version          = $instance.Version
-    } | Write-Output
+        # add metadata
+        $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
+        $instance | Add-Member 'ConnectTimeout' 30
+        $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
+        $instance | Add-Member 'IsLocalDb' $true
+
+        # return
+        $instance | Write-Output
+    }
 }
