@@ -9,42 +9,29 @@ Describe 'Remove-Database' {
     Context 'Instance' {
         BeforeAll {
             $Script:Instance = New-SqlTestInstance
+            $Script:InstanceConnection = $Script:Instance | Connect-TSqlInstance
         }
 
         AfterAll {
             if ( $Script:Instance ) {
                 $Script:Instance | Remove-SqlTestInstance
             }
+            if ( $Script:InstanceConnection ) {
+                Disconnect-TSqlInstance -Connection $Script:InstanceConnection
+            }
         }
 
-        BeforeDiscovery {
-            $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
-        }
-
-        Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
-
-            BeforeAll {
-                $Script:InstanceConnection = $Script:Instance | Connect-TSqlInstance
+        Context 'Database' {
+            BeforeEach {
+                $Script:Database = New-SqlTestDatabase -Instance $Script:Instance -InstanceConnection $Script:InstanceConnection
             }
 
-            AfterAll {
-                if ( $Script:InstanceConnection ) {
-                    Disconnect-TSqlInstance -Connection $Script:InstanceConnection
-                }
-            }
+            It 'Removes the database' {
+                $Script:Database | Remove-SqlTestDatabase
 
-            Context 'Database' {
-                BeforeEach {
-                    $Script:Database = New-SqlTestDatabase -Instance $Script:Instance -InstanceConnection $Script:InstanceConnection
-                }
-
-                It 'Removes the database' {
-                    $Script:Database | Remove-SqlTestDatabase
-
-                    {
-                        $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
-                    } | Should -Throw
-                }
+                {
+                    $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
+                } | Should -Throw
             }
         }
     }

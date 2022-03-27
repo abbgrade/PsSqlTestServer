@@ -5,44 +5,32 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-SqlTestInstance
+# Get-SqlTestInstance
 
 ## SYNOPSIS
-Removes a test SQL server.
+Returns connection parameter for a SQL server.
 
 ## SYNTAX
 
 ```
-Remove-SqlTestInstance -Instance <Object> [<CommonParameters>]
+Get-SqlTestInstance [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
+Checks different versions of local db or creates a Docker container with a SQL server installed.
+Returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$Instance = New-SqlTestInstance
-PS> Remove-SqlTestInstance -Server $Instance
+Get-SqlTestInstance
+ConnectionString                                            DataSource
+----------------                                            ----------
+Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
 ```
 
 ## PARAMETERS
-
-### -Instance
-Specifies the server to remove.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
 
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
