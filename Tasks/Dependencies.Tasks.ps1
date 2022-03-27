@@ -1,5 +1,6 @@
 task InstallBuildDependencies -Jobs {
     Install-Module platyPs -Scope CurrentUser -ErrorAction Stop -Verbose
+    Install-Module PsSqlClient -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease -AllowClobber
 }
 
 task InstallTestDependencies -Jobs {
@@ -9,4 +10,5 @@ task InstallTestDependencies -Jobs {
 }
 
 task InstallReleaseDependencies -Jobs {
+    Install-Module PsSqlClient -Scope CurrentUser -ErrorAction Stop -Verbose -AllowPrerelease -AllowClobber
 }
