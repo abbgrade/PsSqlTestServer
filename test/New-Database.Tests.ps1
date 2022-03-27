@@ -38,11 +38,18 @@ Describe 'New-Database' {
                     $Script:Database = New-SqlTestDatabase -Instance $Script:Instance -InstanceConnection $Script:InstanceConnection
                 }
 
+                AfterAll {
+                    if ( $Script:Database ) {
+                        $Script:Database | Remove-SqlTestDatabase
+                    }
+                }
+
                 It 'Creates a new database' {
                     $Script:Database | Should -Not -BeNullOrEmpty
                     $Script:Database.ConnectionString | Should -Not -BeNullOrEmpty
                     $Script:Database.DataSource | Should -Not -BeNullOrEmpty
                     $Script:Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                    $Script:Database.InstanceConnection | Should -Not -BeNullOrEmpty
                 }
 
                 It 'Connects by properties' {
@@ -56,6 +63,12 @@ Describe 'New-Database' {
 
                 It 'Connects by connection string' {
                     $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Database.ConnectionString
+
+                    $Script:SqlConnection.Database | Should -Be $Script:Database.InitialCatalog
+                }
+
+                It 'Connects by pipeline' {
+                    $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
 
                     $Script:SqlConnection.Database | Should -Be $Script:Database.InitialCatalog
                 }

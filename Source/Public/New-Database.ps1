@@ -21,6 +21,7 @@ function New-Database {
 
     $Database | Add-Member InitialCatalog $Name
     $Database.ConnectionString += ";Initial Catalog=$( $Database.InitialCatalog )"
+    $Database | Add-Member InstanceConnection $InstanceConnection
 
     Write-Output $Database
 }
