@@ -1,5 +1,23 @@
 function Test-Azure {
 
+    <#
+
+    .SYNOPSIS
+    Tests if a Azure-based SQL Server can be created.
+
+    .DESCRIPTION
+    Checks if Az is installed, and if the Azure service is running.
+
+    .EXAMPLE
+    PS> Test-SqlTestAzure
+
+    True
+
+    .OUTPUTS
+    bool
+
+    #>
+
     [CmdletBinding()]
     param()
 

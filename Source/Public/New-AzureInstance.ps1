@@ -1,7 +1,21 @@
 function New-AzureInstance {
 
+    <#
+
+    .SYNOPSIS
+    Returns connection parameter for a Azure SQL Server.
+
+    .DESCRIPTION
+    Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
+
+    .EXAMPLE
+    PS> New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+
+    #>
+
     [CmdletBinding()]
     param(
+        # Specifies the Azure Subscription name.
         [ValidateNotNullOrEmpty()]
         [string] $Subscription
     )
