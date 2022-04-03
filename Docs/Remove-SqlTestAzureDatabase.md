@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-SqlTestAzureDatabase
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a Azure SQL Database.
 
 ## SYNTAX
 
@@ -18,51 +18,22 @@ Remove-SqlTestAzureDatabase [-ResourceGroupName] <Object> [-ServerName] <Object>
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Removes a Azure SQL Database, created using \`New-SqlTestAzureInstance\` command.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+$instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+PS> $database = New-SqlTestAzureDatabase -Instance $instance
+PS> $database | Remove-SqlTestAzureDatabase
+PS> $instance | Remove-SqlTestAzureInstance
+```
 
 ## PARAMETERS
 
-### -DatabaseName
-{{ Fill DatabaseName Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -ResourceGroupName
-{{ Fill ResourceGroupName Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -ServerName
-{{ Fill ServerName Description }}
+Specifies the resource group containing the database.
 
 ```yaml
 Type: Object
@@ -76,16 +47,43 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -ServerName
+Specifies the server to remove the database from.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DatabaseName
+Specifies the database to remove.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.Object
-
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

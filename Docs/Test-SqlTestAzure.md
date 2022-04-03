@@ -8,7 +8,7 @@ schema: 2.0.0
 # Test-SqlTestAzure
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Tests if a Azure-based SQL Server can be created.
 
 ## SYNTAX
 
@@ -17,16 +17,16 @@ Test-SqlTestAzure [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Checks if Az is installed, and if the Azure service is running.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Test-SqlTestAzure
 ```
 
-{{ Add example description here }}
+True
 
 ## PARAMETERS
 
@@ -35,11 +35,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
+### bool
 ## NOTES
 
 ## RELATED LINKS

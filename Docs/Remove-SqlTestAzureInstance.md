@@ -5,43 +5,57 @@ online version:
 schema: 2.0.0
 ---
 
-# New-SqlTestAzureDatabase
+# Remove-SqlTestAzureInstance
 
 ## SYNOPSIS
-Creates a new Azure SQL Database and returns the connection parameters.
+Removes a test Azure SQL Server.
 
 ## SYNTAX
 
 ```
-New-SqlTestAzureDatabase [-Server] <Object> [<CommonParameters>]
+Remove-SqlTestAzureInstance [-ResourceGroupName] <Object> [-ServerName] <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses a existing test azure sql instance and creates a database for (temporary) use.
+Removes a Azure SQL Server, in case it was created with \`New-SqlTestAzureInstance\`.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 $instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
-PS> New-SqlTestAzureDatabase -Instance $instance
+PS> $instance | Remove-SqlTestAzureInstance
 ```
 
 ## PARAMETERS
 
-### -Server
-Specifies the Azure SQL Server.
-\[Microsoft.Azure.Commands.Sql.Server.Model.AzureSqlServerModel\]
+### -ResourceGroupName
+Specifies the resource group containing the server.
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
-Aliases: Instance
+Aliases:
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ServerName
+Specifies the server to remove.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

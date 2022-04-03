@@ -5,39 +5,31 @@ online version:
 schema: 2.0.0
 ---
 
-# New-SqlTestLocalInstance
+# New-SqlTestAzureInstance
 
 ## SYNOPSIS
-Returns connection parameters to new localDb.
+Returns connection parameter for a Azure SQL Server.
 
 ## SYNTAX
 
 ```
-New-SqlTestLocalInstance [[-Name] <String>] [<CommonParameters>]
+New-SqlTestAzureInstance [[-Subscription] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
+Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SqlTestLocalInstance
+New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
 ```
-
-\[PSCustomObject\]
-
-Name                           Value
-----                           -----
-DataSource                     (LocalDb)\test-18f57083
-ConnectionString               Data Source=(LocalDb)\test-18f57083;Integrated Security=True
-Version                        v11.0
 
 ## PARAMETERS
 
-### -Name
-Specifies the name of the instance to create.
+### -Subscription
+Specifies the Azure Subscription name.
 
 ```yaml
 Type: String
@@ -46,7 +38,7 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: "test-$(( [string](New-Guid) ).Substring(0, 8))"
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

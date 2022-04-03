@@ -1,40 +1,33 @@
 function New-AzureDatabase {
 
+    <#
+
+    .SYNOPSIS
+    Creates a new Azure SQL Database and returns the connection parameters.
+
+    .DESCRIPTION
+    Uses a existing test azure sql instance and creates a database for (temporary) use.
+
+    .EXAMPLE
+    PS> $instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+    PS> New-SqlTestAzureDatabase -Instance $instance
+
+    #>
+
     [CmdletBinding()]
     param(
+        # Specifies the Azure SQL Server.
+        [Parameter( Mandatory )]
         [ValidateNotNullOrEmpty()]
-        [string] $Subscription
+        [Alias( 'Instance' )]
+        # [Microsoft.Azure.Commands.Sql.Server.Model.AzureSqlServerModel]
+        $Server
     )
-
-    if ( $Subscription ) {
-        $azureContext = Set-AzContext -Subscription $Subscription -ErrorAction Stop
-    }
-    else {
-        $azureContext = Get-AzContext
-    }
-
-    $ResourceGroup = Get-AzResourceGroup -Name 'PsSqlTestServer' -ErrorAction SilentlyContinue
-    if ( -not $ResourceGroup ) {
-        $ResourceGroup = New-AzResourceGroup -Name 'PsSqlTestServer' -Location 'West Europe' -ErrorAction Stop
-    }
-    $Server = New-AzSqlServer -ErrorAction Stop `
-        -ServerName ( New-Guid ) `
-        -ResourceGroupName $ResourceGroup.ResourceGroupName `
-        -Location $ResourceGroup.Location `
-        -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName ( $azureContext.Account )
-
-    $myIp = ( Invoke-WebRequest ifconfig.me/ip ).Content.Trim()
-
-    New-AzSqlServerFirewallRule `
-        -ResourceGroupName $ResourceGroup.ResourceGroupName `
-        -ServerName $Server.ServerName `
-        -FirewallRuleName 'myIP' `
-        -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
 
     $Database = New-AzSqlDatabase -ErrorAction Stop `
         -DatabaseName ( New-Guid ) `
         -ServerName $Server.ServerName `
-        -ResourceGroupName $ResourceGroup.ResourceGroupName `
+        -ResourceGroupName $Server.ResourceGroupName `
         -Edition GeneralPurpose -Vcore 1 -ComputeGeneration Gen5 -ComputeModel Serverless
 
     $Database | Add-Member DataSource $Server.FullyQualifiedDomainName
