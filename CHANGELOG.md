@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New-AzureInstance, Remove-AzureInstance
+
+### Changed
+
+- New-AzureDatabase does not create a server anymore.
+
 ## [1.2.0] - 2022-03-27
 
 ### Added

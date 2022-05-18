@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Remove-AzureDatabase' -Tag Azure {
+Describe 'Remove-AzureInstance' -Tag Azure {
 
     BeforeDiscovery {
         $Script:AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
@@ -18,22 +18,12 @@ Describe 'Remove-AzureDatabase' -Tag Azure {
                 $Script:Instance = New-SqlTestAzureInstance -Subscription $Script:Subscription
             }
 
-            AfterAll {
+            It 'Removes the Azure Instance' {
                 $Script:Instance | Remove-SqlTestAzureInstance
-            }
 
-            Context 'Database' {
-                BeforeEach {
-                    $Script:Database = New-SqlTestAzureDatabase -Instance $Script:Instance
-                }
-
-                It 'Removes the Azure Database' {
-                    $Script:Database | Remove-SqlTestAzureDatabase
-
-                    {
-                        $Script:Database | Get-AzSqlDatabase -ErrorAction Stop
-                    } | Should -Throw
-                }
+                {
+                    $Script:Instance | Get-AzSqlDatabase -ErrorAction Stop
+                } | Should -Throw
             }
         }
     }

@@ -1,7 +1,21 @@
-function New-AzureDatabase {
+function New-AzureInstance {
+
+    <#
+
+    .SYNOPSIS
+    Returns connection parameter for a Azure SQL Server.
+
+    .DESCRIPTION
+    Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
+
+    .EXAMPLE
+    PS> New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+
+    #>
 
     [CmdletBinding()]
     param(
+        # Specifies the Azure Subscription name.
         [ValidateNotNullOrEmpty()]
         [string] $Subscription
     )
@@ -31,15 +45,8 @@ function New-AzureDatabase {
         -FirewallRuleName 'myIP' `
         -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
 
-    $Database = New-AzSqlDatabase -ErrorAction Stop `
-        -DatabaseName ( New-Guid ) `
-        -ServerName $Server.ServerName `
-        -ResourceGroupName $ResourceGroup.ResourceGroupName `
-        -Edition GeneralPurpose -Vcore 1 -ComputeGeneration Gen5 -ComputeModel Serverless
-
-    $Database | Add-Member DataSource $Server.FullyQualifiedDomainName
-    $Database | Add-Member InitialCatalog $Database.DatabaseName
-    $Database | Add-Member ConnectTimeout 30
-    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog );Authentication=Active Directory Integrated"
-    $Database | Write-Output
+    $Server | Add-Member DataSource $Server.FullyQualifiedDomainName
+    $Server | Add-Member ConnectTimeout 30
+    $Server | Add-Member ConnectionString "Data Source=$( $Server.DataSource );Connect Timeout=$( $Server.ConnectTimeout );Authentication=Active Directory Integrated"
+    $Server | Write-Output
 }
