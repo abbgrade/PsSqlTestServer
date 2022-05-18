@@ -7,7 +7,7 @@ Describe 'Test-LocalDb' -Tag SqlLocalDB {
     }
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
     Context 'PsSqlLocalDb' -Skip:(-Not $Script:PsSqlLocalDbModule) {

@@ -7,7 +7,7 @@ Describe 'Remove-AzureDatabase' -Tag Azure {
     }
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
         $Script:Subscription = 'Visual Studio Enterprise – MPN'
     }
 
