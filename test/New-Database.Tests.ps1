@@ -3,7 +3,7 @@
 Describe 'New-Database' {
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\Source\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
     Context 'Instance' {

@@ -3,7 +3,7 @@
 Describe 'ModuleManifest' {
 
     BeforeAll {
-        $ModuleManifestPath = "$PSScriptRoot\..\Source\PsSqlTestServer.psd1"
+        $ModuleManifestPath = "$PSScriptRoot\..\src\PsSqlTestServer.psd1"
         Import-Module $ModuleManifestPath -Force
     }
 
