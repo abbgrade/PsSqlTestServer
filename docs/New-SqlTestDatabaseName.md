@@ -5,39 +5,33 @@ online version:
 schema: 2.0.0
 ---
 
-# New-SqlTestLocalInstance
+# New-SqlTestDatabaseName
 
 ## SYNOPSIS
-Returns connection parameters to new localDb.
+Generates a database name.
 
 ## SYNTAX
 
 ```
-New-SqlTestLocalInstance [[-Name] <String>] [<CommonParameters>]
+New-SqlTestDatabaseName [[-Prefix] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
+Generates a short random database name.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-New-SqlTestLocalInstance
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
 
-\[PSCustomObject\]
-
-Name                           Value
-----                           -----
-DataSource                     (LocalDb)\test-18f57083
-ConnectionString               Data Source=(LocalDb)\test-18f57083;Integrated Security=True
-Version                        v11.0
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -Name
-Specifies the name of the instance to create.
+### -Prefix
+Prefix to the database name.
 
 ```yaml
 Type: String
@@ -46,7 +40,7 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: "test-$( New-DatabaseName )"
+Default value: Name
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

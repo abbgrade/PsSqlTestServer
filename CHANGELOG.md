@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New-AzureInstance, Remove-AzureInstance
+- New-AzureInstance, Remove-AzureInstance and New-DatabaseName commands
 
 ### Changed
 

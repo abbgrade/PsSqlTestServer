@@ -38,7 +38,7 @@ function New-Database {
         # Specifies the name of the database to create.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Name = ( [string](New-Guid) ).Substring(0, 8)
+        [string] $Name = ( New-DatabaseName )
     )
 
     $Database = $Instance.PsObject.Copy()
