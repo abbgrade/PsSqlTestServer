@@ -26,7 +26,7 @@ function New-LocalInstance {
         # Specifies the name of the instance to create.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Name = "test-$(( [string](New-Guid) ).Substring(0, 8))"
+        [string] $Name = "test-$( New-DatabaseName )"
     )
 
     Import-Module PsSqlLocalDb -ErrorAction Stop

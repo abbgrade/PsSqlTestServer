@@ -79,7 +79,7 @@ Aliases:
 
 Required: False
 Position: 3
-Default value: ( [string](New-Guid) ).Substring(0, 8)
+Default value: ( New-DatabaseName )
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
