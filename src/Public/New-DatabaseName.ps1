@@ -14,9 +14,13 @@ function New-DatabaseName {
     param (
         # Prefix to the database name.
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
         [string] $Prefix = 'name'
     )
 
-    Write-Output "$Prefix-$( ( [string](New-Guid) ).Substring(0, 8) )"
+    if ( $Prefix ) {
+        Write-Output "$Prefix-$( ( [string](New-Guid) ).Substring(0, 8) )"
+    } else {
+        Write-Output ( [string](New-Guid) ).Substring(0, 8)
+    }
+
 }
