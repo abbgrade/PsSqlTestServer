@@ -20,7 +20,10 @@ function Remove-LocalInstance {
         # Specifies the name of the instance to remove.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
-        [string] $Name
+        [string] $Name,
+
+        [Parameter()]
+        [switch] $WhatIf
 
     )
 
@@ -29,6 +32,10 @@ function Remove-LocalInstance {
     }
 
     process {
-        Remove-LocalDbInstance -Name $Name
+        if ( $WhatIf.IsPresent ) {
+            Write-Verbose "Remove $Name" -Verbose
+        } else {
+            Remove-LocalDbInstance -Name $Name
+        }
     }
 }
