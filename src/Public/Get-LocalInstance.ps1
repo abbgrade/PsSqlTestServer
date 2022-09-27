@@ -30,7 +30,12 @@ function Get-LocalInstance {
 
     Import-Module PsSqlLocalDb -ErrorAction Stop
 
-    Get-LocalDbInstance | Select-Object -First $First | ForEach-Object {
+    $selectParam = @{}
+    if ( $First ) {
+        $selectParam.First = $First
+    }
+
+    Get-LocalDbInstance | Select-Object @selectParam | ForEach-Object {
         $instance = $PSItem
 
         # add metadata

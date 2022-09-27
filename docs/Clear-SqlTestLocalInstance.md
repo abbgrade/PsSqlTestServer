@@ -5,44 +5,29 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-SqlTestLocalInstance
+# Clear-SqlTestLocalInstance
 
 ## SYNOPSIS
-Removes a test SQL server.
+Remove all localdb test instances
 
 ## SYNTAX
 
 ```
-Remove-SqlTestLocalInstance [-Name] <String> [-WhatIf] [<CommonParameters>]
+Clear-SqlTestLocalInstance [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestLocalInstance\`.
+Remove all instances created by New-LocalInstance.
+These are identified using the 'test-' prefix.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$Instance = New-SqlTestLocalInstance
-PS> Remove-SqlTestLocalInstance -Server $Instance
+Clear-SqlTestLocalInstance
 ```
 
 ## PARAMETERS
-
-### -Name
-Specifies the name of the instance to remove.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
 
 ### -WhatIf
 Shows what would happen if the cmdlet runs.
