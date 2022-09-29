@@ -26,13 +26,19 @@ function New-LocalInstance {
         # Specifies the name of the instance to create.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Name = "test-$( New-DatabaseName )"
+        [string] $Name = ( New-DatabaseName ),
+
+        [Parameter()]
+        [System.Version] $MinimumVersion,
+
+        [Parameter()]
+        [System.Version] $Version
     )
 
     Import-Module PsSqlLocalDb -ErrorAction Stop
 
     # create instance
-    $instance = New-LocalDbInstance -Name $Name
+    $instance = New-LocalDbInstance -Name $Name -Version:$Version -MinimumVersion:$MinimumVersion
 
     # add metadata
     $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"

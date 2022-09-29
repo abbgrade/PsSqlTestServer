@@ -22,6 +22,24 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             $Instance[0].DataSource | Should -Not -Be $Instance[1].DataSource -Because 'two instances must have unique names'
         }
 
+        It 'Provides a SQL server with minimum version' {
+            $Instance = New-SqlTestLocalInstance -MinimumVersion 15.0
+
+            $Instance | Should -Not -BeNullOrEmpty
+            $Instance.Version | Should -BeGreaterOrEqual 15.0
+            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+            $Instance.DataSource | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Provides a SQL server with version' {
+            $Instance = New-SqlTestLocalInstance -Version 13.1
+
+            $Instance | Should -Not -BeNullOrEmpty
+            $Instance.Version | Should -Be 13.1
+            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+            $Instance.DataSource | Should -Not -BeNullOrEmpty
+        }
+
         AfterEach {
             if ( $Instance ) {
                 $Instance | Remove-SqlTestInstance
