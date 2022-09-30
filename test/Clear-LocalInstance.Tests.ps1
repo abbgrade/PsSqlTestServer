@@ -10,7 +10,7 @@ Describe Clear-LocalInstance {
         BeforeEach {
             $Instance = @((New-SqlTestLocalInstance), (New-SqlTestLocalInstance))
 
-            Import-Module PsSqlLocalDb -ErrorAction Stop
+            Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
         }
 
         It Works-with-WhatIf {

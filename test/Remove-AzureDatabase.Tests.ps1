@@ -1,37 +1,37 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Remove-AzureDatabase' -Tag Azure {
+Describe Remove-AzureDatabase -Tag Azure {
 
     BeforeDiscovery {
-        $Script:AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
+        $AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
-        $Script:Subscription = 'Visual Studio Enterprise – MPN'
+        $Subscription = 'Visual Studio Enterprise – MPN'
     }
 
-    Context 'Az' -Skip:(-Not $Script:AzSqlModule) {
+    Context Az -Skip:(-Not $AzSqlModule) {
 
-        Context 'Instance' {
+        Context Instance {
             BeforeAll {
-                $Script:Instance = New-SqlTestAzureInstance -Subscription $Script:Subscription
+                $Instance = New-SqlTestAzureInstance -Subscription $Subscription
             }
 
             AfterAll {
-                $Script:Instance | Remove-SqlTestAzureInstance
+                $Instance | Remove-SqlTestAzureInstance
             }
 
-            Context 'Database' {
+            Context Database {
                 BeforeEach {
-                    $Script:Database = New-SqlTestAzureDatabase -Instance $Script:Instance
+                    $Database = New-SqlTestAzureDatabase -Instance $Instance
                 }
 
                 It 'Removes the Azure Database' {
-                    $Script:Database | Remove-SqlTestAzureDatabase
+                    $Database | Remove-SqlTestAzureDatabase
 
                     {
-                        $Script:Database | Get-AzSqlDatabase -ErrorAction Stop
+                        $Database | Get-AzSqlDatabase -ErrorAction Stop
                     } | Should -Throw
                 }
             }

@@ -61,9 +61,9 @@
             "label": "Test",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Output Detailed",
+            "command": "Invoke-Pester",
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
@@ -76,9 +76,9 @@
             "label": "Test SqlLocalDB",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' }; Output = 'Detailed' }",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' } }",
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
@@ -91,9 +91,9 @@
             "label": "Test Docker",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' }; Output = 'Detailed' }",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' } }",
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {
@@ -106,9 +106,9 @@
             "label": "Test Azure",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Azure' }; Output = 'Detailed' }",
+            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Azure' } }",
             "options": {
-                "cwd": "test"
+                "cwd": "${workspaceFolder}/test"
             },
             "problemMatcher": "$msCompile",
             "presentation": {

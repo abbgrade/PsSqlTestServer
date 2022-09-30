@@ -13,7 +13,7 @@ Returns connection parameters to new localDb.
 ## SYNTAX
 
 ```
-New-SqlTestLocalInstance [[-Name] <String>] [<CommonParameters>]
+New-SqlTestLocalInstance [[-Name] <String>] [[-Version] <Version>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,7 +46,22 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: "test-$( New-DatabaseName )"
+Default value: ( New-DatabaseName )
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Version
+Specifies the version of the sql server.
+
+```yaml
+Type: Version
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

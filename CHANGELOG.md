@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2022-09-30
+
+### Added
+
+- Parameter to specify sql server version in `New-LocalInstance`.
+
 ## [1.4.0] - 2022-09-27
 
 ## Added
 
+- Added `Clear-LocalInstance` command.
 - Added DatabaseCredential property to `New-DockerInstance`.
 
 ## [1.3.0] - 2022-08-07
