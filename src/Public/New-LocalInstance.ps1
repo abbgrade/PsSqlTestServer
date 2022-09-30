@@ -28,17 +28,19 @@ function New-LocalInstance {
         [ValidateNotNullOrEmpty()]
         [string] $Name = ( New-DatabaseName ),
 
-        [Parameter()]
-        [System.Version] $MinimumVersion,
-
+        # Specifies the version of the sql server.
         [Parameter()]
         [System.Version] $Version
     )
 
-    Import-Module PsSqlLocalDb -ErrorAction Stop
+    Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
 
     # create instance
-    $instance = New-LocalDbInstance -Name $Name -Version:$Version -MinimumVersion:$MinimumVersion
+    if ( $Version ) {
+        $instance = New-LocalDbInstance -Name $Name -Version $Version
+    } else {
+        $instance = New-LocalDbInstance -Name $Name
+    }
 
     # add metadata
     $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
