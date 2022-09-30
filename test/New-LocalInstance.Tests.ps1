@@ -1,30 +1,49 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'New-LocalInstance' -Tag SqlLocalDB {
+Describe New-LocalInstance -Tag SqlLocalDB {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'LocalDb' -Skip:( -Not ( Test-SqlTestLocalDb )) {
+    Context LocalDb -Skip:( -Not ( Test-SqlTestLocalDb )) {
 
         It 'Provides a SQL server' {
-            $Script:Instance = New-SqlTestLocalInstance
+            $Instance = New-SqlTestLocalInstance
 
-            $Script:Instance | Should -Not -BeNullOrEmpty
-            $Script:Instance.ConnectionString | Should -Not -BeNullOrEmpty
-            $Script:Instance.DataSource | Should -Not -BeNullOrEmpty
+            $Instance | Should -Not -BeNullOrEmpty
+            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+            $Instance.DataSource | Should -Not -BeNullOrEmpty
         }
 
         It 'Provides unique SQL servers' {
-            $Script:Instance = @((New-SqlTestLocalInstance), (New-SqlTestLocalInstance))
-            $Script:Instance.Count | Should -Be 2
-            $Script:Instance[0].DataSource | Should -Not -Be $Script:Instance[1].DataSource -Because 'two instances must have unique names'
+            $Instance = @((New-SqlTestLocalInstance), (New-SqlTestLocalInstance))
+            $Instance.Count | Should -Be 2
+            $Instance[0].DataSource | Should -Not -Be $Instance[1].DataSource -Because 'two instances must have unique names'
+        }
+
+        Context Version {
+
+            BeforeAll {
+                Import-Module PsSqlLocalDb -MinimumVersion 0.3
+                $Version = Get-LocalDbVersion | Select-Object -First 1 -ExpandProperty Version
+            }
+
+            It 'Provides a SQL server with version' {
+                $Instance = New-SqlTestLocalInstance -Version "$( $Version.Major ).$( $Version.Minor )"
+
+                $Instance | Should -Not -BeNullOrEmpty
+                $Instance.Version | Should -Not -BeNullOrEmpty
+                $Instance.Version.Major | Should -Be $Version.Major
+                $Instance.Version.Minor | Should -Be $Version.Minor
+                $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+                $Instance.DataSource | Should -Not -BeNullOrEmpty
+            }
         }
 
         AfterEach {
-            if ( $Script:Instance ) {
-                $Script:Instance | Remove-SqlTestInstance
+            if ( $Instance ) {
+                $Instance | Remove-SqlTestInstance
             }
         }
     }

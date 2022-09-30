@@ -1,68 +1,68 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'New-AzureDatabase' -Tag Azure {
+Describe New-AzureDatabase -Tag Azure {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
     BeforeAll {
-        $Script:Subscription = 'Visual Studio Enterprise – MPN'
+        $Subscription = 'Visual Studio Enterprise – MPN'
     }
 
-    Context 'Azure' -Skip:( -Not ( Test-SqlTestAzure )) {
+    Context Azure -Skip:( -Not ( Test-SqlTestAzure )) {
 
-        Context 'Instance' {
+        Context Instance {
             BeforeAll {
-                $Script:Instance = New-SqlTestAzureInstance -Subscription $Script:Subscription
+                $Instance = New-SqlTestAzureInstance -Subscription $Subscription
             }
 
             AfterAll {
-                $Script:Instance | Remove-SqlTestAzureInstance
+                $Instance | Remove-SqlTestAzureInstance
             }
 
-            Context 'Database' {
+            Context Database {
 
                 BeforeAll {
-                    $Script:Database = New-SqlTestAzureDatabase -Instance $Script:Instance
+                    $Database = New-SqlTestAzureDatabase -Instance $Instance
                 }
 
                 AfterAll {
-                    $Script:Database | Remove-SqlTestAzureDatabase
+                    $Database | Remove-SqlTestAzureDatabase
                 }
 
                 It 'Returns values' {
-                    $Script:Database | Should -Not -BeNullOrEmpty
-                    $Script:Database.DataSource | Should -Not -BeNullOrEmpty
-                    $Script:Database.InitialCatalog | Should -Not -BeNullOrEmpty
-                    $Script:Database.ConnectTimeout | Should -Not -BeNullOrEmpty
-                    $Script:Database.ConnectionString | Should -Not -BeNullOrEmpty
+                    $Database | Should -Not -BeNullOrEmpty
+                    $Database.DataSource | Should -Not -BeNullOrEmpty
+                    $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                    $Database.ConnectTimeout | Should -Not -BeNullOrEmpty
+                    $Database.ConnectionString | Should -Not -BeNullOrEmpty
                 }
 
                 BeforeDiscovery {
-                    $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+                    $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
                 }
 
-                Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
+                Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
 
                     It 'Connects by pipeline' {
-                        $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
+                        $SqlConnection = $Database | Connect-TSqlInstance
                     }
 
                     It 'Connects by DataSource' {
-                        $Script:SqlConnection = Connect-TSqlInstance `
-                            -DataSource $Script:Database.DataSource `
-                            -InitialCatalog $Script:Database.InitialCatalog `
-                            -ConnectTimeout $Script:Database.ConnectTimeout
+                        $SqlConnection = Connect-TSqlInstance `
+                            -DataSource $Database.DataSource `
+                            -InitialCatalog $Database.InitialCatalog `
+                            -ConnectTimeout $Database.ConnectTimeout
                     }
 
                     It 'Connects by ConnectionString' {
-                        $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Database.ConnectionString
+                        $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
                     }
 
                     AfterEach {
-                        if ( $Script:SqlConnection ) {
-                            Disconnect-TSqlInstance -Connection $Script:SqlConnection
+                        if ( $SqlConnection ) {
+                            Disconnect-TSqlInstance -Connection $SqlConnection
                         }
                     }
                 }

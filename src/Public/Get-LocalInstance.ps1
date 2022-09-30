@@ -28,7 +28,7 @@ function Get-LocalInstance {
         [int] $First = 1
     )
 
-    Import-Module PsSqlLocalDb -ErrorAction Stop
+    Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
 
     $selectParam = @{}
     if ( $First ) {

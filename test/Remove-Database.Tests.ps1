@@ -1,36 +1,36 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Remove-Database' {
+Describe Remove-Database {
 
     BeforeAll {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'Instance' {
+    Context Instance {
         BeforeAll {
-            $Script:Instance = New-SqlTestInstance
-            $Script:InstanceConnection = $Script:Instance | Connect-TSqlInstance
+            $Instance = New-SqlTestInstance
+            $InstanceConnection = $Instance | Connect-TSqlInstance
         }
 
         AfterAll {
-            if ( $Script:Instance ) {
-                $Script:Instance | Remove-SqlTestInstance
+            if ( $Instance ) {
+                $Instance | Remove-SqlTestInstance
             }
-            if ( $Script:InstanceConnection ) {
-                Disconnect-TSqlInstance -Connection $Script:InstanceConnection
+            if ( $InstanceConnection ) {
+                Disconnect-TSqlInstance -Connection $InstanceConnection
             }
         }
 
-        Context 'Database' {
+        Context Database {
             BeforeEach {
-                $Script:Database = New-SqlTestDatabase -Instance $Script:Instance -InstanceConnection $Script:InstanceConnection
+                $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
             }
 
             It 'Removes the database' {
-                $Script:Database | Remove-SqlTestDatabase
+                $Database | Remove-SqlTestDatabase
 
                 {
-                    $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
+                    $SqlConnection = $Database | Connect-TSqlInstance
                 } | Should -Throw
             }
         }

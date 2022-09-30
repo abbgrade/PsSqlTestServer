@@ -1,12 +1,12 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'Get-LocalInstance' -Tag SqlLocalDB {
+Describe Get-LocalInstance -Tag SqlLocalDB {
 
     BeforeDiscovery {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'LocalDb' -Skip:( -Not ( Test-SqlTestLocalDb )) {
+    Context LocalDb -Skip:( -Not ( Test-SqlTestLocalDb )) {
 
         It 'Returns values' {
             $result = Get-SqlTestLocalInstance
@@ -18,30 +18,30 @@ Describe 'Get-LocalInstance' -Tag SqlLocalDB {
         }
 
         BeforeDiscovery {
-            $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+            $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
         }
 
-        Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
+        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
 
             BeforeAll {
-                $Script:LocalDb = Get-SqlTestLocalInstance
+                $LocalDb = Get-SqlTestLocalInstance
             }
 
             It 'Connects by Pipeline' {
-                $Script:SqlConnection = $Script:LocalDb | Connect-TSqlInstance
+                $SqlConnection = $LocalDb | Connect-TSqlInstance
             }
 
             It 'Connects by DataSource' {
-                $Script:SqlConnection = Connect-TSqlInstance -DataSource $Script:LocalDb.DataSource -ConnectTimeout $Script:LocalDb.ConnectTimeout
+                $SqlConnection = Connect-TSqlInstance -DataSource $LocalDb.DataSource -ConnectTimeout $LocalDb.ConnectTimeout
             }
 
             It 'Connects by ConnectionString' {
-                $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:LocalDb.ConnectionString
+                $SqlConnection = Connect-TSqlInstance -ConnectionString $LocalDb.ConnectionString
             }
 
             AfterEach {
-                if ( $Script:SqlConnection ) {
-                    Disconnect-TSqlInstance -Connection $Script:SqlConnection
+                if ( $SqlConnection ) {
+                    Disconnect-TSqlInstance -Connection $SqlConnection
                 }
             }
         }

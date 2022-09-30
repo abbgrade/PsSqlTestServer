@@ -1,81 +1,81 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe 'New-Database' {
+Describe New-Database {
 
     BeforeAll {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
     }
 
-    Context 'Instance' {
+    Context Instance {
         BeforeAll {
-            $Script:Instance = New-SqlTestInstance
+            $Instance = New-SqlTestInstance
         }
 
         AfterAll {
-            if ( $Script:Instance ) {
-                $Script:Instance | Remove-SqlTestInstance
+            if ( $Instance ) {
+                $Instance | Remove-SqlTestInstance
             }
         }
 
         BeforeDiscovery {
-            $Script:PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+            $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
         }
 
-        Context 'PsSqlClient' -Skip:( -Not $Script:PsSqlClient ) {
+        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
 
             BeforeAll {
-                $Script:InstanceConnection = $Script:Instance | Connect-TSqlInstance
+                $InstanceConnection = $Instance | Connect-TSqlInstance
             }
 
             AfterAll {
-                if ( $Script:InstanceConnection ) {
-                    Disconnect-TSqlInstance -Connection $Script:InstanceConnection
+                if ( $InstanceConnection ) {
+                    Disconnect-TSqlInstance -Connection $InstanceConnection
                 }
             }
 
-            Context 'Database' {
+            Context Database {
                 BeforeAll {
-                    $Script:Database = New-SqlTestDatabase -Instance $Script:Instance -InstanceConnection $Script:InstanceConnection
+                    $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
                 }
 
                 AfterAll {
-                    if ( $Script:Database ) {
-                        $Script:Database | Remove-SqlTestDatabase
+                    if ( $Database ) {
+                        $Database | Remove-SqlTestDatabase
                     }
                 }
 
                 It 'Creates a new database' {
-                    $Script:Database | Should -Not -BeNullOrEmpty
-                    $Script:Database.ConnectionString | Should -Not -BeNullOrEmpty
-                    $Script:Database.DataSource | Should -Not -BeNullOrEmpty
-                    $Script:Database.InitialCatalog | Should -Not -BeNullOrEmpty
-                    $Script:Database.InstanceConnection | Should -Not -BeNullOrEmpty
+                    $Database | Should -Not -BeNullOrEmpty
+                    $Database.ConnectionString | Should -Not -BeNullOrEmpty
+                    $Database.DataSource | Should -Not -BeNullOrEmpty
+                    $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                    $Database.InstanceConnection | Should -Not -BeNullOrEmpty
                 }
 
                 It 'Connects by properties' {
-                    $Script:SqlConnection = Connect-TSqlInstance `
-                        -DataSource $Script:Database.DataSource `
-                        -InitialCatalog $Script:Database.InitialCatalog `
-                        -ConnectTimeout $Script:Database.ConnectTimeout
+                    $SqlConnection = Connect-TSqlInstance `
+                        -DataSource $Database.DataSource `
+                        -InitialCatalog $Database.InitialCatalog `
+                        -ConnectTimeout $Database.ConnectTimeout
 
-                    $Script:SqlConnection.Database | Should -Be $Script:Database.InitialCatalog
+                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
                 }
 
                 It 'Connects by connection string' {
-                    $Script:SqlConnection = Connect-TSqlInstance -ConnectionString $Script:Database.ConnectionString
+                    $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
 
-                    $Script:SqlConnection.Database | Should -Be $Script:Database.InitialCatalog
+                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
                 }
 
                 It 'Connects by pipeline' {
-                    $Script:SqlConnection = $Script:Database | Connect-TSqlInstance
+                    $SqlConnection = $Database | Connect-TSqlInstance
 
-                    $Script:SqlConnection.Database | Should -Be $Script:Database.InitialCatalog
+                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
                 }
 
                 AfterEach {
-                    if ( $Script:SqlConnection ) {
-                        Disconnect-TSqlInstance -Connection $Script:SqlConnection
+                    if ( $SqlConnection ) {
+                        Disconnect-TSqlInstance -Connection $SqlConnection
                     }
                 }
             }
