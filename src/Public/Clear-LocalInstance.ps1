@@ -18,7 +18,7 @@ function Clear-LocalInstance {
         [switch] $WhatIf
     )
 
-    Import-Module PsSqlLocalDb -ErrorAction Stop
+    Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
 
     Get-LocalInstance -First $null | Where-Object Name -Like test-* | Remove-LocalInstance -WhatIf:$WhatIf
 }
