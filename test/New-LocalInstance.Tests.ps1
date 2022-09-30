@@ -22,15 +22,23 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             $Instance[0].DataSource | Should -Not -Be $Instance[1].DataSource -Because 'two instances must have unique names'
         }
 
-        It 'Provides a SQL server with version' {
-            $Instance = New-SqlTestLocalInstance -Version 13.1
+        Context Version {
 
-            $Instance | Should -Not -BeNullOrEmpty
-            $Instance.Version | Should -Not -BeNullOrEmpty
-            $Instance.Version.Major | Should -Be 13
-            $Instance.Version.Minor | Should -Be 1
-            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
-            $Instance.DataSource | Should -Not -BeNullOrEmpty
+            BeforeAll {
+                Import-Module PsSqlLocalDb -MinimumVersion 0.3
+                $Version = Get-LocalDbVersion | Select-Object -First 1 -ExpandProperty Version
+            }
+
+            It 'Provides a SQL server with version' {
+                $Instance = New-SqlTestLocalInstance -Version "$( $Version.Major ).$( $Version.Minor )"
+
+                $Instance | Should -Not -BeNullOrEmpty
+                $Instance.Version | Should -Not -BeNullOrEmpty
+                $Instance.Version.Major | Should -Be $Version.Major
+                $Instance.Version.Minor | Should -Be $Version.Minor
+                $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+                $Instance.DataSource | Should -Not -BeNullOrEmpty
+            }
         }
 
         AfterEach {
