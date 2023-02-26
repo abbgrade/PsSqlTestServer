@@ -1,34 +1,36 @@
-# PsSqlTestServer
+# Readme
+
+PsSqlTestServer provides commands to manage SQL servers for tests.
+
+For details, visit the [GitHub Pages](https://abbgrade.github.io/PsSqlTestServer/).
+
+## Usage
+
+See [the command reference](./docs/) for descriptions and examples.
+
+## Changelog
+
+See the [changelog](./CHANGELOG.md) file.
 
 ## Installation
 
-### From PowerShell Gallery
-
-Install PsSqlTestServer from [PowerShell Gallery](https://www.powershellgallery.com/packages/PsSqlTestServer) using a PowerShell command line:
+This module can be installed from [PsGallery](https://www.powershellgallery.com/packages/PsSqlTestServer).
 
 ```powershell
-Install-Module -Name PsSqlTestServer -Scope CurrentUser
+Install-Module -Name PsSqlTestServer -AllowPrerelease
 ```
 
-### From Source
+Alternatively it can be built and installed from the sources:
+
+1. Install the development dependencies
+2. Download or clone it from GitHub
+3. Run the installation task:
 
 ```powershell
 Invoke-Build Install
 ```
 
-## Usage
-
-See [the documentation](./Docs) for description and examples.
-
-## Commands
-
-## Changelog
-
-See [the changelog](./CHANGELOG.md) file.
-
 ## Development
-
-[![.github/workflows/build-validation.yml](https://github.com/abbgrade/PsSqlTestServer/actions/workflows/build-validation.yml/badge.svg?branch=develop)](https://github.com/abbgrade/PsSqlTestServer/actions/workflows/build-validation.yml)
 
 - This is a [Portable Module](https://docs.microsoft.com/de-de/powershell/scripting/dev-cross-plat/writing-portable-modules?view=powershell-7).
 - [VSCode](https://code.visualstudio.com) is recommended as IDE. [VSCode Tasks](https://code.visualstudio.com/docs/editor/tasks) are configured.
@@ -50,10 +52,9 @@ You can build the module using the VS Code build task or with the command `Invok
 1. Create a release branch using git-flow.
 2. Update the version number in the module manifest.
 3. Extend the changelog in `CHANGELOG.md`.
-4. If you want to create a pre-release:
-   1. Push the release branch to github, to publish the pre-release to PsGallery.
-5. run `Update-Changelog -ReleaseVersion $version -LinkMode None`
-6. Finish release using git-flow.
-7. Check if tags are not pushed to github.
-8. Check if the release branch is deleted on github.
-9. Create the release on github.
+4. If you want to create a pre-release.
+   1. Push the release branch to GitHub, to publish the pre-release to PsGallery.
+5. Finish release using git-flow.
+6. Check if tags are not pushed to GitHub.
+7. Check if the release branch is deleted on GitHub.
+8. Create the release on GitHub.
