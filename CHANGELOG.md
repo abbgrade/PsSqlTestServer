@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added Version filter parameter for `Get-LocalInstance`.
+
 ## [1.5.0] - 2022-09-30
 
 ### Added

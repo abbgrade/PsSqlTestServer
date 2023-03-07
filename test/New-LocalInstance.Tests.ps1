@@ -30,6 +30,17 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             }
 
             It 'Provides a SQL server with version' {
+                $Instance = New-SqlTestLocalInstance -Version $Version
+
+                $Instance | Should -Not -BeNullOrEmpty
+                $Instance.Version | Should -Not -BeNullOrEmpty
+                $Instance.Version.Major | Should -Be $Version.Major
+                $Instance.Version.Minor | Should -Be $Version.Minor
+                $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+                $Instance.DataSource | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Provides a SQL server with major and minor version' {
                 $Instance = New-SqlTestLocalInstance -Version "$( $Version.Major ).$( $Version.Minor )"
 
                 $Instance | Should -Not -BeNullOrEmpty

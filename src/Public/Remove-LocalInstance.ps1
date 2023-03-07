@@ -28,7 +28,7 @@ function Remove-LocalInstance {
     )
 
     begin {
-        Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
+        Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
     }
 
     process {
