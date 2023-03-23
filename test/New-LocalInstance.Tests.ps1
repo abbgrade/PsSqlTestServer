@@ -52,6 +52,51 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             }
         }
 
+        Context PsSqlClient {
+
+            Context Disconnected {
+
+                BeforeAll {
+                    $LocalDb = New-SqlTestLocalInstance
+                }
+
+                It 'Connects by Pipeline' {
+                    $SqlConnection = $LocalDb | Connect-TSqlInstance
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                It 'Connects by DataSource' {
+                    $SqlConnection = Connect-TSqlInstance -DataSource $LocalDb.DataSource -ConnectTimeout $LocalDb.ConnectTimeout
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                It 'Connects by ConnectionString' {
+                    $SqlConnection = Connect-TSqlInstance -ConnectionString $LocalDb.ConnectionString
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                AfterEach {
+                    if ( $SqlConnection ) {
+                        Disconnect-TSqlInstance -Connection $SqlConnection
+                    }
+                }
+
+            }
+
+            Context Connected {
+
+                BeforeAll {
+                    $LocalDb = New-SqlTestLocalInstance -Connected
+                }
+
+                It 'is connected' {
+                    ( Invoke-TSqlCommand -Connection $LocalDb.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+                }
+
+            }
+
+        }
+
         AfterEach {
             if ( $Instance ) {
                 $Instance | Remove-SqlTestInstance

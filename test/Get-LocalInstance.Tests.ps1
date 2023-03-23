@@ -26,11 +26,7 @@ Describe Get-LocalInstance -Tag SqlLocalDB {
             $result.ConnectionString | Should -Not -BeNullOrEmpty
         }
 
-        BeforeDiscovery {
-            $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
-        }
-
-        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
+        Context PsSqlClient {
 
             BeforeAll {
                 $LocalDb = Get-SqlTestLocalInstance

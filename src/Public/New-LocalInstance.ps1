@@ -30,7 +30,11 @@ function New-LocalInstance {
 
         # Specifies the version of the sql server.
         [Parameter()]
-        [System.Version] $Version
+        [System.Version] $Version,
+
+        # Speficies if a SqlClient connection should be created.
+        [Parameter()]
+        [switch] $Connected
     )
 
     Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
@@ -43,6 +47,11 @@ function New-LocalInstance {
     $instance | Add-Member 'ConnectTimeout' 30
     $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
     $instance | Add-Member 'IsLocalDb' $true
+
+    # connect instance if needed
+    if ( $Connected.IsPresent ) {
+        $instance | Add-Member 'Connection' ( $instance | Connect-TSqlInstance )
+    }
 
     # return
     $instance | Write-Output
