@@ -17,14 +17,11 @@ Describe New-Database {
             }
         }
 
-        BeforeDiscovery {
-            $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
-        }
-
-        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
+        Context PsSqlClient {
 
             BeforeAll {
                 $InstanceConnection = $Instance | Connect-TSqlInstance
+                $Instance | Add-Member Connection $InstanceConnection
             }
 
             AfterAll {
@@ -34,48 +31,85 @@ Describe New-Database {
             }
 
             Context Database {
-                BeforeAll {
-                    $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
-                }
 
-                AfterAll {
-                    if ( $Database ) {
-                        $Database | Remove-SqlTestDatabase
+                Context Disconnected {
+
+                    BeforeAll {
+                        $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
+                    }
+
+                    AfterAll {
+                        if ( $Database ) {
+                            $Database | Remove-SqlTestDatabase
+                        }
+                    }
+
+                    It 'Creates a new database' {
+                        $Database | Should -Not -BeNullOrEmpty
+                        $Database.ConnectionString | Should -Not -BeNullOrEmpty
+                        $Database.DataSource | Should -Not -BeNullOrEmpty
+                        $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                        $Database.InstanceConnection | Should -Not -BeNullOrEmpty
+                    }
+
+                    It 'Connects by properties' {
+                        $SqlConnection = Connect-TSqlInstance `
+                            -DataSource $Database.DataSource `
+                            -InitialCatalog $Database.InitialCatalog `
+                            -ConnectTimeout $Database.ConnectTimeout
+
+                        $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                    }
+
+                    It 'Connects by connection string' {
+                        $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
+
+                        $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                    }
+
+                    It 'Connects by pipeline' {
+                        $SqlConnection = $Database | Connect-TSqlInstance
+
+                        $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                    }
+
+                    AfterEach {
+                        if ( $SqlConnection ) {
+                            Disconnect-TSqlInstance -Connection $SqlConnection
+                        }
                     }
                 }
 
-                It 'Creates a new database' {
-                    $Database | Should -Not -BeNullOrEmpty
-                    $Database.ConnectionString | Should -Not -BeNullOrEmpty
-                    $Database.DataSource | Should -Not -BeNullOrEmpty
-                    $Database.InitialCatalog | Should -Not -BeNullOrEmpty
-                    $Database.InstanceConnection | Should -Not -BeNullOrEmpty
-                }
+                Context Connected {
 
-                It 'Connects by properties' {
-                    $SqlConnection = Connect-TSqlInstance `
-                        -DataSource $Database.DataSource `
-                        -InitialCatalog $Database.InitialCatalog `
-                        -ConnectTimeout $Database.ConnectTimeout
+                    AfterEach {
+                        if ( $Database ) {
+                            $Database | Remove-SqlTestDatabase
+                        }
+                    }
 
-                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
-                }
+                    It 'Creates a new database with connection' {
+                        $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection -Connected
 
-                It 'Connects by connection string' {
-                    $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
+                        $Database | Should -Not -BeNullOrEmpty
+                        $Database.ConnectionString | Should -Not -BeNullOrEmpty
+                        $Database.DataSource | Should -Not -BeNullOrEmpty
+                        $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                        $Database.InstanceConnection | Should -Not -BeNullOrEmpty
+                        $Database.Connection | Should -Not -BeNullOrEmpty
+                        ( Invoke-TSqlCommand -Connection $Database.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+                    }
 
-                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
-                }
+                    It 'Creates a new database with connection in pipeline' {
+                        $Database = $Instance | New-SqlTestDatabase -Connected
 
-                It 'Connects by pipeline' {
-                    $SqlConnection = $Database | Connect-TSqlInstance
-
-                    $SqlConnection.Database | Should -Be $Database.InitialCatalog
-                }
-
-                AfterEach {
-                    if ( $SqlConnection ) {
-                        Disconnect-TSqlInstance -Connection $SqlConnection
+                        $Database | Should -Not -BeNullOrEmpty
+                        $Database.ConnectionString | Should -Not -BeNullOrEmpty
+                        $Database.DataSource | Should -Not -BeNullOrEmpty
+                        $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                        $Database.InstanceConnection | Should -Not -BeNullOrEmpty
+                        $Database.Connection | Should -Not -BeNullOrEmpty
+                        ( Invoke-TSqlCommand -Connection $Database.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
                     }
                 }
             }

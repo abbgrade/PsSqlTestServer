@@ -43,14 +43,14 @@ function New-LocalInstance {
     $instance = New-LocalDbInstance -Name $Name -Version:$Version
 
     # add metadata
-    $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
-    $instance | Add-Member 'ConnectTimeout' 30
-    $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
-    $instance | Add-Member 'IsLocalDb' $true
+    $instance | Add-Member DataSource "(LocalDb)\$( $instance.Name )"
+    $instance | Add-Member ConnectTimeout 30
+    $instance | Add-Member ConnectionString "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
+    $instance | Add-Member IsLocalDb $true
 
     # connect instance if needed
     if ( $Connected.IsPresent ) {
-        $instance | Add-Member 'Connection' ( $instance | Connect-TSqlInstance )
+        $instance | Add-Member Connection ( $instance | Connect-TSqlInstance )
     }
 
     # return

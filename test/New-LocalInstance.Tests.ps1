@@ -86,11 +86,11 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             Context Connected {
 
                 BeforeAll {
-                    $LocalDb = New-SqlTestLocalInstance -Connected
+                    $Instance = New-SqlTestLocalInstance -Connected
                 }
 
                 It 'is connected' {
-                    ( Invoke-TSqlCommand -Connection $LocalDb.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+                    ( Invoke-TSqlCommand -Connection $Instance.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
                 }
 
             }
