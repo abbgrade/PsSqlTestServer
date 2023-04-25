@@ -59,18 +59,21 @@ Describe New-Database {
                             -ConnectTimeout $Database.ConnectTimeout
 
                         $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                        $SqlConnection | Test-TSqlConnection | Should -Be $true
                     }
 
                     It 'Connects by connection string' {
                         $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
 
                         $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                        $SqlConnection | Test-TSqlConnection | Should -Be $true
                     }
 
                     It 'Connects by pipeline' {
                         $SqlConnection = $Database | Connect-TSqlInstance
 
                         $SqlConnection.Database | Should -Be $Database.InitialCatalog
+                        $SqlConnection | Test-TSqlConnection | Should -Be $true
                     }
 
                     AfterEach {
@@ -97,7 +100,8 @@ Describe New-Database {
                         $Database.InitialCatalog | Should -Not -BeNullOrEmpty
                         $Database.InstanceConnection | Should -Not -BeNullOrEmpty
                         $Database.Connection | Should -Not -BeNullOrEmpty
-                        ( Invoke-TSqlCommand -Connection $Database.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+
+                        $Database.Connection | Test-TSqlConnection | Should -Be $true
                     }
 
                     It 'Creates a new database with connection in pipeline' {
@@ -109,7 +113,8 @@ Describe New-Database {
                         $Database.InitialCatalog | Should -Not -BeNullOrEmpty
                         $Database.InstanceConnection | Should -Not -BeNullOrEmpty
                         $Database.Connection | Should -Not -BeNullOrEmpty
-                        ( Invoke-TSqlCommand -Connection $Database.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+
+                        $Database.Connection | Test-TSqlConnection | Should -Be $true
                     }
                 }
             }

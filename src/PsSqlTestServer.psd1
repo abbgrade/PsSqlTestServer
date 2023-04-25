@@ -51,7 +51,7 @@ Description = 'Cmdlets to provide and manage SQL servers for tests.'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('PsSqlClient')
+RequiredModules = @(@{ ModuleName = 'PsSqlClient'; ModuleVersion = '1.5.0' })
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()

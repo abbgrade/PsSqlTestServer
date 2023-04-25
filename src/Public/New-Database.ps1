@@ -60,7 +60,11 @@ function New-Database {
         # connect instance if needed
         if ( $Connected.IsPresent ) {
             $DatabaseConnection = $Database | Connect-TSqlInstance
-            $Database.Connection = $DatabaseConnection
+            if ( $DatabaseConnection | Test-TSqlConnection ) {
+                $Database.Connection = $DatabaseConnection
+            } else {
+                Write-Error "Failed to connect database."
+            }
         }
 
         Write-Output $Database
