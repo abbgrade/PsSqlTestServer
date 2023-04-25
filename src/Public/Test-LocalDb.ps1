@@ -20,7 +20,7 @@ function Test-LocalDb {
     [CmdletBinding()]
     param ()
 
-    if ( -Not ( Import-Module PsSqlLocalDb -MinimumVersion 0.3 -PassThru -ErrorAction SilentlyContinue )) {
+    if ( -Not ( Import-Module PsSqlLocalDb -MinimumVersion 0.4 -PassThru -ErrorAction SilentlyContinue )) {
         Write-Warning 'PsSqlLocalDb is not installed in required version.'
         return $false
     }
