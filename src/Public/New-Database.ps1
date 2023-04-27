@@ -26,30 +26,47 @@ function New-Database {
     [CmdletBinding()]
     param (
         # Specifies the instance, to create the database in.
-        [Parameter( Mandatory )]
+        [Parameter( Mandatory, ValueFromPipeline )]
         [ValidateNotNullOrEmpty()]
         [PsObject] $Instance,
 
         # Specifies a open sql connection to the instance.
-        [Parameter( Mandatory )]
+        [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
+        [Alias('Connection')]
         [Microsoft.Data.SqlClient.SqlConnection] $InstanceConnection,
 
         # Specifies the name of the database to create.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Name = ( New-DatabaseName )
+        [string] $Name = ( New-DatabaseName ),
+
+        # Speficies if a SqlClient connection should be created.
+        [Parameter()]
+        [switch] $Connected
     )
 
-    $Database = $Instance.PsObject.Copy()
-    $Database | Add-Member InstanceName $Database.Name
-    $Database.Name = $Name
+    process {
+        $Database = $Instance.PsObject.Copy()
+        $Database | Add-Member InstanceName $Database.Name
+        $Database.Name = $Name
 
-    Invoke-TSqlCommand "CREATE DATABASE [$Name]" -Connection $InstanceConnection
+        Invoke-TSqlCommand "CREATE DATABASE [$Name]" -Connection $InstanceConnection
 
-    $Database | Add-Member InitialCatalog $Name
-    $Database.ConnectionString += ";Initial Catalog=$( $Database.InitialCatalog )"
-    $Database | Add-Member InstanceConnection $InstanceConnection
+        $Database | Add-Member InitialCatalog $Name
+        $Database.ConnectionString += ";Initial Catalog=$( $Database.InitialCatalog )"
+        $Database | Add-Member InstanceConnection $InstanceConnection
 
-    Write-Output $Database
+        # connect instance if needed
+        if ( $Connected.IsPresent ) {
+            $DatabaseConnection = $Database | Connect-TSqlInstance
+            if ( $DatabaseConnection | Test-TSqlConnection ) {
+                $Database.Connection = $DatabaseConnection
+            } else {
+                Write-Error "Failed to connect database."
+            }
+        }
+
+        Write-Output $Database
+    }
 }

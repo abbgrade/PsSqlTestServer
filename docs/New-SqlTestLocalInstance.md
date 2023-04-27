@@ -13,7 +13,7 @@ Returns connection parameters to new localDb.
 ## SYNTAX
 
 ```
-New-SqlTestLocalInstance [[-Name] <String>] [[-Version] <Version>] [<CommonParameters>]
+New-SqlTestLocalInstance [[-Name] <String>] [[-Version] <Version>] [-Connected] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,6 +62,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Connected
+Speficies if a SqlClient connection should be created.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
