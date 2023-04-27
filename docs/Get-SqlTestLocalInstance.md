@@ -13,7 +13,7 @@ Returns connection parameters to a available localDb.
 ## SYNTAX
 
 ```
-Get-SqlTestLocalInstance [[-First] <Int32>] [<CommonParameters>]
+Get-SqlTestLocalInstance [[-First] <Int32>] [[-Version] <Version>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,7 +37,7 @@ Version                        v11.0
 ## PARAMETERS
 
 ### -First
-Specifies maximum number of returned instances.
+Specifies maximum number of returned sql server instances.
 
 ```yaml
 Type: Int32
@@ -47,6 +47,21 @@ Aliases:
 Required: False
 Position: 1
 Default value: 1
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Version
+Filters the version of the returned sql server instance.
+
+```yaml
+Type: Version
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

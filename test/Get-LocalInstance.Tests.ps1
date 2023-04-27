@@ -17,11 +17,16 @@ Describe Get-LocalInstance -Tag SqlLocalDB {
             $result.ConnectionString | Should -Not -BeNullOrEmpty
         }
 
-        BeforeDiscovery {
-            $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+        It 'Returns values by version' {
+            $result = Get-SqlTestLocalInstance -Version 15.0
+
+            $result | Should -Not -BeNullOrEmpty
+            $result.Count | Should -Be 1
+            $result.DataSource | Should -Not -BeNullOrEmpty
+            $result.ConnectionString | Should -Not -BeNullOrEmpty
         }
 
-        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
+        Context PsSqlClient {
 
             BeforeAll {
                 $LocalDb = Get-SqlTestLocalInstance

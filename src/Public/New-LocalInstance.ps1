@@ -30,24 +30,35 @@ function New-LocalInstance {
 
         # Specifies the version of the sql server.
         [Parameter()]
-        [System.Version] $Version
+        [System.Version] $Version,
+
+        # Speficies if a SqlClient connection should be created.
+        [Parameter()]
+        [switch] $Connected
     )
 
-    Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
+    Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
 
     # create instance
-    if ( $Version ) {
-        $instance = New-LocalDbInstance -Name $Name -Version $Version
-    } else {
-        $instance = New-LocalDbInstance -Name $Name
-    }
+    $Instance = New-LocalDbInstance -Name $Name -Version:$Version
 
     # add metadata
-    $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
-    $instance | Add-Member 'ConnectTimeout' 30
-    $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
-    $instance | Add-Member 'IsLocalDb' $true
+    $Instance | Add-Member DataSource "(LocalDb)\$( $Instance.Name )"
+    $Instance | Add-Member ConnectTimeout 30
+    $Instance | Add-Member ConnectionString "Data Source=$( $Instance.DataSource );Connect Timeout=$( $Instance.ConnectTimeout );Integrated Security=True"
+    $Instance | Add-Member IsLocalDb $true
+
+    # connect instance if needed
+    if ( $Connected.IsPresent ) {
+        $InstanceConnection = $Instance | Connect-TSqlInstance
+        if ( $InstanceConnection | Test-TSqlConnection ) {
+            $Instance | Add-Member Connection $InstanceConnection
+        } else {
+            Write-Error "Failed to connect instance."
+        }
+
+    }
 
     # return
-    $instance | Write-Output
+    $Instance | Write-Output
 }

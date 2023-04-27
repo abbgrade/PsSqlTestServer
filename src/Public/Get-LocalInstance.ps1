@@ -23,19 +23,23 @@ function Get-LocalInstance {
 
     [CmdletBinding()]
     param (
-        # Specifies maximum number of returned instances.
+        # Specifies maximum number of returned sql server instances.
         [Parameter()]
-        [int] $First = 1
+        [int] $First = 1,
+
+        # Filters the version of the returned sql server instance.
+        [Parameter()]
+        [System.Version] $Version
     )
 
-    Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
+    Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
 
     $selectParam = @{}
     if ( $First ) {
         $selectParam.First = $First
     }
 
-    Get-LocalDbInstance | Select-Object @selectParam | ForEach-Object {
+    Get-LocalDbInstance -Version:$Version | Select-Object @selectParam | ForEach-Object {
         $instance = $PSItem
 
         # add metadata

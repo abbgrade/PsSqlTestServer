@@ -30,6 +30,17 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             }
 
             It 'Provides a SQL server with version' {
+                $Instance = New-SqlTestLocalInstance -Version $Version
+
+                $Instance | Should -Not -BeNullOrEmpty
+                $Instance.Version | Should -Not -BeNullOrEmpty
+                $Instance.Version.Major | Should -Be $Version.Major
+                $Instance.Version.Minor | Should -Be $Version.Minor
+                $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+                $Instance.DataSource | Should -Not -BeNullOrEmpty
+            }
+
+            It 'Provides a SQL server with major and minor version' {
                 $Instance = New-SqlTestLocalInstance -Version "$( $Version.Major ).$( $Version.Minor )"
 
                 $Instance | Should -Not -BeNullOrEmpty
@@ -39,6 +50,51 @@ Describe New-LocalInstance -Tag SqlLocalDB {
                 $Instance.ConnectionString | Should -Not -BeNullOrEmpty
                 $Instance.DataSource | Should -Not -BeNullOrEmpty
             }
+        }
+
+        Context PsSqlClient {
+
+            Context Disconnected {
+
+                BeforeAll {
+                    $LocalDb = New-SqlTestLocalInstance
+                }
+
+                It 'Connects by Pipeline' {
+                    $SqlConnection = $LocalDb | Connect-TSqlInstance
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                It 'Connects by DataSource' {
+                    $SqlConnection = Connect-TSqlInstance -DataSource $LocalDb.DataSource -ConnectTimeout $LocalDb.ConnectTimeout
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                It 'Connects by ConnectionString' {
+                    $SqlConnection = Connect-TSqlInstance -ConnectionString $LocalDb.ConnectionString
+                    Invoke-TSqlCommand -Connection $SqlConnection -Text 'SELECT 1'
+                }
+
+                AfterEach {
+                    if ( $SqlConnection ) {
+                        Disconnect-TSqlInstance -Connection $SqlConnection
+                    }
+                }
+
+            }
+
+            Context Connected {
+
+                BeforeAll {
+                    $Instance = New-SqlTestLocalInstance -Connected
+                }
+
+                It 'is connected' {
+                    ( Invoke-TSqlCommand -Connection $Instance.Connection -Text 'SELECT 1' ).Column1 | Should -Be 1
+                }
+
+            }
+
         }
 
         AfterEach {

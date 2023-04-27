@@ -14,7 +14,7 @@ Creates a new database and returns the connection parameters.
 
 ```
 New-SqlTestDatabase [-Instance] <PSObject> [-InstanceConnection] <SqlConnection> [[-Name] <String>]
- [<CommonParameters>]
+ [-Connected] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,7 +50,7 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -60,12 +60,12 @@ Specifies a open sql connection to the instance.
 ```yaml
 Type: SqlConnection
 Parameter Sets: (All)
-Aliases:
+Aliases: Connection
 
 Required: True
 Position: 2
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -80,6 +80,21 @@ Aliases:
 Required: False
 Position: 3
 Default value: ( New-DatabaseName )
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Connected
+Speficies if a SqlClient connection should be created.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
