@@ -3,7 +3,7 @@ function New-AzureInstance {
     <#
 
     .SYNOPSIS
-    Returns connection parameter for a Azure SQL Server.
+    Returns connection parameter for a new Azure SQL Server.
 
     .DESCRIPTION
     Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
