@@ -1,5 +1,18 @@
 function Get-AzureInstance {
 
+    <#
+
+    .SYNOPSIS
+    Returns connection parameter for a existing Azure SQL Server.
+
+    .DESCRIPTION
+    Retrieves Azure SQL Servers and returns a object with the properties DataSource and ConnectionString.
+
+    .EXAMPLE
+    PS> Get-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+
+    #>
+
     [CmdletBinding()]
     param(
         # Specifies the Azure Subscription name.
