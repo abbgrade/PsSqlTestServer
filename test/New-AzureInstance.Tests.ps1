@@ -13,7 +13,7 @@ Describe New-AzureInstance -Tag Azure {
     Context Azure -Skip:( -Not ( Test-SqlTestAzure )) {
 
         It 'Provides a Azure SQL Server' {
-$            $Instance = New-SqlTestAzureInstance -Subscription $Subscription -ErrorAction Stop
+            $Instance = New-SqlTestAzureInstance -Subscription $Subscription -ErrorAction Stop
 
             $Instance | Should -Not -BeNullOrEmpty
             $Instance.ConnectionString | Should -Not -BeNullOrEmpty

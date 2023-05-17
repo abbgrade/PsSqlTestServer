@@ -7,7 +7,7 @@ Describe New-AzureDatabase -Tag Azure {
     }
 
     BeforeAll {
-        $Subscription = 'Visual Studio Enterprise – MPN'
+        $Subscription = 'Visual Studio'
     }
 
     Context Azure -Skip:( -Not ( Test-SqlTestAzure )) {
@@ -46,18 +46,19 @@ Describe New-AzureDatabase -Tag Azure {
                 Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
 
                     It 'Connects by pipeline' {
-                        $SqlConnection = $Database | Connect-TSqlInstance
+                        $SqlConnection = $Database | Connect-TSqlInstance -ErrorAction Stop
                     }
 
                     It 'Connects by DataSource' {
                         $SqlConnection = Connect-TSqlInstance `
                             -DataSource $Database.DataSource `
                             -InitialCatalog $Database.InitialCatalog `
-                            -ConnectTimeout $Database.ConnectTimeout
+                            -ConnectTimeout $Database.ConnectTimeout `
+                            -ErrorAction Stop
                     }
 
                     It 'Connects by ConnectionString' {
-                        $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString
+                        $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString -ErrorAction Stop
                     }
 
                     AfterEach {
@@ -66,6 +67,25 @@ Describe New-AzureDatabase -Tag Azure {
                         }
                     }
                 }
+            }
+        }
+
+        Context Database {
+
+            BeforeAll {
+                $Database = New-SqlTestAzureDatabase -Subscription $Subscription -ErrorAction Stop
+            }
+
+            AfterAll {
+                $Database | Remove-SqlTestAzureDatabase
+            }
+
+            It 'Returns values' {
+                $Database | Should -Not -BeNullOrEmpty
+                $Database.DataSource | Should -Not -BeNullOrEmpty
+                $Database.InitialCatalog | Should -Not -BeNullOrEmpty
+                $Database.ConnectTimeout | Should -Not -BeNullOrEmpty
+                $Database.ConnectionString | Should -Not -BeNullOrEmpty
             }
         }
     }

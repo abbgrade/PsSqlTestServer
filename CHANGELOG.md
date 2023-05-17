@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added new command `Get-AzureInstance` that works like `New-AzureInstance` but does not create new resources but reuses existing.
+- Added new parameter set to `New-AzureDatabase` that creates a server and extended `Remove-AzureDatabase` to clean up that created server.
 
 ## [1.6.0] - 2023-03-07
 
