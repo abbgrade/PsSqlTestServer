@@ -44,7 +44,7 @@ function New-AzureDatabase {
     $Database | Add-Member DataSource $Server.FullyQualifiedDomainName
     $Database | Add-Member InitialCatalog $Database.DatabaseName
     $Database | Add-Member ConnectTimeout 30
-    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog );Authentication=Active Directory Integrated"
+    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog )"
 
     switch ( $PSCmdlet.ParameterSetName ) {
         NewServer {
