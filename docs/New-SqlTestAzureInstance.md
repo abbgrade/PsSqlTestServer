@@ -13,7 +13,7 @@ Returns connection parameter for a new Azure SQL Server.
 ## SYNTAX
 
 ```
-New-SqlTestAzureInstance [[-Subscription] <String>] [<CommonParameters>]
+New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,6 +39,21 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FirewallRule
+Specify which firewall rule to create.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: All
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
