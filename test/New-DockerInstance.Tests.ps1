@@ -40,7 +40,8 @@ Describe New-DockerInstance -Tag Docker {
                     -UserId $Container.UserId `
                     -Password $Container.SecurePassword `
                     -ConnectTimeout $Container.ConnectTimeout `
-                    -RetryCount 3
+                    -RetryCount 3 `
+                    -TrustServerCertificate:$Container.TrustServerCertificate
             }
 
             It 'Connects by ConnectionString' {
