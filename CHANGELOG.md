@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2023-06-02
+
 ### Added
 
 - Added new command `Get-AzureInstance` that works like `New-AzureInstance` but does not create new resources but reuses existing.
