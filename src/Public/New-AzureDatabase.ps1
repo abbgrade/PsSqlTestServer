@@ -17,12 +17,23 @@ function New-AzureDatabase {
     [CmdletBinding()]
     param(
         # Specifies the Azure SQL Server.
-        [Parameter( Mandatory )]
+        [Parameter( Mandatory, ParameterSetName='UseServer' )]
         [ValidateNotNullOrEmpty()]
         [Alias( 'Instance' )]
         # [Microsoft.Azure.Commands.Sql.Server.Model.AzureSqlServerModel]
-        $Server
+        $Server,
+
+        # Specifies the Azure Subscription name.
+        [Parameter( Mandatory, ParameterSetName='NewServer' )]
+        [ValidateNotNullOrEmpty()]
+        [string] $Subscription
     )
+
+    switch ( $PSCmdlet.ParameterSetName ) {
+        NewServer {
+            $Server = New-AzureInstance -Subscription:$Subscription
+        }
+    }
 
     $Database = New-AzSqlDatabase -ErrorAction Stop `
         -DatabaseName ( New-Guid ) `
@@ -33,6 +44,13 @@ function New-AzureDatabase {
     $Database | Add-Member DataSource $Server.FullyQualifiedDomainName
     $Database | Add-Member InitialCatalog $Database.DatabaseName
     $Database | Add-Member ConnectTimeout 30
-    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog );Authentication=Active Directory Integrated"
+    $Database | Add-Member ConnectionString "Data Source=$( $Database.DataSource );Connect Timeout=$( $Database.ConnectTimeout );Initial Catalog=$( $Database.InitialCatalog )"
+
+    switch ( $PSCmdlet.ParameterSetName ) {
+        NewServer {
+            $Database | Add-Member RemoveServer $true
+        }
+    }
+
     $Database | Write-Output
 }

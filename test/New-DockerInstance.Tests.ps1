@@ -9,7 +9,7 @@ Describe New-DockerInstance -Tag Docker {
     Context Docker -Skip:( -Not ( Test-SqlTestDocker )) {
 
         BeforeDiscovery {
-            $PsSqlClient = Import-Module PsSqlClient -MinimumVersion 1.1.0 -PassThru -ErrorAction SilentlyContinue
+            $PsSqlClient = Import-Module PsSqlClient -MinimumVersion 2.0.0 -PassThru -ErrorAction SilentlyContinue
         }
 
         BeforeAll {
@@ -40,7 +40,8 @@ Describe New-DockerInstance -Tag Docker {
                     -UserId $Container.UserId `
                     -Password $Container.SecurePassword `
                     -ConnectTimeout $Container.ConnectTimeout `
-                    -RetryCount 3
+                    -RetryCount 3 `
+                    -TrustServerCertificate:$Container.TrustServerCertificate
             }
 
             It 'Connects by ConnectionString' {

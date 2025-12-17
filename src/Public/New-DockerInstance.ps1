@@ -12,25 +12,26 @@ function New-DockerInstance {
 
     .EXAMPLE
     PS> New-SqlTestDockerInstance -AcceptEula
-    Name               : Sandbox
-    Hostname           : localhost
-    UserId             : sa
-    ConnectionString   : Server='localhost';Encrypt=False;User Id='sa';Password='pa$$w0rd'
-    IsDocker           : True
-    Id                 : 693d5e79169c50af4ab5b10e1af9069a987ec8902033f3c55f325e12199a61c1
-    Names              : {Sandbox}
-    Image              : mcr.microsoft.com/mssql/server
-    Command            : "/opt/mssql/bin/permissions_check.sh /opt/mssql/bin/sqlservr"
-    LocalVolumes       : {0}
-    Labels             : {com.microsoft.product=Microsoft SQL Server, com.microsoft.version=15.0.4153.1, vendor=Microsoft}
-    Mounts             : {}
-    Networks           : {bridge}
-    Ports              : {0.0.0.0:1433->1433/tcp}
-    CreatedAt          : 2021-12-01 00:00:00 +0100 CET
-    RunningFor         : 2 seconds ago
-    Status             : Up 1 second
-    Size               : 0B (virtual 1.54GB)
-    DatabaseCredential : System.Management.Automation.PSCredential
+    Name                   : Sandbox
+    Hostname               : localhost
+    UserId                 : sa
+    ConnectionString       : Server='localhost';TrustServerCertificate=False;User Id='sa';Password='pa$$w0rd'
+    IsDocker               : True
+    Id                     : 693d5e79169c50af4ab5b10e1af9069a987ec8902033f3c55f325e12199a61c1
+    Names                  : {Sandbox}
+    Image                  : mcr.microsoft.com/mssql/server
+    Command                : "/opt/mssql/bin/permissions_check.sh /opt/mssql/bin/sqlservr"
+    LocalVolumes           : {0}
+    Labels                 : {com.microsoft.product=Microsoft SQL Server, com.microsoft.version=15.0.4153.1, vendor=Microsoft}
+    Mounts                 : {}
+    Networks               : {bridge}
+    Ports                  : {0.0.0.0:1433->1433/tcp}
+    CreatedAt              : 2021-12-01 00:00:00 +0100 CET
+    RunningFor             : 2 seconds ago
+    Status                 : Up 1 second
+    Size                   : 0B (virtual 1.54GB)
+    DatabaseCredential     : System.Management.Automation.PSCredential
+    TrustServerCertificate : True
 
     #>
 
@@ -93,11 +94,12 @@ function New-DockerInstance {
         ConvertTo-SecureString $ServerAdminPassword -AsPlainText -Force
     )
     $container | Add-Member 'ConnectTimeout' 30
-    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname ),$( $container.Port )';Connect Timeout=$( $container.ConnectTimeout );Encrypt=False;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
+    $container | Add-Member 'ConnectionString' "Server='$( $container.Hostname ),$( $container.Port )';Connect Timeout=$( $container.ConnectTimeout );TrustServerCertificate=True;User Id='$( $container.UserId )';Password='$ServerAdminPassword'"
     $container | Add-Member 'IsDocker' $true
     $container | Add-Member 'DatabaseCredential' (
         New-Object System.Management.Automation.PSCredential ($container.UserId, $container.SecurePassword)
     )
+    $container | Add-Member 'TrustServerCertificate' $true
 
     # return
     $container | Write-Output

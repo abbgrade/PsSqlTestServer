@@ -12,8 +12,14 @@ Creates a new Azure SQL Database and returns the connection parameters.
 
 ## SYNTAX
 
+### UseServer
 ```
-New-SqlTestAzureDatabase [-Server] <Object> [<CommonParameters>]
+New-SqlTestAzureDatabase -Server <Object> [<CommonParameters>]
+```
+
+### NewServer
+```
+New-SqlTestAzureDatabase -Subscription <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,11 +41,26 @@ Specifies the Azure SQL Server.
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
+Parameter Sets: UseServer
 Aliases: Instance
 
 Required: True
-Position: 1
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Subscription
+Specifies the Azure Subscription name.
+
+```yaml
+Type: String
+Parameter Sets: NewServer
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

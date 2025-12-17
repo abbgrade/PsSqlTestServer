@@ -31,10 +31,18 @@ function Remove-AzureDatabase {
         # Specifies the database to remove.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
-        $DatabaseName
+        $DatabaseName,
+
+        # Specifies if the server should be removed as well.
+        [Parameter( ValueFromPipelineByPropertyName )]
+        [switch] $RemoveServer
     )
 
     process {
         Remove-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ServerName -DatabaseName $DatabaseName
+
+        if ( $RemoveServer.IsPresent ) {
+            Remove-AzureInstance -ResourceGroupName $ResourceGroupName -ServerName $ServerName
+        }
     }
 }

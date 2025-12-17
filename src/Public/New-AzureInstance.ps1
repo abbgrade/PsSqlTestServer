@@ -3,7 +3,7 @@ function New-AzureInstance {
     <#
 
     .SYNOPSIS
-    Returns connection parameter for a Azure SQL Server.
+    Returns connection parameter for a new Azure SQL Server.
 
     .DESCRIPTION
     Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
@@ -16,8 +16,14 @@ function New-AzureInstance {
     [CmdletBinding()]
     param(
         # Specifies the Azure Subscription name.
+        [Parameter()]
         [ValidateNotNullOrEmpty()]
-        [string] $Subscription
+        [string] $Subscription,
+
+        # Specify which firewall rule to create.
+        [Parameter()]
+        [ValidateSet('all', 'justme')]
+        [string] $FirewallRule = 'all'
     )
 
     if ( $Subscription ) {
@@ -37,13 +43,24 @@ function New-AzureInstance {
         -Location $ResourceGroup.Location `
         -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName ( $azureContext.Account )
 
-    $myIp = ( Invoke-WebRequest ifconfig.me/ip ).Content.Trim()
+    switch ( $FirewallRule ) {
+        justme {
+            $myIp = ( Invoke-WebRequest ifconfig.me/ip ).Content.Trim()
 
-    New-AzSqlServerFirewallRule `
-        -ResourceGroupName $ResourceGroup.ResourceGroupName `
-        -ServerName $Server.ServerName `
-        -FirewallRuleName 'myIP' `
-        -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
+            New-AzSqlServerFirewallRule `
+                -ResourceGroupName $ResourceGroup.ResourceGroupName `
+                -ServerName $Server.ServerName `
+                -FirewallRuleName $FirewallRule `
+                -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
+        }
+        all {
+            New-AzSqlServerFirewallRule `
+                -ResourceGroupName $ResourceGroup.ResourceGroupName `
+                -ServerName $Server.ServerName `
+                -FirewallRuleName $FirewallRule `
+                -StartIpAddress '0.0.0.0' -EndIpAddress '255.255.255.255' | Out-Null
+        }
+    }
 
     $Server | Add-Member DataSource $Server.FullyQualifiedDomainName
     $Server | Add-Member ConnectTimeout 30

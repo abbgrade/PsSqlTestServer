@@ -5,25 +5,25 @@ online version:
 schema: 2.0.0
 ---
 
-# New-SqlTestAzureInstance
+# Get-SqlTestAzureInstance
 
 ## SYNOPSIS
-Returns connection parameter for a new Azure SQL Server.
+Returns connection parameter for a existing Azure SQL Server.
 
 ## SYNTAX
 
 ```
-New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>] [<CommonParameters>]
+Get-SqlTestAzureInstance [[-Subscription] <String>] [[-ResourceGroupName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
+Retrieves Azure SQL Servers and returns a object with the properties DataSource and ConnectionString.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+Get-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
 ```
 
 ## PARAMETERS
@@ -43,8 +43,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -FirewallRule
-Specify which firewall rule to create.
+### -ResourceGroupName
+Specifies the Azure Resource Group name.
 
 ```yaml
 Type: String
@@ -53,7 +53,7 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: All
+Default value: PsSqlTestServer
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -12,7 +12,7 @@
 RootModule = 'PsSqlTestServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.6.0'
+ModuleVersion = '1.7.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -51,7 +51,7 @@ Description = 'Cmdlets to provide and manage SQL servers for tests.'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ ModuleName = 'PsSqlClient'; ModuleVersion = '1.5.0' })
+RequiredModules = @(@{ ModuleName = 'PsSqlClient'; ModuleVersion = '2.3.0' })
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()

@@ -14,7 +14,7 @@ Removes a Azure SQL Database.
 
 ```
 Remove-SqlTestAzureDatabase [-ResourceGroupName] <Object> [-ServerName] <Object> [-DatabaseName] <Object>
- [<CommonParameters>]
+ [-RemoveServer] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -73,6 +73,21 @@ Aliases:
 Required: True
 Position: 3
 Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -RemoveServer
+Specifies if the server should be removed as well.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
