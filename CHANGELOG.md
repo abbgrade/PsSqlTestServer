@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2025-12-18
+
+### Changed
+
+- Updated PsSqlClient to 2.3.1 for compatibility with Az v14.
+
 ## [1.7.0] - 2025-12-17
 
 ### Changed
