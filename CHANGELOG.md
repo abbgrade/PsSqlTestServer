@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed dependency to RequiredVersion.
+
 ## [1.7.1] - 2025-12-18
 
 ### Changed
@@ -23,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added new command `Get-AzureInstance` that works like `New-AzureInstance` but does not create new resources but reuses existing.
 - Added new parameter set to `New-AzureDatabase` that creates a server and extended `Remove-AzureDatabase` to clean up that created server.
+
+## [1.6.1] - 2026-01-02
+
+### Changed
+
+- Set dependency to required version.
 
 ## [1.6.0] - 2023-03-07
 
