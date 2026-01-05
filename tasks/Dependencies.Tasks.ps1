@@ -8,5 +8,5 @@ task InstallTestDependencies -Jobs InstallReleaseDependencies, {
 }
 
 task InstallReleaseDependencies -Jobs {
-    Install-Module PsSqlClient -Scope CurrentUser -RequiredVersion 2.3.1 -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease -AllowClobber
+    Install-Module PsSqlClient -Scope CurrentUser -MinimumVersion 2.3.1 -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease -AllowClobber
 }
