@@ -14,7 +14,7 @@ Returns connection parameter for a SQL server in a new Docker container.
 
 ```
 New-SqlTestDockerInstance [-DockerContainerName <String>] [-ServerAdminPassword <String>] [-AcceptEula]
- [-Timeout <Int32>] [-Port <Int32>] [<CommonParameters>]
+ [-Timeout <Int32>] [-Port <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +121,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: 1433
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -3,7 +3,7 @@
 Describe Test-Docker -Tag Docker {
 
     BeforeDiscovery {
-        $PsDockerModule = Import-Module psdocker -MinimumVersion '1.7.0' -PassThru -ErrorAction SilentlyContinue
+        $PsDockerModule = Import-Module psdocker -MinimumVersion '1.9.0' -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {

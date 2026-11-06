@@ -14,7 +14,7 @@ Removes a Azure SQL Database.
 
 ```
 Remove-SqlTestAzureDatabase [-ResourceGroupName] <Object> [-ServerName] <Object> [-DatabaseName] <Object>
- [-RemoveServer] [<CommonParameters>]
+ [-RemoveServer] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -89,6 +89,21 @@ Required: False
 Position: Named
 Default value: False
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

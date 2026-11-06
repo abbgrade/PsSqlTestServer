@@ -14,12 +14,12 @@ Creates a new Azure SQL Database and returns the connection parameters.
 
 ### UseServer
 ```
-New-SqlTestAzureDatabase -Server <Object> [<CommonParameters>]
+New-SqlTestAzureDatabase -Server <Object> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### NewServer
 ```
-New-SqlTestAzureDatabase -Subscription <String> [<CommonParameters>]
+New-SqlTestAzureDatabase -Subscription <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,6 +60,21 @@ Parameter Sets: NewServer
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

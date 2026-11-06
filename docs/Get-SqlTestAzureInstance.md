@@ -13,7 +13,8 @@ Returns connection parameter for a existing Azure SQL Server.
 ## SYNTAX
 
 ```
-Get-SqlTestAzureInstance [[-Subscription] <String>] [[-ResourceGroupName] <String>] [<CommonParameters>]
+Get-SqlTestAzureInstance [[-Subscription] <String>] [[-ResourceGroupName] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +55,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: PsSqlTestServer
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
