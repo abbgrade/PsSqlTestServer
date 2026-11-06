@@ -13,7 +13,8 @@ Removes a database.
 ## SYNTAX
 
 ```
-Remove-SqlTestDatabase [-Name] <String> [-InstanceConnection] <SqlConnection> [<CommonParameters>]
+Remove-SqlTestDatabase [-Name] <String> [-InstanceConnection] <SqlConnection>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,6 +59,21 @@ Required: True
 Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

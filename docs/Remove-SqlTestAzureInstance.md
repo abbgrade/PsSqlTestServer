@@ -13,7 +13,8 @@ Removes a test Azure SQL Server.
 ## SYNTAX
 
 ```
-Remove-SqlTestAzureInstance [-ResourceGroupName] <Object> [-ServerName] <Object> [<CommonParameters>]
+Remove-SqlTestAzureInstance [-ResourceGroupName] <Object> [-ServerName] <Object>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,6 +57,21 @@ Required: True
 Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

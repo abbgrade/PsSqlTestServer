@@ -13,7 +13,8 @@ Returns connection parameter for a new Azure SQL Server.
 ## SYNTAX
 
 ```
-New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>] [<CommonParameters>]
+New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +55,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: All
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

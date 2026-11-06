@@ -13,7 +13,7 @@ Generates a database name.
 ## SYNTAX
 
 ```
-New-SqlTestDatabaseName [[-Prefix] <String>] [<CommonParameters>]
+New-SqlTestDatabaseName [[-Prefix] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,6 +41,21 @@ Aliases:
 Required: False
 Position: 1
 Default value: Test-
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
