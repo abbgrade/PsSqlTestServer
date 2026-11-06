@@ -22,7 +22,9 @@ param(
 	[switch] $ForceDocInit,
 
 	# Version suffix to prereleases
-	[int] $BuildNumber
+	[int] $BuildNumber,
+
+    [switch] $AllowPrerelease
 )
 
 $ModuleName = 'PsSqlTestServer'

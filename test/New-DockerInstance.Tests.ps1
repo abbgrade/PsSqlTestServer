@@ -13,7 +13,10 @@ Describe New-DockerInstance -Tag Docker {
         }
 
         BeforeAll {
-            $Port = 7027 # just a unassigned port
+            $PortListener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, 0)
+            $PortListener.Start()
+            $Port = $PortListener.LocalEndpoint.Port
+            $PortListener.Stop()
             $Container = New-SqlTestDockerInstance -Port $Port -AcceptEula
         }
 

@@ -26,7 +26,7 @@ function Remove-DockerInstance {
     )
 
     begin {
-        Import-Module psdocker -MinimumVersion 1.7.0 -ErrorAction Stop
+        Import-Module psdocker -MinimumVersion '1.9.0' -ErrorAction Stop
     }
 
     process {
