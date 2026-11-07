@@ -7,8 +7,9 @@ Describe Remove-AzureDatabase -Tag Azure {
     }
 
     BeforeAll {
+        . $PSScriptRoot\TestHelpers.ps1
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
-        $Subscription = 'Visual Studio Enterprise – MPN'
+        $Subscription = Get-TestAzureSubscription
     }
 
     Context Az -Skip:(-Not $AzSqlModule) {

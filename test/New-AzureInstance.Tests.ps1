@@ -7,7 +7,8 @@ Describe New-AzureInstance -Tag Azure {
     }
 
     BeforeAll {
-        $Subscription = 'Visual Studio'
+        . $PSScriptRoot\TestHelpers.ps1
+        $Subscription = Get-TestAzureSubscription
     }
 
     Context Azure -Skip:( -Not ( Test-SqlTestAzure )) {

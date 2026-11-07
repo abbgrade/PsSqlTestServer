@@ -36,6 +36,14 @@ Invoke-Build Install
 - [VSCode](https://code.visualstudio.com) is recommended as IDE. [VSCode Tasks](https://code.visualstudio.com/docs/editor/tasks) are configured.
 - Build automation is based on [InvokeBuild](https://github.com/nightroman/Invoke-Build)
 - Test automation is based on [Pester](https://pester.dev)
+- Azure tests use the subscription specified by the `PSSQLTESTSERVER_AZURE_SUBSCRIPTION`
+  environment variable. If it is not set, each test uses its existing default subscription.
+  For example:
+
+  ```powershell
+  $env:PSSQLTESTSERVER_AZURE_SUBSCRIPTION = 'My Azure subscription'
+  Invoke-Pester
+  ```
 - Commands are named based on [Approved Verbs for PowerShell Commands](https://docs.microsoft.com/de-de/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands)
 - This project uses [git-flow](https://github.com/nvie/gitflow).
 - This project uses [keep a changelog](https://keepachangelog.com/en/1.0.0/).
