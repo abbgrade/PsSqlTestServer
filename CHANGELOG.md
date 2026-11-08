@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-08
+
 ### Changed
 
 - Added standard `-WhatIf` support to commands that create or remove SQL instances and databases, forwarding previews to the Docker and LocalDB providers.
