@@ -3,8 +3,8 @@ task InstallBuildDependencies -Jobs InstallReleaseDependencies, {
 }
 
 task InstallTestDependencies -Jobs InstallReleaseDependencies, {
-    Install-Module psdocker -Scope CurrentUser -MinimumVersion '1.9.0' -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease
-    Install-Module PsSqlLocalDb -Scope CurrentUser -MinimumVersion 0.3 -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease
+    Install-Module psdocker -Scope CurrentUser -MinimumVersion 1.10.0 -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease
+    Install-Module PsSqlLocalDb -Scope CurrentUser -MinimumVersion 0.6.0 -ErrorAction Stop -Verbose -AllowPrerelease:$AllowPrerelease
 }
 
 task InstallReleaseDependencies -Jobs {

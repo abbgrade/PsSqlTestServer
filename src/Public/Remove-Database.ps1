@@ -6,31 +6,43 @@ function Remove-Database {
     Removes a database.
 
     .DESCRIPTION
-    Removes a database, created using `New-SqlTestInstance` command.
+    Removes a database using the instance connection stored on a database object returned by New-SqlTestDatabase.
 
     .EXAMPLE
-    PS> $Instance = New-SqlTestInstance
-    PS> $InstanceConnection = $Instance | Connect-TSqlInstance
-    PS> $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
-    PS> $Database | Remove-SqlTestDatabase
+    PS> $instance = New-SqlTestInstance
+    PS> $instanceConnection = $instance | Connect-TSqlInstance
+    PS> $database = New-SqlTestDatabase -Instance $instance -InstanceConnection $instanceConnection
+    PS> $database | Remove-SqlTestDatabase
+    Removes the database created for this example.
+    Illustrative output: the database is dropped; output depends on the SQL client module version.
+    PS> Disconnect-TSqlInstance -Connection $instanceConnection
+    PS> $instance | Remove-SqlTestInstance
+    Closes the connection and removes the server instance. Provider availability varies by environment.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDatabase.html
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
+        # Specifies the database name, or accepts the InitialCatalog property from the pipeline.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
         [Alias('InitialCatalog')]
         [string] $Name,
 
+        # Specifies the open connection to the SQL Server instance.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
         [Microsoft.Data.SqlClient.SqlConnection] $InstanceConnection
     )
 
     process {
-        Invoke-TSqlCommand 'USE [master];' -Connection $InstanceConnection
-        Invoke-TSqlCommand "ALTER DATABASE [$Name] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" -Connection $InstanceConnection
-        Invoke-TSqlCommand "DROP DATABASE [$Name]" -Connection $InstanceConnection
+        if ( $PSCmdlet.ShouldProcess($Name, 'Remove SQL database') ) {
+            Invoke-TSqlCommand 'USE [master];' -Connection $InstanceConnection
+            Invoke-TSqlCommand "ALTER DATABASE [$Name] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" -Connection $InstanceConnection
+            Invoke-TSqlCommand "DROP DATABASE [$Name]" -Connection $InstanceConnection
+        }
     }
 }

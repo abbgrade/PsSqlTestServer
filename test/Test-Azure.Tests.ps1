@@ -2,18 +2,23 @@
 
 Describe Test-Azure -Tag Azure {
 
-    BeforeDiscovery {
-        $AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
-    }
+    Context IntegrationTests -Tag IntegrationTest {
+        BeforeAll {
+            $AzSqlModule = Import-Module Az.Sql -PassThru -ErrorAction SilentlyContinue
+            Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
+        }
 
-    BeforeAll {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
-    }
+        It 'returns a boolean indicating Azure availability' {
+            # Arrange
+            if ( -Not $AzSqlModule ) {
+                Set-ItResult -Skipped -Because 'Az.Sql is unavailable'
+            }
 
-    Context Az.Sql -Skip:(-Not $AzSqlModule) {
+            # Act
+            $result = Test-SqlTestAzure
 
-        It 'works' {
-            Test-SqlTestAzure | Should -BeIn $true, $false
+            # Assert
+            $result | Should -BeIn $true, $false
         }
     }
 }

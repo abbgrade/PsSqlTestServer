@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestAzure.html
 schema: 2.0.0
 ---
 
@@ -17,16 +17,16 @@ Test-SqlTestAzure [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks if Az is installed, and if the Azure service is running.
+Checks whether the required Az modules are installed and an Azure account is authenticated.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 Test-SqlTestAzure
+Checks whether Azure-backed SQL Server operations can be used in the current session.
+Illustrative output: $true when requirements are met and $false otherwise; results depend on installed modules and authentication.
 ```
-
-True
 
 ## PARAMETERS
 
@@ -56,3 +56,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestAzure.html](https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestAzure.html)
+

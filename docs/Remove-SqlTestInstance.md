@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html
 schema: 2.0.0
 ---
 
@@ -13,18 +13,21 @@ Removes a test SQL server.
 ## SYNTAX
 
 ```
-Remove-SqlTestInstance -Instance <Object> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-SqlTestInstance -Instance <Object> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
+Removes a SQL Server instance created by New-SqlTestInstance, using its provider-specific removal command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 $Instance = New-SqlTestInstance
-PS> Remove-SqlTestInstance -Server $Instance
+PS> $Instance | Remove-SqlTestInstance
+Removes the instance created by this example.
+Illustrative output: the instance is removed; output depends on the selected provider.
 ```
 
 ## PARAMETERS
@@ -41,6 +44,37 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -69,3 +103,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html)
+

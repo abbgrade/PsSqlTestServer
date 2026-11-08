@@ -7,15 +7,20 @@ function Remove-DockerInstance {
     Removes a test SQL server Docker container.
 
     .DESCRIPTION
-    Removes a SQL server Docker container, in case it was created with `New-DockerSqlServer`.
+    Removes a SQL Server Docker container created by New-SqlTestDockerInstance. Requires Docker and the psdocker module.
 
     .EXAMPLE
-    PS> $server = New-SqlTestDockerInstance -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-    PS> Remove-SqlTestDockerInstance -DockerContainerName $server.Name
+    PS> $container = New-SqlTestDockerInstance -DockerContainerName 'sql-test' -AcceptEula
+    PS> $container | Remove-SqlTestDockerInstance
+    Removes the container created by this example.
+    Illustrative output: the container is removed; output depends on the psdocker version.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDockerInstance.html
 
     #>
 
-    [CmdletBinding( PositionalBinding=$false )]
+    [CmdletBinding( SupportsShouldProcess, PositionalBinding=$false )]
     param (
 
         # Specifies the server to remove. Requires the name of the Docker container.
@@ -25,11 +30,12 @@ function Remove-DockerInstance {
 
     )
 
-    begin {
-        Import-Module psdocker -MinimumVersion '1.9.0' -ErrorAction Stop
-    }
-
     process {
-        Remove-DockerContainer -Name $Server.Name -Force
+        $DockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru
+        if ( -not $DockerModule ) {
+            return
+        }
+
+        Remove-DockerContainer -Name $Server.Name -Force -WhatIf:$WhatIfPreference
     }
 }

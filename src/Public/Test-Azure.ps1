@@ -6,12 +6,15 @@ function Test-Azure {
     Tests if a Azure-based SQL Server can be created.
 
     .DESCRIPTION
-    Checks if Az is installed, and if the Azure service is running.
+    Checks whether the required Az modules are installed and an Azure account is authenticated.
 
     .EXAMPLE
     PS> Test-SqlTestAzure
+    Checks whether Azure-backed SQL Server operations can be used in the current session.
+    Illustrative output: $true when requirements are met and $false otherwise; results depend on installed modules and authentication.
 
-    True
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestAzure.html
 
     .OUTPUTS
     bool

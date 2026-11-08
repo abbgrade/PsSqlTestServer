@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabase.html
 schema: 2.0.0
 ---
 
@@ -14,28 +14,37 @@ Creates a new database and returns the connection parameters.
 
 ```
 New-SqlTestDatabase [-Instance] <PSObject> [-InstanceConnection] <SqlConnection> [[-Name] <String>]
- [-Connected] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Connected] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses a existing test instance and creates a database for (temporary) use.
-It keeps an open connection to the instance for later removal.
+Creates a database for temporary use on an existing SQL Server instance.
+The returned object includes the
+instance connection for later database removal.
+Use -Connected to also open and return a database connection.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$Instance = New-SqlTestInstance
-PS> $InstanceConnection = $Instance | Connect-TSqlInstance
-PS> New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
+$instance = New-SqlTestInstance
+PS> $instanceConnection = $instance | Connect-TSqlInstance
+PS> $database = New-SqlTestDatabase -Instance $instance -InstanceConnection $instanceConnection
+Creates a temporary database on the SQL Server instance.
+Captured output (temporary database and instance names redacted):
 ```
 
-ConnectionString   : Data Source=(LocalDb)\MSSQLLocalDB;Connect Timeout=30;Integrated Security=True;Initial Catalog=a48b028c
-DataSource         : (LocalDb)\MSSQLLocalDB
-ConnectTimeout     : 30
-Version            : v11.0
-InitialCatalog     : a48b028c
-InstanceConnection : Microsoft.Data.SqlClient.SqlConnection
+Name             : test-\<redacted\>
+Version          : 15.0.4382.1
+DataSource       : (LocalDb)\test-\<redacted\>
+ConnectTimeout   : 30
+InitialCatalog   : test-\<redacted\>
+ConnectionString : Data Source=(LocalDb)\test-\<redacted\>;Connect Timeout=30;Integrated Security=True;Initial Catalog=test-\<redacted\>
+
+PS\> $database | Remove-SqlTestDatabase
+PS\> Disconnect-TSqlInstance -Connection $instanceConnection
+PS\> $instance | Remove-SqlTestInstance
+Removes the database, closes the instance connection, and removes the server instance.
 
 ## PARAMETERS
 
@@ -55,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceConnection
-Specifies a open sql connection to the instance.
+Specifies an open SQL connection to the instance.
 
 ```yaml
 Type: SqlConnection
@@ -85,7 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Connected
-Speficies if a SqlClient connection should be created.
+Specifies whether a SqlClient connection should be created.
 
 ```yaml
 Type: SwitchParameter
@@ -95,6 +104,37 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -124,3 +164,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabase.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabase.html)
+

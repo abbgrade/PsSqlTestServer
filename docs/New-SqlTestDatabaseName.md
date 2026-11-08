@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabaseName.html
 schema: 2.0.0
 ---
 
@@ -17,16 +17,17 @@ New-SqlTestDatabaseName [[-Prefix] <String>] [-ProgressAction <ActionPreference>
 ```
 
 ## DESCRIPTION
-Generates a short random database name.
+Generates a short random database name with an optional prefix.
+The generated suffix is based on a GUID.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+New-SqlTestDatabaseName -Prefix 'test-'
+Generates a database name with the specified prefix.
+Captured output (random suffix redacted): test-<redacted>
+```
 
 ## PARAMETERS
 
@@ -70,3 +71,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabaseName.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabaseName.html)
+

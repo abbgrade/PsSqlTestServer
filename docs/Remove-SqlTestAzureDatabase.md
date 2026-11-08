@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureDatabase.html
 schema: 2.0.0
 ---
 
@@ -14,20 +14,26 @@ Removes a Azure SQL Database.
 
 ```
 Remove-SqlTestAzureDatabase [-ResourceGroupName] <Object> [-ServerName] <Object> [-DatabaseName] <Object>
- [-RemoveServer] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-RemoveServer] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a Azure SQL Database, created using \`New-SqlTestAzureInstance\` command.
+Removes an Azure SQL Database created by New-SqlTestAzureDatabase.
+If the database object has RemoveServer set,
+its associated Azure SQL Server is removed as well.
+Requires Az modules and an authenticated Azure context.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+Connect-AzAccount
+PS> $instance = New-SqlTestAzureInstance -Location 'westeurope'
 PS> $database = New-SqlTestAzureDatabase -Instance $instance
 PS> $database | Remove-SqlTestAzureDatabase
+Removes the temporary Azure SQL database.
 PS> $instance | Remove-SqlTestAzureInstance
+Removes the Azure SQL Server created for this example. Its resource group remains. Output depends on the Az module version.
 ```
 
 ## PARAMETERS
@@ -78,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -RemoveServer
-Specifies if the server should be removed as well.
+Specifies whether the associated server should also be removed.
 
 ```yaml
 Type: SwitchParameter
@@ -89,6 +95,37 @@ Required: False
 Position: Named
 Default value: False
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -117,3 +154,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureDatabase.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureDatabase.html)
+

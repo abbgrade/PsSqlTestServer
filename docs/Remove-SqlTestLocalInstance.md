@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestLocalInstance.html
 schema: 2.0.0
 ---
 
@@ -13,19 +13,22 @@ Removes a test SQL server.
 ## SYNTAX
 
 ```
-Remove-SqlTestLocalInstance [-Name] <String> [-WhatIf] [-ProgressAction <ActionPreference>]
+Remove-SqlTestLocalInstance [-Name] <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestLocalInstance\`.
+Removes a LocalDB instance created by New-SqlTestLocalInstance.
+Requires PsSqlLocalDb.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 $Instance = New-SqlTestLocalInstance
-PS> Remove-SqlTestLocalInstance -Server $Instance
+PS> $Instance | Remove-SqlTestLocalInstance
+Removes the LocalDB instance created by this example.
+Illustrative output: the LocalDB instance is removed; output depends on the PsSqlLocalDb version.
 ```
 
 ## PARAMETERS
@@ -52,11 +55,26 @@ The cmdlet is not run.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: wi
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -86,3 +104,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestLocalInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestLocalInstance.html)
+

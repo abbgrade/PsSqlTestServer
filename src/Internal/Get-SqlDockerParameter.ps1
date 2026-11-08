@@ -1,7 +1,24 @@
 function Get-SqlDockerParameter {
 
+    <#
+
+    .SYNOPSIS
+    Gets Docker image settings for a supported server architecture.
+
+    .DESCRIPTION
+    Selects the SQL Server container image, password environment variable, and readiness command
+    for the supplied Docker server architecture.
+
+    .EXAMPLE
+    Get-SqlDockerParameter -OsArch 'linux/amd64'
+    Returns the Docker settings used internally to start a Linux SQL Server container.
+    Illustrative output: an object containing the Linux SQL Server image, password variable, and readiness command.
+
+    #>
+
     [CmdletBinding()]
     param (
+        # Specifies the Docker server architecture, such as linux/amd64.
         $OsArch
     )
 
@@ -17,7 +34,8 @@ function Get-SqlDockerParameter {
             $WaitCommand = Get-Command 'Wait-WindowsDockerSqlServer'
         }
         default {
-            throw "$_ not supported"
+            Write-Error "$_ not supported"
+            return
         }
     }
 

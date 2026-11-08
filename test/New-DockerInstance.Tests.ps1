@@ -1,43 +1,142 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe New-DockerInstance -Tag Docker {
+Describe New-DockerInstance {
 
     BeforeDiscovery {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        if ( Get-Module psdocker -ListAvailable ) {
+            Import-Module psdocker -ErrorAction SilentlyContinue
+        }
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    Context Docker -Skip:( -Not ( Test-SqlTestDocker )) {
+    Context UnitTests -Tag UnitTest -Skip:( -Not ( Get-Module psdocker -ListAvailable | Where-Object Version -GE ([version]'1.10.0') )) {
+        It 'does not wait for a Docker container when WhatIf is specified' {
+            # Arrange
+            Mock Import-Module { [pscustomobject]@{} } -ModuleName PsSqlTestServer
+            Mock Get-DockerVersion {
+                [pscustomobject]@{
+                    Server = @{
+                        Engine = @{
+                            OSArch = 'linux/amd64'
+                        }
+                    }
+                }
+            } -ModuleName PsSqlTestServer
+            Mock New-DockerContainer { $null } -ModuleName PsSqlTestServer
+            Mock Wait-LinuxDockerSqlServer {} -ModuleName PsSqlTestServer
 
-        BeforeDiscovery {
-            $PsSqlClient = Import-Module PsSqlClient -MinimumVersion 2.0.0 -PassThru -ErrorAction SilentlyContinue
+            # Act
+            $container = New-SqlTestDockerInstance -DockerContainerName 'test-container' -AcceptEula -WhatIf
+
+            # Assert
+            $container | Should -BeNullOrEmpty
+            Should -Invoke New-DockerContainer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Name -eq 'test-container' -and $WhatIf
+            }
+            Should -Invoke Wait-LinuxDockerSqlServer -ModuleName PsSqlTestServer -Times 0
         }
 
-        BeforeAll {
-            $PortListener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, 0)
-            $PortListener.Start()
-            $Port = $PortListener.LocalEndpoint.Port
-            $PortListener.Stop()
-            $Container = New-SqlTestDockerInstance -Port $Port -AcceptEula
-        }
+        It 'passes container name and timeout separately to readiness check' {
+            # Arrange
+            Mock Get-DockerVersion {
+                [pscustomobject]@{
+                    Server = @{
+                        Engine = @{
+                            OSArch = 'linux/amd64'
+                        }
+                    }
+                }
+            } -ModuleName PsSqlTestServer
+            Mock New-DockerContainer {
+                [pscustomobject]@{
+                    Name = 'test-container'
+                }
+            } -ModuleName PsSqlTestServer
+            Mock Wait-LinuxDockerSqlServer {} -ModuleName PsSqlTestServer
 
-        AfterAll {
-            if ( $Container ) {
-                $Container | Remove-SqlTestDockerInstance
+            # Act
+            $container = New-SqlTestDockerInstance -DockerContainerName 'test-container' -AcceptEula -Timeout 7
+
+            # Assert
+            $container.Name | Should -Be 'test-container'
+            Should -Invoke Wait-LinuxDockerSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Name -eq 'test-container' -and $Timeout -eq 7
             }
         }
 
-        It 'Returns values' {
-            $Container | Should -Not -BeNullOrEmpty
-            $Container.ConnectionString | Should -Not -BeNullOrEmpty
-            $Container.DataSource | Should -Not -BeNullOrEmpty
-            $Container.Port | Should -Be $Port
-            $Container.SecurePassword | Should -Not -BeNullOrEmpty
-            $Container.UserId | Should -Not -BeNullOrEmpty
+        It 'writes a non-terminating error when the EULA is not accepted' {
+            # Arrange
+            $errors = @()
+
+            # Act
+            $container = New-SqlTestDockerInstance -AcceptEula:$false -ErrorAction SilentlyContinue -ErrorVariable errors
+
+            # Assert
+            $container | Should -BeNullOrEmpty
+            $errors.Count | Should -Be 1
+            $errors[0].ToString() | Should -BeLike '*Accept the Microsoft EULA with -AcceptEula*'
         }
 
-        Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
-            It 'Connects by Properties' {
-                $SqlConnection = Connect-TSqlInstance `
+        It 'terminates when caller requests terminating errors for an unaccepted EULA' {
+            # Arrange
+            $action = { New-SqlTestDockerInstance -AcceptEula:$false -ErrorAction Stop }
+
+            # Act
+            $caughtError = $null
+            try {
+                & $action
+            }
+            catch {
+                $caughtError = $_
+            }
+
+            # Assert
+            $caughtError | Should -Not -BeNullOrEmpty
+            $caughtError.ToString() | Should -BeLike '*Accept the Microsoft EULA with -AcceptEula*'
+        }
+    }
+
+    Context IntegrationTests -Tag IntegrationTest {
+        Context Docker -Tag Docker -Skip:( -Not ( Test-SqlTestDocker )) {
+
+            BeforeDiscovery {
+                $PsSqlClient = Import-Module PsSqlClient -MinimumVersion 2.0.0 -PassThru -ErrorAction SilentlyContinue
+            }
+
+            BeforeAll {
+                $PortListener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, 0)
+                $PortListener.Start()
+                $Port = $PortListener.LocalEndpoint.Port
+                $PortListener.Stop()
+                $Container = New-SqlTestDockerInstance -Port $Port -AcceptEula
+            }
+
+            AfterAll {
+                if ( $Container ) {
+                    $Container | Remove-SqlTestDockerInstance
+                }
+            }
+
+            It 'returns Docker connection metadata' {
+                # Assert
+                $Container | Should -Not -BeNullOrEmpty
+                $Container.ConnectionString | Should -Not -BeNullOrEmpty
+                $Container.DataSource | Should -Not -BeNullOrEmpty
+                $Container.Port | Should -Be $Port
+                $Container.SecurePassword | Should -Not -BeNullOrEmpty
+                $Container.UserId | Should -Not -BeNullOrEmpty
+            }
+
+            Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
+                AfterEach {
+                    if ( $SqlConnection ) {
+                        Disconnect-TSqlInstance -Connection $SqlConnection
+                    }
+                }
+
+                It 'connects using instance properties' {
+                    # Act
+                    $SqlConnection = Connect-TSqlInstance `
                     -DataSource $Container.DataSource `
                     -Port $Container.Port `
                     -UserId $Container.UserId `
@@ -45,15 +144,19 @@ Describe New-DockerInstance -Tag Docker {
                     -ConnectTimeout $Container.ConnectTimeout `
                     -RetryCount 3 `
                     -TrustServerCertificate:$Container.TrustServerCertificate
-            }
 
-            It 'Connects by ConnectionString' {
-                $SqlConnection = Connect-TSqlInstance -ConnectionString $Container.ConnectionString
-            }
+                    # Assert
+                    $SqlConnection | Should -Not -BeNullOrEmpty
+                    $SqlConnection | Test-TSqlConnection | Should -BeTrue
+                }
 
-            AfterEach {
-                if ( $SqlConnection ) {
-                    Disconnect-TSqlInstance -Connection $SqlConnection
+                It 'connects using the connection string' {
+                    # Act
+                    $SqlConnection = Connect-TSqlInstance -ConnectionString $Container.ConnectionString
+
+                    # Assert
+                    $SqlConnection | Should -Not -BeNullOrEmpty
+                    $SqlConnection | Test-TSqlConnection | Should -BeTrue
                 }
             }
         }

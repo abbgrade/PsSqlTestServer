@@ -20,6 +20,31 @@ This module can be installed from [PsGallery](https://www.powershellgallery.com/
 Install-Module -Name PsSqlTestServer -AllowPrerelease
 ```
 
+Azure functionality is optional. For an Az 14.0.0-compatible setup, install
+`Az.Accounts` 5.0.0, `Az.Resources` 8.0.0, and `Az.Sql` 6.0.4:
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 5.0.0 -Scope CurrentUser
+Install-Module -Name Az.Resources -RequiredVersion 8.0.0 -Scope CurrentUser
+Install-Module -Name Az.Sql -RequiredVersion 6.0.4 -Scope CurrentUser
+```
+
+Az 14.0.0 specifies `Az.Accounts` 5.0.0 or later, but compatibility with later
+versions is not established by that dependency alone.
+
+Az 12.0.0 specifies `Az.Accounts` 3.0.0 or later, `Az.Resources` 7.1.0, and
+`Az.Sql` 5.0.0. To install the corresponding baseline versions:
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 3.0.0 -Scope CurrentUser
+Install-Module -Name Az.Resources -RequiredVersion 7.1.0 -Scope CurrentUser
+Install-Module -Name Az.Sql -RequiredVersion 5.0.0 -Scope CurrentUser
+```
+
+These are the Az 12.0.0 dependencies; compatibility with PsSqlTestServer and
+its PsSqlClient dependency has not been established by the dependency metadata.
+The Az modules are not required to install or use non-Azure features.
+
 Alternatively it can be built and installed from the sources:
 
 1. Install the development dependencies
@@ -36,6 +61,38 @@ Invoke-Build Install
 - [VSCode](https://code.visualstudio.com) is recommended as IDE. [VSCode Tasks](https://code.visualstudio.com/docs/editor/tasks) are configured.
 - Build automation is based on [InvokeBuild](https://github.com/nightroman/Invoke-Build)
 - Test automation is based on [Pester](https://pester.dev)
+- Azure tests can use a local, Git-ignored `.PsSqlTestServer.settings.json` file
+  in the repository root:
+
+  ```json
+  {
+      "AzureSubscription": "My Azure subscription"
+  }
+  ```
+
+  The `PSSQLTESTSERVER_AZURE_SUBSCRIPTION` environment variable takes precedence
+  over this file. If neither is configured, tests use `Visual Studio`. For example:
+
+  ```powershell
+  $env:PSSQLTESTSERVER_AZURE_SUBSCRIPTION = 'My Azure subscription'
+  Invoke-Pester
+  ```
+- Azure integration tests create SQL servers. Set `PSSQLTESTSERVER_AZURE_LOCATION`
+  to a region where your subscription can create SQL servers (for example,
+  `northeurope`). Without it, the existing resource group's location is used.
+  If the group does not exist, the variable is required for tests that create
+  servers directly. Region availability depends on the subscription.
+  The `New-SqlTestAzureDatabase -Subscription` integration test creates its own
+  server internally and cannot pass this location override; it requires an
+  existing `PsSqlTestServer` resource group in a usable region.
+  To troubleshoot provisioning, enable verbose output for the test run:
+
+  ```powershell
+  & { $VerbosePreference = 'Continue'; Invoke-Pester -Path .\test\Get-AzureInstance.Tests.ps1 }
+  ```
+
+  Verbose output includes Azure account and resource identifiers; review it
+  before sharing.
 - Commands are named based on [Approved Verbs for PowerShell Commands](https://docs.microsoft.com/de-de/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands)
 - This project uses [git-flow](https://github.com/nvie/gitflow).
 - This project uses [keep a changelog](https://keepachangelog.com/en/1.0.0/).

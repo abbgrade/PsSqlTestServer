@@ -7,35 +7,32 @@ function New-DockerInstance {
     Returns connection parameter for a SQL server in a new Docker container.
 
     .DESCRIPTION
-    Creates a Docker container with a SQL server installed.
-    Returns a object with the properties DataSource and ConnectionString.
+    Creates a Docker container with SQL Server and returns an object with connection metadata. Requires Docker,
+    the psdocker module, and acceptance of the Microsoft SQL Server EULA.
 
     .EXAMPLE
-    PS> New-SqlTestDockerInstance -AcceptEula
-    Name                   : Sandbox
+    PS> $container = New-SqlTestDockerInstance -DockerContainerName 'sql-test' -Port 58955 -AcceptEula
+    Creates a SQL Server container named sql-test. Container details and mapped port depend on the local Docker environment.
+    Captured output (password omitted):
+
+    Name                   : sql-test
     Hostname               : localhost
+    DataSource             : localhost
+    Port                   : 58955
     UserId                 : sa
-    ConnectionString       : Server='localhost';TrustServerCertificate=False;User Id='sa';Password='pa$$w0rd'
+    ConnectTimeout         : 30
     IsDocker               : True
-    Id                     : 693d5e79169c50af4ab5b10e1af9069a987ec8902033f3c55f325e12199a61c1
-    Names                  : {Sandbox}
-    Image                  : mcr.microsoft.com/mssql/server
-    Command                : "/opt/mssql/bin/permissions_check.sh /opt/mssql/bin/sqlservr"
-    LocalVolumes           : {0}
-    Labels                 : {com.microsoft.product=Microsoft SQL Server, com.microsoft.version=15.0.4153.1, vendor=Microsoft}
-    Mounts                 : {}
-    Networks               : {bridge}
-    Ports                  : {0.0.0.0:1433->1433/tcp}
-    CreatedAt              : 2021-12-01 00:00:00 +0100 CET
-    RunningFor             : 2 seconds ago
-    Status                 : Up 1 second
-    Size                   : 0B (virtual 1.54GB)
-    DatabaseCredential     : System.Management.Automation.PSCredential
     TrustServerCertificate : True
+
+    PS> $container | Remove-SqlTestDockerInstance
+    Removes the container created by this example.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDockerInstance.html
 
     #>
 
-    [CmdletBinding( PositionalBinding=$false )]
+    [CmdletBinding( SupportsShouldProcess, PositionalBinding=$false )]
     param (
 
         # Specifies the name of the new Docker container.
@@ -60,15 +57,27 @@ function New-DockerInstance {
         [int] $Port = 1433
     )
 
-    Import-Module psdocker -MinimumVersion '1.9.0' -ErrorAction Stop
-
     if ( -not $AcceptEula ) {
-        throw "Accept the Microsoft EULA with -AcceptEula"
+        Write-Error "Accept the Microsoft EULA with -AcceptEula"
+        return
     }
 
-    $osArch = ( Get-DockerVersion -ErrorAction Stop ).Server.Engine.OSArch
+    $DockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru
+    if ( -not $DockerModule ) {
+        return
+    }
+
+    $dockerVersion = Get-DockerVersion
+    if ( -not $dockerVersion ) {
+        return
+    }
+
+    $osArch = $dockerVersion.Server.Engine.OSArch
     Write-Verbose "Create $osArch container."
     $dockerParameter = Get-SqlDockerParameter -OsArch $osArch
+    if ( -not $dockerParameter ) {
+        return
+    }
 
     # create container
     $container = New-DockerContainer `
@@ -80,10 +89,14 @@ function New-DockerInstance {
         } `
         -Ports @{
             "$Port" = 1433
-        } -Detach -ErrorAction Stop
+        } -Detach -WhatIf:$WhatIfPreference
+
+    if ( -not $container ) {
+        return
+    }
 
     # await the service
-    Invoke-Expression "$( $dockerParameter.WaitCommand.Name ) -Name '$( $container.Name ) -Timeout $Timeout'" -Verbose
+    & $dockerParameter.WaitCommand -Name $container.Name -Timeout $Timeout -Verbose
 
     # add metadata
     $container | Add-Member 'Hostname' 'localhost'

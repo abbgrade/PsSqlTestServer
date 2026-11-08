@@ -1,14 +1,14 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestAzureInstance.html
 schema: 2.0.0
 ---
 
 # Get-SqlTestAzureInstance
 
 ## SYNOPSIS
-Returns connection parameter for a existing Azure SQL Server.
+Returns connection parameters for an existing Azure SQL Server.
 
 ## SYNTAX
 
@@ -18,14 +18,27 @@ Get-SqlTestAzureInstance [[-Subscription] <String>] [[-ResourceGroupName] <Strin
 ```
 
 ## DESCRIPTION
-Retrieves Azure SQL Servers and returns a object with the properties DataSource and ConnectionString.
+Retrieves Azure SQL Servers in the selected subscription and resource group and returns the first server
+with DataSource, ConnectTimeout, and ConnectionString properties.
+Requires Az modules and an authenticated
+Azure context.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+Connect-AzAccount
+PS> Get-SqlTestAzureInstance
+Retrieves the first SQL Server from the default PsSqlTestServer resource group in the current subscription.
+Captured output (server name redacted):
 ```
+
+ResourceGroupName        : PsSqlTestServer
+ServerName               : \<redacted\>
+FullyQualifiedDomainName : \<redacted\>.database.windows.net
+DataSource               : \<redacted\>.database.windows.net
+ConnectTimeout           : 30
+ConnectionString         : Data Source=\<redacted\>.database.windows.net;Connect Timeout=30;Authentication=Active Directory Integrated
 
 ## PARAMETERS
 
@@ -84,3 +97,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestAzureInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestAzureInstance.html)
+

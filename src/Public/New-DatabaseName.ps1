@@ -6,7 +6,15 @@ function New-DatabaseName {
     Generates a database name.
 
     .DESCRIPTION
-    Generates a short random database name.
+    Generates a short random database name with an optional prefix. The generated suffix is based on a GUID.
+
+    .EXAMPLE
+    PS> New-SqlTestDatabaseName -Prefix 'test-'
+    Generates a database name with the specified prefix.
+    Captured output (random suffix redacted): test-<redacted>
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabaseName.html
 
     #>
 

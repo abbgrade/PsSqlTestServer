@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestLocalDb.html
 schema: 2.0.0
 ---
 
@@ -17,16 +17,17 @@ Test-SqlTestLocalDb [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15).
+Checks whether PsSqlLocalDb and the \[SqlLocalDB utility\](https://learn.microsoft.com/sql/tools/sqllocaldb-utility)
+are available.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 Test-SqlTestLocalDb
+Checks whether LocalDB instances can be used on this computer.
+Illustrative output: $true when the LocalDB utility is available and $false otherwise.
 ```
-
-True
 
 ## PARAMETERS
 
@@ -56,3 +57,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestLocalDb.html](https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestLocalDb.html)
+

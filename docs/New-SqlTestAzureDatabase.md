@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureDatabase.html
 schema: 2.0.0
 ---
 
@@ -14,24 +14,42 @@ Creates a new Azure SQL Database and returns the connection parameters.
 
 ### UseServer
 ```
-New-SqlTestAzureDatabase -Server <Object> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-SqlTestAzureDatabase -Server <Object> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### NewServer
 ```
-New-SqlTestAzureDatabase -Subscription <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-SqlTestAzureDatabase -Subscription <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Uses a existing test azure sql instance and creates a database for (temporary) use.
+Creates a database for temporary use on an existing Azure SQL Server.
+Requires Az modules and an authenticated
+Azure context.
+When creating a server with -Subscription, the returned database has a RemoveServer property
+that allows Remove-SqlTestAzureDatabase to remove the server as well.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
-PS> New-SqlTestAzureDatabase -Instance $instance
+Connect-AzAccount
+PS> $instance = New-SqlTestAzureInstance -FirewallRule justme
+PS> $database = New-SqlTestAzureDatabase -Server $instance
+Creates a temporary database on the specified Azure SQL Server.
+Captured output (temporary server and database names redacted):
 ```
+
+DatabaseName     : \<redacted\>
+DataSource       : \<redacted\>.database.windows.net
+InitialCatalog   : \<redacted\>
+ConnectTimeout   : 30
+ConnectionString : Data Source=\<redacted\>.database.windows.net;Connect Timeout=30;Initial Catalog=\<redacted\>
+PS\> $database | Remove-SqlTestAzureDatabase
+PS\> $instance | Remove-SqlTestAzureInstance
+Removes the database and the server created for this example.
 
 ## PARAMETERS
 
@@ -66,6 +84,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -91,3 +140,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureDatabase.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureDatabase.html)
+
