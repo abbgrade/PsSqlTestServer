@@ -13,12 +13,14 @@ Returns connection parameter for a new Azure SQL Server.
 ## SYNTAX
 
 ```
-New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>]
+New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>] [[-Location] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
+If no location is specified, the server uses the existing resource group's location.
+A location is required when the resource group does not exist.
 
 ## EXAMPLES
 
@@ -55,6 +57,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: All
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Location
+Specifies the Azure region for the server and, if necessary, the new resource group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

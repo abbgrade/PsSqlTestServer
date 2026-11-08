@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added verbose diagnostics to `Get-AzureInstance` for the selected Azure context and resource group, and validation that the requested subscription and resource group exist.
+- Added an optional `Location` parameter to `New-SqlTestAzureInstance` and a location override for the Get-AzureInstance integration test. A location must be supplied when creating a resource group.
+- Added verbose Azure SQL provisioning diagnostics to `New-SqlTestAzureInstance`.
+
 ## [1.7.4] - 2026-11-06
 
 ### Changed

@@ -7,6 +7,8 @@ function New-AzureInstance {
 
     .DESCRIPTION
     Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
+    If no location is specified, the server uses the existing resource group's location.
+    A location is required when the resource group does not exist.
 
     .EXAMPLE
     PS> New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
@@ -23,25 +25,57 @@ function New-AzureInstance {
         # Specify which firewall rule to create.
         [Parameter()]
         [ValidateSet('all', 'justme')]
-        [string] $FirewallRule = 'all'
+        [string] $FirewallRule = 'all',
+
+        # Specifies the Azure region for the server and, if necessary, the new resource group.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string] $Location
     )
 
     if ( $Subscription ) {
+        Write-Verbose "Selecting Azure subscription '$Subscription'."
         $azureContext = Set-AzContext -Subscription $Subscription -ErrorAction Stop
     }
     else {
+        Write-Verbose 'Using the current Azure context.'
         $azureContext = Get-AzContext
     }
 
+    Write-Verbose "Azure subscription: '$($azureContext.Subscription.Name)' ($($azureContext.Subscription.Id)); tenant: '$($azureContext.Tenant.Id)'."
+
+    # Guest accounts are known in the directory by a UPN that differs from the account name.
+    $adminName = $azureContext.Account.Id
+    $signedInUser = Get-AzADUser -SignedIn -ErrorAction SilentlyContinue
+    if ( $signedInUser.UserPrincipalName ) {
+        $adminName = $signedInUser.UserPrincipalName
+    }
+    Write-Verbose "Using '$adminName' as Entra admin of the Azure SQL Server."
+
+    Write-Verbose "Looking up resource group 'PsSqlTestServer'."
     $ResourceGroup = Get-AzResourceGroup -Name 'PsSqlTestServer' -ErrorAction SilentlyContinue
     if ( -not $ResourceGroup ) {
-        $ResourceGroup = New-AzResourceGroup -Name 'PsSqlTestServer' -Location 'West Europe' -ErrorAction Stop
+        if ( -not $Location ) {
+            Write-Error -Message "Resource group 'PsSqlTestServer' does not exist. Specify -Location to create it." -ErrorAction Stop
+        }
+        Write-Verbose "Creating resource group 'PsSqlTestServer' in location '$Location'."
+        $ResourceGroup = New-AzResourceGroup -Name 'PsSqlTestServer' -Location $Location -ErrorAction Stop
     }
+    Write-Verbose "Using resource group '$($ResourceGroup.ResourceGroupName)' in location '$($ResourceGroup.Location)'."
+
+    if ( -not $Location ) {
+        $Location = $ResourceGroup.Location
+    }
+
+    $serverName = New-Guid
+    Write-Verbose "Creating Azure SQL Server '$serverName' in resource group '$($ResourceGroup.ResourceGroupName)', location '$Location'."
     $Server = New-AzSqlServer -ErrorAction Stop `
-        -ServerName ( New-Guid ) `
+        -ServerName $serverName `
         -ResourceGroupName $ResourceGroup.ResourceGroupName `
-        -Location $ResourceGroup.Location `
-        -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName ( $azureContext.Account )
+        -Location $Location `
+        -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName $adminName
+
+    Write-Verbose "Azure SQL Server '$serverName' was created. Creating firewall rule '$FirewallRule'."
 
     switch ( $FirewallRule ) {
         justme {
