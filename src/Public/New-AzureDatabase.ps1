@@ -31,7 +31,7 @@ function New-AzureDatabase {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Specifies the Azure SQL Server.
         [Parameter( Mandatory, ParameterSetName='UseServer' )]
@@ -48,18 +48,23 @@ function New-AzureDatabase {
 
     switch ( $PSCmdlet.ParameterSetName ) {
         NewServer {
-            $Server = New-AzureInstance -Subscription:$Subscription
+            $Server = New-AzureInstance -Subscription:$Subscription -WhatIf:$WhatIfPreference
             if ( -not $Server ) {
                 return
             }
         }
     }
 
+    if ( -not $WhatIfPreference -and -not $PSCmdlet.ShouldProcess($Server.ServerName, 'Create Azure SQL database') ) {
+        return
+    }
+
     $Database = New-AzSqlDatabase `
         -DatabaseName ( New-Guid ) `
         -ServerName $Server.ServerName `
         -ResourceGroupName $Server.ResourceGroupName `
-        -Edition GeneralPurpose -Vcore 1 -ComputeGeneration Gen5 -ComputeModel Serverless
+        -Edition GeneralPurpose -Vcore 1 -ComputeGeneration Gen5 -ComputeModel Serverless `
+        -WhatIf:$WhatIfPreference -Confirm:$false
 
     if ( -not $Database ) {
         return

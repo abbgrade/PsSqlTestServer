@@ -6,6 +6,25 @@ Describe Clear-LocalInstance {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
+    Context UnitTests -Tag UnitTest {
+        It 'passes WhatIf through to each LocalDB removal' {
+            # Arrange
+            Mock Import-Module { [pscustomobject]@{} } -ModuleName PsSqlTestServer
+            Mock Get-LocalInstance { [pscustomobject]@{ Name = 'test-instance' } } -ModuleName PsSqlTestServer
+            Mock Remove-LocalInstance {} -ModuleName PsSqlTestServer
+
+            # Act
+            Clear-SqlTestLocalInstance -WhatIf
+
+            # Assert
+            Should -Invoke Import-Module -ModuleName PsSqlTestServer -Times 1
+            Should -Invoke Get-LocalInstance -ModuleName PsSqlTestServer -Times 1
+            Should -Invoke Remove-LocalInstance -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Name -eq 'test-instance' -and $WhatIf
+            }
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         Context LocalInstance {
             BeforeEach {

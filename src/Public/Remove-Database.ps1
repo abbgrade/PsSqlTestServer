@@ -24,7 +24,7 @@ function Remove-Database {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Specifies the database name, or accepts the InitialCatalog property from the pipeline.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
@@ -39,8 +39,10 @@ function Remove-Database {
     )
 
     process {
-        Invoke-TSqlCommand 'USE [master];' -Connection $InstanceConnection
-        Invoke-TSqlCommand "ALTER DATABASE [$Name] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" -Connection $InstanceConnection
-        Invoke-TSqlCommand "DROP DATABASE [$Name]" -Connection $InstanceConnection
+        if ( $PSCmdlet.ShouldProcess($Name, 'Remove SQL database') ) {
+            Invoke-TSqlCommand 'USE [master];' -Connection $InstanceConnection
+            Invoke-TSqlCommand "ALTER DATABASE [$Name] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" -Connection $InstanceConnection
+            Invoke-TSqlCommand "DROP DATABASE [$Name]" -Connection $InstanceConnection
+        }
     }
 }

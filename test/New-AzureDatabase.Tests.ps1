@@ -51,6 +51,25 @@ Describe New-AzureDatabase -Tag Azure {
             $database | Should -BeNullOrEmpty
             $errors.Count | Should -Be 1
         }
+
+        It 'passes WhatIf to Azure SQL database creation' {
+            # Arrange
+            Mock New-AzSqlDatabase {} -ModuleName PsSqlTestServer
+            $server = [pscustomobject]@{
+                ServerName = 'test-server'
+                ResourceGroupName = 'PsSqlTestServer'
+                FullyQualifiedDomainName = 'server.example.com'
+            }
+
+            # Act
+            $database = New-SqlTestAzureDatabase -Server $server -WhatIf
+
+            # Assert
+            $database | Should -BeNullOrEmpty
+            Should -Invoke New-AzSqlDatabase -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $WhatIf -and $Confirm -eq $false
+            }
+        }
     }
 
     Context IntegrationTests -Tag IntegrationTest {

@@ -20,7 +20,7 @@ function Remove-DockerInstance {
 
     #>
 
-    [CmdletBinding( PositionalBinding=$false )]
+    [CmdletBinding( SupportsShouldProcess, PositionalBinding=$false )]
     param (
 
         # Specifies the server to remove. Requires the name of the Docker container.
@@ -30,14 +30,12 @@ function Remove-DockerInstance {
 
     )
 
-    begin {
+    process {
         $DockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru
         if ( -not $DockerModule ) {
             return
         }
-    }
 
-    process {
-        Remove-DockerContainer -Name $Server.Name -Force
+        Remove-DockerContainer -Name $Server.Name -Force -WhatIf:$WhatIfPreference
     }
 }

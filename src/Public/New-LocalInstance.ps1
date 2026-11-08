@@ -27,7 +27,7 @@ function New-LocalInstance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Specifies the name of the instance to create.
         [Parameter()]
@@ -49,7 +49,7 @@ function New-LocalInstance {
     }
 
     # create instance
-    $Instance = New-LocalDbInstance -Name $Name -Version:$Version
+    $Instance = New-LocalDbInstance -Name $Name -Version:$Version -WhatIf:$WhatIfPreference
     if ( -not $Instance ) {
         return
     }

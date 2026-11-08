@@ -23,7 +23,7 @@ function Remove-AzureDatabase {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Specifies the resource group containing the database.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
@@ -46,10 +46,14 @@ function Remove-AzureDatabase {
     )
 
     process {
-        Remove-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ServerName -DatabaseName $DatabaseName
+        if ( -not $WhatIfPreference -and -not $PSCmdlet.ShouldProcess("$ServerName/$DatabaseName", 'Remove Azure SQL database') ) {
+            return
+        }
+
+        Remove-AzSqlDatabase -ResourceGroupName $ResourceGroupName -ServerName $ServerName -DatabaseName $DatabaseName -WhatIf:$WhatIfPreference -Confirm:$false
 
         if ( $RemoveServer.IsPresent ) {
-            Remove-AzureInstance -ResourceGroupName $ResourceGroupName -ServerName $ServerName
+            Remove-AzureInstance -ResourceGroupName $ResourceGroupName -ServerName $ServerName -WhatIf:$WhatIfPreference -Confirm:$false
         }
     }
 }

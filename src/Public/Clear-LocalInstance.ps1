@@ -18,17 +18,13 @@ function Clear-LocalInstance {
     https://abbgrade.github.io/PsSqlTestServer/docs/Clear-SqlTestLocalInstance.html
     #>
 
-    [CmdletBinding()]
-    param (
-        # Previews removal without removing matching instances.
-        [Parameter()]
-        [switch] $WhatIf
-    )
+    [CmdletBinding(SupportsShouldProcess)]
+    param ()
 
     $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.6.0 -PassThru
     if ( -not $LocalDbModule ) {
         return
     }
 
-    Get-LocalInstance -First $null | Where-Object Name -Like test-* | Remove-LocalInstance -WhatIf:$WhatIf
+    Get-LocalInstance -First $null | Where-Object Name -Like test-* | Remove-LocalInstance -WhatIf:$WhatIfPreference
 }

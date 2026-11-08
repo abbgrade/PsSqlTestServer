@@ -3,10 +3,39 @@
 Describe New-DockerInstance {
 
     BeforeDiscovery {
+        if ( Get-Module psdocker -ListAvailable ) {
+            Import-Module psdocker -ErrorAction SilentlyContinue
+        }
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    Context UnitTests -Tag UnitTest {
+    Context UnitTests -Tag UnitTest -Skip:( -Not ( Get-Module psdocker -ListAvailable | Where-Object Version -GE ([version]'1.10.0') )) {
+        It 'does not wait for a Docker container when WhatIf is specified' {
+            # Arrange
+            Mock Import-Module { [pscustomobject]@{} } -ModuleName PsSqlTestServer
+            Mock Get-DockerVersion {
+                [pscustomobject]@{
+                    Server = @{
+                        Engine = @{
+                            OSArch = 'linux/amd64'
+                        }
+                    }
+                }
+            } -ModuleName PsSqlTestServer
+            Mock New-DockerContainer { $null } -ModuleName PsSqlTestServer
+            Mock Wait-LinuxDockerSqlServer {} -ModuleName PsSqlTestServer
+
+            # Act
+            $container = New-SqlTestDockerInstance -DockerContainerName 'test-container' -AcceptEula -WhatIf
+
+            # Assert
+            $container | Should -BeNullOrEmpty
+            Should -Invoke New-DockerContainer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Name -eq 'test-container' -and $WhatIf
+            }
+            Should -Invoke Wait-LinuxDockerSqlServer -ModuleName PsSqlTestServer -Times 0
+        }
+
         It 'passes container name and timeout separately to readiness check' {
             # Arrange
             Mock Get-DockerVersion {

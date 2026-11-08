@@ -19,7 +19,7 @@ function Remove-Instance {
 
     #>
 
-    [CmdletBinding( PositionalBinding=$false )]
+    [CmdletBinding( SupportsShouldProcess, PositionalBinding=$false )]
     param (
         # Specifies the server to remove.
         [Parameter( Mandatory, ValueFromPipeline )]
@@ -28,10 +28,10 @@ function Remove-Instance {
     )
 
     if ( $Instance.IsDocker ) {
-        $Instance | Remove-DockerInstance
+        $Instance | Remove-DockerInstance -WhatIf:$WhatIfPreference
     }
 
     if ( $Instance.IsLocalDb ) {
-        $Instance | Remove-LocalInstance
+        $Instance | Remove-LocalInstance -WhatIf:$WhatIfPreference
     }
 }

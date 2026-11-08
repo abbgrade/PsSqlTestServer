@@ -33,7 +33,7 @@ function New-Database {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
         # Specifies the instance, to create the database in.
         [Parameter( Mandatory, ValueFromPipeline )]
@@ -57,6 +57,10 @@ function New-Database {
     )
 
     process {
+        if ( -not $PSCmdlet.ShouldProcess($Name, 'Create SQL database') ) {
+            return
+        }
+
         $Database = $Instance.PsObject.Copy()
         $Database | Add-Member InstanceName $Database.Name
         $Database.Name = $Name

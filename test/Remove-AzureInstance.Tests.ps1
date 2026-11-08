@@ -2,6 +2,32 @@
 
 Describe Remove-AzureInstance -Tag Azure {
 
+    BeforeDiscovery {
+        if ( Get-Module Az.Accounts -ListAvailable ) {
+            Import-Module Az.Accounts
+        }
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
+    }
+
+    Context UnitTests -Tag UnitTest {
+        It 'passes WhatIf to Azure SQL server removal' {
+            # Arrange
+            Mock Remove-AzSqlServer {} -ModuleName PsSqlTestServer
+            $instance = [pscustomobject]@{
+                ResourceGroupName = 'test-group'
+                ServerName = 'test-server'
+            }
+
+            # Act
+            $instance | Remove-SqlTestAzureInstance -WhatIf
+
+            # Assert
+            Should -Invoke Remove-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $WhatIf -and $Confirm -eq $false
+            }
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         BeforeAll {
             if ( Get-Module Az.Accounts -ListAvailable ) {

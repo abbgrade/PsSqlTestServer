@@ -28,15 +28,15 @@ function New-Instance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param ()
 
     if ( Test-LocalDb ) {
-        New-LocalInstance |
+        New-LocalInstance -WhatIf:$WhatIfPreference |
             Write-Output
     }
     elseif ( Test-Docker ) {
-        New-DockerInstance -AcceptEula |
+        New-DockerInstance -AcceptEula -WhatIf:$WhatIfPreference |
             Write-Output
     }
     else {

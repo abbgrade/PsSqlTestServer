@@ -20,7 +20,7 @@ function Remove-AzureInstance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Specifies the resource group containing the server.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
@@ -34,6 +34,8 @@ function Remove-AzureInstance {
     )
 
     process {
-        Remove-AzSqlServer -ResourceGroupName $ResourceGroupName -ServerName $ServerName
+        if ( $WhatIfPreference -or $PSCmdlet.ShouldProcess($ServerName, 'Remove Azure SQL Server') ) {
+            Remove-AzSqlServer -ResourceGroupName $ResourceGroupName -ServerName $ServerName -WhatIf:$WhatIfPreference -Confirm:$false
+        }
     }
 }

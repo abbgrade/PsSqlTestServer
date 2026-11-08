@@ -43,6 +43,39 @@ Describe New-AzureInstance -Tag Azure {
             Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter { $Location -eq 'westeurope' }
         }
 
+        It 'passes WhatIf to Azure SQL server creation' {
+            # Arrange
+            Mock New-AzSqlServer { $null } -ModuleName PsSqlTestServer
+
+            # Act
+            $instance = New-SqlTestAzureInstance -Location 'westeurope' -WhatIf
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            Should -Invoke Get-AzContext -ModuleName PsSqlTestServer -Times 1
+            Should -Invoke New-AzResourceGroup -ModuleName PsSqlTestServer -Times 0
+            Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $WhatIf -and $Confirm -eq $false
+            }
+            Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 0
+        }
+
+        It 'passes WhatIf to Azure resource group creation' {
+            # Arrange
+            Mock Get-AzResourceGroup { $null } -ModuleName PsSqlTestServer
+            Mock New-AzResourceGroup { $null } -ModuleName PsSqlTestServer
+
+            # Act
+            $instance = New-SqlTestAzureInstance -Location 'westeurope' -WhatIf
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            Should -Invoke New-AzResourceGroup -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $WhatIf -and $Confirm -eq $false
+            }
+            Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 0
+        }
+
         It 'restricts the justme firewall rule to the current IPv4 address' {
             # Arrange
             Mock Invoke-WebRequest { [pscustomobject]@{ Content = "203.0.113.42`n" } } -ModuleName PsSqlTestServer
@@ -58,6 +91,18 @@ Describe New-AzureInstance -Tag Azure {
             Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
                 $StartIpAddress -eq '203.0.113.42' -and $EndIpAddress -eq '203.0.113.42'
             }
+        }
+
+        It 'stops when the current IPv4 address cannot be retrieved' {
+            # Arrange
+            Mock Invoke-WebRequest { throw 'IP lookup failed' } -ModuleName PsSqlTestServer
+
+            # Act
+            $action = { New-SqlTestAzureInstance -FirewallRule justme }
+
+            # Assert
+            $action | Should -Throw '*IP lookup failed*'
+            Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 0 -Exactly
         }
 
         It 'uses the requested location for a new group and server' {

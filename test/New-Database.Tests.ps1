@@ -6,6 +6,25 @@ Describe New-Database {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
+    Context UnitTests -Tag UnitTest {
+        It 'does not create a database when WhatIf is specified' {
+            # Arrange
+            Mock Invoke-TSqlCommand {} -ModuleName PsSqlTestServer
+            $instance = [pscustomobject]@{
+                Name = 'test-instance'
+                ConnectionString = 'Data Source=localhost;Integrated Security=True'
+            }
+            $connection = [Microsoft.Data.SqlClient.SqlConnection]::new()
+
+            # Act
+            $database = New-SqlTestDatabase -Instance $instance -InstanceConnection $connection -Name 'test-database' -WhatIf
+
+            # Assert
+            $database | Should -BeNullOrEmpty
+            Should -Invoke Invoke-TSqlCommand -ModuleName PsSqlTestServer -Times 0
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         Context Instance {
         BeforeAll {

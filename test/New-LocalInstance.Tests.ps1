@@ -6,6 +6,23 @@ Describe New-LocalInstance -Tag SqlLocalDB {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
+    Context UnitTests -Tag UnitTest {
+        It 'passes WhatIf to LocalDB instance creation' {
+            # Arrange
+            Mock Import-Module { [pscustomobject]@{} } -ModuleName PsSqlTestServer
+            Mock New-LocalDbInstance { $null } -ModuleName PsSqlTestServer
+
+            # Act
+            $instance = New-SqlTestLocalInstance -Name 'test-instance' -WhatIf
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            Should -Invoke New-LocalDbInstance -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Name -eq 'test-instance' -and $WhatIf
+            }
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         Context LocalDb -Skip:( -Not ( Test-SqlTestLocalDb )) {
             AfterEach {

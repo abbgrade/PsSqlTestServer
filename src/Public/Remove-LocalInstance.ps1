@@ -19,32 +19,22 @@ function Remove-LocalInstance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param (
 
         # Specifies the name of the instance to remove.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
-        [string] $Name,
-
-        # Previews removal without removing the LocalDB instance.
-        [Parameter()]
-        [switch] $WhatIf
+        [string] $Name
 
     )
 
-    begin {
+    process {
         $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.6.0 -PassThru
         if ( -not $LocalDbModule ) {
             return
         }
-    }
 
-    process {
-        if ( $WhatIf.IsPresent ) {
-            Write-Verbose "Remove $Name" -Verbose
-        } else {
-            Remove-LocalDbInstance -Name $Name
-        }
+        Remove-LocalDbInstance -Name $Name -WhatIf:$WhatIfPreference
     }
 }

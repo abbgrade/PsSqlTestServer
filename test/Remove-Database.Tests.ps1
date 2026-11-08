@@ -6,6 +6,20 @@ Describe Remove-Database {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
+    Context UnitTests -Tag UnitTest {
+        It 'does not remove a database when WhatIf is specified' {
+            # Arrange
+            Mock Invoke-TSqlCommand {} -ModuleName PsSqlTestServer
+            $connection = [Microsoft.Data.SqlClient.SqlConnection]::new()
+
+            # Act
+            Remove-SqlTestDatabase -Name 'test-database' -InstanceConnection $connection -WhatIf
+
+            # Assert
+            Should -Invoke Invoke-TSqlCommand -ModuleName PsSqlTestServer -Times 0
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         Context Instance {
         BeforeAll {

@@ -32,7 +32,7 @@ function New-DockerInstance {
 
     #>
 
-    [CmdletBinding( PositionalBinding=$false )]
+    [CmdletBinding( SupportsShouldProcess, PositionalBinding=$false )]
     param (
 
         # Specifies the name of the new Docker container.
@@ -89,7 +89,7 @@ function New-DockerInstance {
         } `
         -Ports @{
             "$Port" = 1433
-        } -Detach
+        } -Detach -WhatIf:$WhatIfPreference
 
     if ( -not $container ) {
         return

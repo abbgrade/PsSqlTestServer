@@ -13,7 +13,7 @@ Removes all LocalDB test instances created by this module.
 ## SYNTAX
 
 ```
-Clear-SqlTestLocalInstance [-WhatIf] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Clear-SqlTestLocalInstance [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,16 +33,32 @@ Illustrative output: no instances are removed; verbose output depends on the mat
 ## PARAMETERS
 
 ### -WhatIf
-Previews removal without removing matching instances.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: wi
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

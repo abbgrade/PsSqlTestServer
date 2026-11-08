@@ -33,7 +33,7 @@ function New-AzureInstance {
 
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # Specifies the Azure Subscription name.
         [Parameter()]
@@ -50,6 +50,10 @@ function New-AzureInstance {
         [ValidateNotNullOrEmpty()]
         [string] $Location
     )
+
+    if ( -not $WhatIfPreference -and -not $PSCmdlet.ShouldProcess('Azure SQL Server in resource group PsSqlTestServer', 'Create') ) {
+        return
+    }
 
     if ( $Subscription ) {
         Write-Verbose "Selecting Azure subscription '$Subscription'."
@@ -81,7 +85,7 @@ function New-AzureInstance {
             return
         }
         Write-Verbose "Creating resource group 'PsSqlTestServer' in location '$Location'."
-        $ResourceGroup = New-AzResourceGroup -Name 'PsSqlTestServer' -Location $Location
+        $ResourceGroup = New-AzResourceGroup -Name 'PsSqlTestServer' -Location $Location -WhatIf:$WhatIfPreference -Confirm:$false
         if ( -not $ResourceGroup ) {
             return
         }
@@ -98,7 +102,8 @@ function New-AzureInstance {
         -ServerName $serverName `
         -ResourceGroupName $ResourceGroup.ResourceGroupName `
         -Location $Location `
-        -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName $adminName
+        -EnableActiveDirectoryOnlyAuthentication -ExternalAdminName $adminName `
+        -WhatIf:$WhatIfPreference -Confirm:$false
 
     if ( -not $Server ) {
         return
@@ -108,20 +113,20 @@ function New-AzureInstance {
 
     switch ( $FirewallRule ) {
         justme {
-            $myIp = ( Invoke-WebRequest -Uri 'https://ipv4.icanhazip.com' ).Content.Trim()
+            $myIp = ( Invoke-WebRequest -Uri 'https://ipv4.icanhazip.com' -ErrorAction Stop ).Content.Trim()
 
             New-AzSqlServerFirewallRule `
                 -ResourceGroupName $ResourceGroup.ResourceGroupName `
                 -ServerName $Server.ServerName `
                 -FirewallRuleName $FirewallRule `
-                -StartIpAddress $myIp -EndIpAddress $myIp | Out-Null
+                -StartIpAddress $myIp -EndIpAddress $myIp -WhatIf:$WhatIfPreference -Confirm:$false | Out-Null
         }
         all {
             New-AzSqlServerFirewallRule `
                 -ResourceGroupName $ResourceGroup.ResourceGroupName `
                 -ServerName $Server.ServerName `
                 -FirewallRuleName $FirewallRule `
-                -StartIpAddress '0.0.0.0' -EndIpAddress '255.255.255.255' | Out-Null
+                -StartIpAddress '0.0.0.0' -EndIpAddress '255.255.255.255' -WhatIf:$WhatIfPreference -Confirm:$false | Out-Null
         }
     }
 

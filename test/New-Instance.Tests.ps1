@@ -6,6 +6,24 @@ Describe New-Instance {
         Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
+    Context UnitTests -Tag UnitTest {
+        It 'does not query or create providers when WhatIf is specified' {
+            # Arrange
+            Mock Test-LocalDb { $true } -ModuleName PsSqlTestServer
+            Mock New-LocalInstance {} -ModuleName PsSqlTestServer
+
+            # Act
+            $instance = New-SqlTestInstance -WhatIf
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            Should -Invoke Test-LocalDb -ModuleName PsSqlTestServer -Times 1
+            Should -Invoke New-LocalInstance -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $WhatIf
+            }
+        }
+    }
+
     Context IntegrationTests -Tag IntegrationTest {
         AfterEach {
             if ( $Instance ) {

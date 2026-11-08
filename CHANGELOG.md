@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Added standard `-WhatIf` support to commands that create or remove SQL instances and databases, forwarding previews to the Docker and LocalDB providers.
 - Updated the PsSqlLocalDb dependency to 0.6.0.
 - Updated the psdocker dependency to 1.10.0.
 - Expanded comment-based help and refreshed generated Markdown help for all public commands.
@@ -16,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced illustrative output with captured output for locally runnable Get and New command examples.
 - Replaced illustrative Azure Get/New output with captured output and redacted temporary resource names.
 - Changed the Azure SQL `justme` firewall rule to resolve an IPv4 address.
+- Report `justme` IPv4 lookup failures as terminating errors; the Azure SQL server may already have been created.
 - Consolidated SQL connection string construction across Azure, LocalDB, and database commands.
 - Added verbose diagnostics to `Get-AzureInstance` for the selected Azure context and resource group, and validation that the requested subscription and resource group exist.
 - Added an optional `Location` parameter to `New-SqlTestAzureInstance` and a location override for the Get-AzureInstance integration test. A location must be supplied when creating a resource group.
