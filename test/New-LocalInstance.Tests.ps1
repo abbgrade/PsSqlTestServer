@@ -37,7 +37,7 @@ Describe New-LocalInstance -Tag SqlLocalDB {
             Context Version {
 
                 BeforeAll {
-                    Import-Module PsSqlLocalDb -MinimumVersion 0.3
+                    Import-Module PsSqlLocalDb -MinimumVersion 0.6.0
                     $Version = Get-LocalDbVersion | Select-Object -First 1 -ExpandProperty Version
                 }
 

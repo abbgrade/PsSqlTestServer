@@ -3,7 +3,7 @@
 Describe Test-LocalDb -Tag SqlLocalDB {
 
     BeforeDiscovery {
-        $PsSqlLocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.3 -PassThru -ErrorAction SilentlyContinue
+        $PsSqlLocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.6.0 -PassThru -ErrorAction SilentlyContinue
     }
 
     BeforeAll {

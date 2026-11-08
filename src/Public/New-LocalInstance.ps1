@@ -43,7 +43,7 @@ function New-LocalInstance {
         [switch] $Connected
     )
 
-    $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.4 -PassThru
+    $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.6.0 -PassThru
     if ( -not $LocalDbModule ) {
         return
     }

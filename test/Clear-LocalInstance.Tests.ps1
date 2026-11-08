@@ -11,7 +11,7 @@ Describe Clear-LocalInstance {
             BeforeEach {
                 $Instance = @((New-SqlTestLocalInstance), (New-SqlTestLocalInstance))
 
-                Import-Module PsSqlLocalDb -MinimumVersion 0.3 -ErrorAction Stop
+                Import-Module PsSqlLocalDb -MinimumVersion 0.6.0 -ErrorAction Stop
             }
 
             AfterEach {
