@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestInstance.html
 schema: 2.0.0
 ---
 
@@ -17,18 +17,27 @@ New-SqlTestInstance [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks different versions of local db or creates a Docker container with a SQL server installed.
-Returns a object with the properties DataSource and ConnectionString.
+Checks whether LocalDB is available and creates an instance using that provider.
+If unavailable, it uses Docker.
+Requires LocalDB or Docker and the corresponding module.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SqlTestInstance
-ConnectionString                                            DataSource
-----------------                                            ----------
-Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
+$instance = New-SqlTestInstance
+Creates a temporary SQL Server instance using an available provider.
+Captured output (temporary instance name redacted; LocalDB was selected on the example system):
 ```
+
+Name             : test-\<redacted\>
+Version          : 15.0.4382.1
+DataSource       : (LocalDb)\test-\<redacted\>
+ConnectTimeout   : 30
+ConnectionString : Data Source=(LocalDb)\test-\<redacted\>;Connect Timeout=30;Integrated Security=True
+IsLocalDb        : True
+PS\> $instance | Remove-SqlTestInstance
+Removes the instance created by this example.
 
 ## PARAMETERS
 
@@ -57,3 +66,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestInstance.html)
+

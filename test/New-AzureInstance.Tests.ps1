@@ -7,7 +7,7 @@ Describe New-AzureInstance -Tag Azure {
         if ( Get-Module Az.Accounts -ListAvailable ) {
             Import-Module Az.Accounts
         }
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
     Context UnitTests -Tag UnitTest {
@@ -21,12 +21,16 @@ Describe New-AzureInstance -Tag Azure {
         }
 
         It 'uses the specified location for a server in an existing group' {
+            # Arrange
+            $location = 'northeurope'
+
             # Act
-            $instance = New-SqlTestAzureInstance -Location 'northeurope'
+            $instance = New-SqlTestAzureInstance -Location $location
 
             # Assert
             $instance.DataSource | Should -Be 'server.example.com'
-            Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter { $Location -eq 'northeurope' }
+            $instance.ConnectionString | Should -Be 'Data Source=server.example.com;Connect Timeout=30;Authentication=Active Directory Integrated'
+            Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter { $Location -eq $location }
             Should -Invoke New-AzResourceGroup -ModuleName PsSqlTestServer -Times 0 -Exactly
         }
 
@@ -37,6 +41,23 @@ Describe New-AzureInstance -Tag Azure {
             # Assert
             $instance.DataSource | Should -Be 'server.example.com'
             Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter { $Location -eq 'westeurope' }
+        }
+
+        It 'restricts the justme firewall rule to the current IPv4 address' {
+            # Arrange
+            Mock Invoke-WebRequest { [pscustomobject]@{ Content = "203.0.113.42`n" } } -ModuleName PsSqlTestServer
+
+            # Act
+            $instance = New-SqlTestAzureInstance -FirewallRule justme
+
+            # Assert
+            $instance.DataSource | Should -Be 'server.example.com'
+            Should -Invoke Invoke-WebRequest -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $Uri -eq 'https://ipv4.icanhazip.com' -and $ErrorAction -eq 'Stop'
+            }
+            Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 1 -Exactly -ParameterFilter {
+                $StartIpAddress -eq '203.0.113.42' -and $EndIpAddress -eq '203.0.113.42'
+            }
         }
 
         It 'uses the requested location for a new group and server' {
@@ -55,9 +76,25 @@ Describe New-AzureInstance -Tag Azure {
         It 'requires a location when the resource group does not exist' {
             # Arrange
             Mock Get-AzResourceGroup { $null } -ModuleName PsSqlTestServer
+            $errors = @()
 
             # Act
-            $action = { New-SqlTestAzureInstance }
+            $instance = New-SqlTestAzureInstance -ErrorAction SilentlyContinue -ErrorVariable errors
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            $errors.Count | Should -Be 1
+            $errors[0].ToString() | Should -BeLike "*Resource group 'PsSqlTestServer' does not exist. Specify -Location to create it.*"
+            Should -Invoke New-AzResourceGroup -ModuleName PsSqlTestServer -Times 0 -Exactly
+            Should -Invoke New-AzSqlServer -ModuleName PsSqlTestServer -Times 0 -Exactly
+        }
+
+        It 'terminates when caller requests terminating errors for a missing location' {
+            # Arrange
+            Mock Get-AzResourceGroup { $null } -ModuleName PsSqlTestServer
+
+            # Act
+            $action = { New-SqlTestAzureInstance -ErrorAction Stop }
 
             # Assert
             $action | Should -Throw "*Resource group 'PsSqlTestServer' does not exist. Specify -Location to create it.*"
@@ -66,7 +103,7 @@ Describe New-AzureInstance -Tag Azure {
         }
 
         It 'rejects an empty location' {
-            # Act
+            # Arrange
             $action = { New-SqlTestAzureInstance -Location '' }
 
             # Assert
@@ -94,6 +131,21 @@ Describe New-AzureInstance -Tag Azure {
             }
             Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 0 -Exactly
         }
+
+        It 'returns after a non-terminating server provisioning error' {
+            # Arrange
+            Mock New-AzSqlServer { Write-Error 'Provisioning failed' } -ModuleName PsSqlTestServer
+            $errors = @()
+
+            # Act
+            $instance = New-SqlTestAzureInstance -ErrorAction SilentlyContinue -ErrorVariable errors
+
+            # Assert
+            $instance | Should -BeNullOrEmpty
+            $errors.Count | Should -Be 1
+            Should -Invoke New-AzSqlServerFirewallRule -ModuleName PsSqlTestServer -Times 0 -Exactly
+        }
+
     }
 
     Context IntegrationTests -Tag IntegrationTest {
@@ -103,7 +155,13 @@ Describe New-AzureInstance -Tag Azure {
             . $PSScriptRoot\Helper\Get-TestAzureInstanceParameter.ps1
         }
 
-        It 'Provides a Azure SQL Server' {
+        AfterEach {
+            if ( $Instance ) {
+                $Instance | Remove-SqlTestAzureInstance
+            }
+        }
+
+        It 'creates an Azure SQL server' {
             # Arrange
             if ( -Not ( Test-SqlTestAzure ) ) {
                 Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
@@ -117,12 +175,6 @@ Describe New-AzureInstance -Tag Azure {
             $Instance | Should -Not -BeNullOrEmpty
             $Instance.ConnectionString | Should -Not -BeNullOrEmpty
             $Instance.DataSource | Should -Not -BeNullOrEmpty
-        }
-
-        AfterEach {
-            if ( $Instance ) {
-                $Instance | Remove-SqlTestAzureInstance
-            }
         }
     }
 }

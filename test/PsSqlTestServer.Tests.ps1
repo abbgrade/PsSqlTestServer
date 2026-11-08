@@ -4,13 +4,18 @@ Describe 'ModuleManifest' {
 
     BeforeAll {
         $ModuleManifestPath = "$PSScriptRoot\..\src\PsSqlTestServer.psd1"
-        Import-Module $ModuleManifestPath -Force
+        Import-Module $ModuleManifestPath
     }
 
-    It 'is valid' {
-        $info = Test-ModuleManifest -Path $ModuleManifestPath -ErrorAction Stop
-        $info.RootModule | Should -Not -BeNullOrEmpty
-        $info | Should -Not -BeNullOrEmpty
-        $? | Should -Be $true
+    Context UnitTests -Tag UnitTest {
+        It 'loads a valid module manifest' {
+            # Act
+            $info = Test-ModuleManifest -Path $ModuleManifestPath -ErrorAction Stop
+
+            # Assert
+            $info.RootModule | Should -Not -BeNullOrEmpty
+            $info | Should -Not -BeNullOrEmpty
+            $? | Should -Be $true
+        }
     }
 }

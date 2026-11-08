@@ -7,13 +7,19 @@ Describe Test-LocalDb -Tag SqlLocalDB {
     }
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    Context PsSqlLocalDb -Skip:(-Not $PsSqlLocalDbModule) {
+    Context IntegrationTests -Tag IntegrationTest {
+        Context PsSqlLocalDb -Skip:(-Not $PsSqlLocalDbModule) {
 
-        It 'works' {
-            Test-SqlTestLocalDb | Should -BeIn $true, $false
+            It 'returns a boolean indicating LocalDB availability' {
+                # Act
+                $result = Test-SqlTestLocalDb
+
+                # Assert
+                $result | Should -BeIn $true, $false
+            }
         }
     }
 }

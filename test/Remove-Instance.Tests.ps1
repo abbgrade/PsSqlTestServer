@@ -3,27 +3,35 @@
 Describe Remove-Instance {
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    It 'removes all instances' {
-        $Instance = New-SqlTestInstance
-        $Instance | Remove-SqlTestInstance
-        {
-            $Instance | Connect-TSqlInstance
-        } | Should -Throw
-    }
+    Context IntegrationTests -Tag IntegrationTest {
+        It 'removes a created SQL server instance' {
+            # Arrange
+            $Instance = New-SqlTestInstance
 
-    Context Docker -Tag Docker -Skip:( -Not ( Test-SqlTestDocker )) {
+            # Act
+            $Instance | Remove-SqlTestInstance
 
-        BeforeEach {
-            $Container = New-SqlTestDockerInstance -Port 7027 -AcceptEula
+            # Assert
+            {
+                $Instance | Connect-TSqlInstance -ErrorAction Stop
+            } | Should -Throw
         }
 
-        It 'Removes the Docker container' {
-            $Container | Remove-SqlTestInstance
+        Context Docker -Tag Docker -Skip:( -Not ( Test-SqlTestDocker )) {
+            BeforeEach {
+                $Container = New-SqlTestDockerInstance -Port 7027 -AcceptEula
+            }
 
-            Get-DockerContainer -Name $Container.Name | Should -BeNullOrEmpty
+            It 'removes the Docker container' {
+                # Act
+                $Container | Remove-SqlTestInstance
+
+                # Assert
+                Get-DockerContainer -Name $Container.Name | Should -BeNullOrEmpty
+            }
         }
     }
 }

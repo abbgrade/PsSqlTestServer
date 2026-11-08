@@ -6,20 +6,30 @@ function New-Database {
     Creates a new database and returns the connection parameters.
 
     .DESCRIPTION
-    Uses a existing test instance and creates a database for (temporary) use.
-    It keeps an open connection to the instance for later removal.
+    Creates a database for temporary use on an existing SQL Server instance. The returned object includes the
+    instance connection for later database removal. Use -Connected to also open and return a database connection.
 
     .EXAMPLE
-    PS> $Instance = New-SqlTestInstance
-    PS> $InstanceConnection = $Instance | Connect-TSqlInstance
-    PS> New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
+    PS> $instance = New-SqlTestInstance
+    PS> $instanceConnection = $instance | Connect-TSqlInstance
+    PS> $database = New-SqlTestDatabase -Instance $instance -InstanceConnection $instanceConnection
+    Creates a temporary database on the SQL Server instance.
+    Captured output (temporary database and instance names redacted):
 
-    ConnectionString   : Data Source=(LocalDb)\MSSQLLocalDB;Connect Timeout=30;Integrated Security=True;Initial Catalog=a48b028c
-    DataSource         : (LocalDb)\MSSQLLocalDB
-    ConnectTimeout     : 30
-    Version            : v11.0
-    InitialCatalog     : a48b028c
-    InstanceConnection : Microsoft.Data.SqlClient.SqlConnection
+    Name             : test-<redacted>
+    Version          : 15.0.4382.1
+    DataSource       : (LocalDb)\test-<redacted>
+    ConnectTimeout   : 30
+    InitialCatalog   : test-<redacted>
+    ConnectionString : Data Source=(LocalDb)\test-<redacted>;Connect Timeout=30;Integrated Security=True;Initial Catalog=test-<redacted>
+
+    PS> $database | Remove-SqlTestDatabase
+    PS> Disconnect-TSqlInstance -Connection $instanceConnection
+    PS> $instance | Remove-SqlTestInstance
+    Removes the database, closes the instance connection, and removes the server instance.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestDatabase.html
 
     #>
 
@@ -30,7 +40,7 @@ function New-Database {
         [ValidateNotNullOrEmpty()]
         [PsObject] $Instance,
 
-        # Specifies a open sql connection to the instance.
+        # Specifies an open SQL connection to the instance.
         [Parameter( Mandatory, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
         [Alias('Connection')]
@@ -41,7 +51,7 @@ function New-Database {
         [ValidateNotNullOrEmpty()]
         [string] $Name = ( New-DatabaseName ),
 
-        # Speficies if a SqlClient connection should be created.
+        # Specifies whether a SqlClient connection should be created.
         [Parameter()]
         [switch] $Connected
     )
@@ -54,7 +64,9 @@ function New-Database {
         Invoke-TSqlCommand "CREATE DATABASE [$Name]" -Connection $InstanceConnection
 
         $Database | Add-Member InitialCatalog $Name
-        $Database.ConnectionString += ";Initial Catalog=$( $Database.InitialCatalog )"
+        $Database.ConnectionString = New-SqlConnectionString `
+            -ConnectionString $Database.ConnectionString `
+            -InitialCatalog $Database.InitialCatalog
         $Database | Add-Member InstanceConnection $InstanceConnection
 
         # connect instance if needed

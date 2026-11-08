@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDatabase.html
 schema: 2.0.0
 ---
 
@@ -18,22 +18,27 @@ Remove-SqlTestDatabase [-Name] <String> [-InstanceConnection] <SqlConnection>
 ```
 
 ## DESCRIPTION
-Removes a database, created using \`New-SqlTestInstance\` command.
+Removes a database using the instance connection stored on a database object returned by New-SqlTestDatabase.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$Instance = New-SqlTestInstance
-PS> $InstanceConnection = $Instance | Connect-TSqlInstance
-PS> $Database = New-SqlTestDatabase -Instance $Instance -InstanceConnection $InstanceConnection
-PS> $Database | Remove-SqlTestDatabase
+$instance = New-SqlTestInstance
+PS> $instanceConnection = $instance | Connect-TSqlInstance
+PS> $database = New-SqlTestDatabase -Instance $instance -InstanceConnection $instanceConnection
+PS> $database | Remove-SqlTestDatabase
+Removes the database created for this example.
+Illustrative output: the database is dropped; output depends on the SQL client module version.
+PS> Disconnect-TSqlInstance -Connection $instanceConnection
+PS> $instance | Remove-SqlTestInstance
+Closes the connection and removes the server instance. Provider availability varies by environment.
 ```
 
 ## PARAMETERS
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the database name, or accepts the InitialCatalog property from the pipeline.
 
 ```yaml
 Type: String
@@ -48,7 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceConnection
-{{ Fill InstanceConnection Description }}
+Specifies the open connection to the SQL Server instance.
 
 ```yaml
 Type: SqlConnection
@@ -87,3 +92,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDatabase.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDatabase.html)
+

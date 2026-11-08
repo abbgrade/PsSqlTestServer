@@ -6,11 +6,16 @@ function Remove-LocalInstance {
     Removes a test SQL server.
 
     .DESCRIPTION
-    Removes a SQL server, in case it was created with `New-SqlTestLocalInstance`.
+    Removes a LocalDB instance created by New-SqlTestLocalInstance. Requires PsSqlLocalDb.
 
     .EXAMPLE
     PS> $Instance = New-SqlTestLocalInstance
-    PS> Remove-SqlTestLocalInstance -Server $Instance
+    PS> $Instance | Remove-SqlTestLocalInstance
+    Removes the LocalDB instance created by this example.
+    Illustrative output: the LocalDB instance is removed; output depends on the PsSqlLocalDb version.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestLocalInstance.html
 
     #>
 
@@ -22,13 +27,17 @@ function Remove-LocalInstance {
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
+        # Previews removal without removing the LocalDB instance.
         [Parameter()]
         [switch] $WhatIf
 
     )
 
     begin {
-        Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
+        $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.4 -PassThru
+        if ( -not $LocalDbModule ) {
+            return
+        }
     }
 
     process {

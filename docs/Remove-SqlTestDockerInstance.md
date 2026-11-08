@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDockerInstance.html
 schema: 2.0.0
 ---
 
@@ -17,14 +17,17 @@ Remove-SqlTestDockerInstance -Server <Object> [-ProgressAction <ActionPreference
 ```
 
 ## DESCRIPTION
-Removes a SQL server Docker container, in case it was created with \`New-DockerSqlServer\`.
+Removes a SQL Server Docker container created by New-SqlTestDockerInstance.
+Requires Docker and the psdocker module.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$server = New-SqlTestDockerInstance -DockerContainerName 'Sandbox' -ServerAdminPassword 'pa$$w0rd' -AcceptEula
-PS> Remove-SqlTestDockerInstance -DockerContainerName $server.Name
+$container = New-SqlTestDockerInstance -DockerContainerName 'sql-test' -AcceptEula
+PS> $container | Remove-SqlTestDockerInstance
+Removes the container created by this example.
+Illustrative output: the container is removed; output depends on the psdocker version.
 ```
 
 ## PARAMETERS
@@ -70,3 +73,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDockerInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestDockerInstance.html)
+

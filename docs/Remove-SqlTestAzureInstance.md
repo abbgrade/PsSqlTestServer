@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureInstance.html
 schema: 2.0.0
 ---
 
@@ -18,14 +18,18 @@ Remove-SqlTestAzureInstance [-ResourceGroupName] <Object> [-ServerName] <Object>
 ```
 
 ## DESCRIPTION
-Removes a Azure SQL Server, in case it was created with \`New-SqlTestAzureInstance\`.
+Removes an Azure SQL Server created by New-SqlTestAzureInstance.
+Requires Az modules and an authenticated Azure context.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-$instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+Connect-AzAccount
+PS> $instance = New-SqlTestAzureInstance -Location 'westeurope'
 PS> $instance | Remove-SqlTestAzureInstance
+Removes the Azure SQL Server created for this example. The resource group remains.
+Illustrative output: server removal status depends on the Az module version.
 ```
 
 ## PARAMETERS
@@ -85,3 +89,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureInstance.html)
+

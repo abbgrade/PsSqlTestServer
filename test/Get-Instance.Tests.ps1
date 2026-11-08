@@ -3,14 +3,18 @@
 Describe Get-Instance {
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    It 'Provides a SQL server' {
-        $Instance = Get-SqlTestInstance
+    Context IntegrationTests -Tag IntegrationTest {
+        It 'returns a SQL server when a provider is available' {
+            # Act
+            $Instance = Get-SqlTestInstance
 
-        $Instance | Should -Not -BeNullOrEmpty
-        $Instance.ConnectionString | Should -Not -BeNullOrEmpty
-        $Instance.DataSource | Should -Not -BeNullOrEmpty
+            # Assert
+            $Instance | Should -Not -BeNullOrEmpty
+            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+            $Instance.DataSource | Should -Not -BeNullOrEmpty
+        }
     }
 }

@@ -1,14 +1,14 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureInstance.html
 schema: 2.0.0
 ---
 
 # New-SqlTestAzureInstance
 
 ## SYNOPSIS
-Returns connection parameter for a new Azure SQL Server.
+Creates an Azure SQL Server and returns its connection parameters.
 
 ## SYNTAX
 
@@ -18,16 +18,33 @@ New-SqlTestAzureInstance [[-Subscription] <String>] [[-FirewallRule] <String>] [
 ```
 
 ## DESCRIPTION
-Creates a Azure SQL Server and returns a object with the properties DataSource and ConnectionString.
-If no location is specified, the server uses the existing resource group's location.
-A location is required when the resource group does not exist.
+Creates a server in the PsSqlTestServer resource group and returns an object with connection metadata.
+If no location is specified, the existing resource group's location is used.
+A location is required when
+the resource group does not exist.
+Requires Az modules, an authenticated Azure context, and permission to
+create Azure SQL resources.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+Connect-AzAccount
+PS> $instance = New-SqlTestAzureInstance -FirewallRule justme
+Creates an Azure SQL Server in the existing PsSqlTestServer resource group, allowing connections only from your current
+IPv4 address.
+Captured output (temporary server name redacted):
 ```
+
+ResourceGroupName        : PsSqlTestServer
+ServerName               : \<redacted\>
+FullyQualifiedDomainName : \<redacted\>.database.windows.net
+DataSource               : \<redacted\>.database.windows.net
+ConnectTimeout           : 30
+ConnectionString         : Data Source=\<redacted\>.database.windows.net;Connect Timeout=30;Authentication=Active Directory Integrated
+PS\> $instance | Remove-SqlTestAzureInstance
+Removes the Azure SQL Server created by this example.
+The resource group remains and is not removed by this command.
 
 ## PARAMETERS
 
@@ -101,3 +118,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestAzureInstance.html)
+

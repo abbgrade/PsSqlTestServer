@@ -6,11 +6,16 @@ function Remove-Instance {
     Removes a test SQL server.
 
     .DESCRIPTION
-    Removes a SQL server, in case it was created with `New-SqlTestInstance`.
+    Removes a SQL Server instance created by New-SqlTestInstance, using its provider-specific removal command.
 
     .EXAMPLE
     PS> $Instance = New-SqlTestInstance
-    PS> Remove-SqlTestInstance -Server $Instance
+    PS> $Instance | Remove-SqlTestInstance
+    Removes the instance created by this example.
+    Illustrative output: the instance is removed; output depends on the selected provider.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html
 
     #>
 

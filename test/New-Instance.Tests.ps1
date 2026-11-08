@@ -3,26 +3,33 @@
 Describe New-Instance {
 
     BeforeAll {
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
     }
 
-    It 'Provides a SQL server' {
-        $Instance = New-SqlTestInstance
+    Context IntegrationTests -Tag IntegrationTest {
+        AfterEach {
+            if ( $Instance ) {
+                $Instance | Remove-SqlTestInstance
+            }
+        }
 
-        $Instance | Should -Not -BeNullOrEmpty
-        $Instance.ConnectionString | Should -Not -BeNullOrEmpty
-        $Instance.DataSource | Should -Not -BeNullOrEmpty
-    }
+        It 'creates a SQL server when a provider is available' {
+            # Act
+            $Instance = New-SqlTestInstance
 
-    It 'Provides unique SQL servers' {
-        $Instance = @((New-SqlTestInstance), (New-SqlTestInstance))
-        $Instance.Count | Should -Be 2
-        $Instance[0].DataSource | Should -Not -Be $Instance[1].DataSource -Because 'two instances must have unique names'
-    }
+            # Assert
+            $Instance | Should -Not -BeNullOrEmpty
+            $Instance.ConnectionString | Should -Not -BeNullOrEmpty
+            $Instance.DataSource | Should -Not -BeNullOrEmpty
+        }
 
-    AfterEach {
-        if ( $Instance ) {
-            $Instance | Remove-SqlTestInstance
+        It 'creates SQL servers with unique data sources' {
+            # Act
+            $Instance = @((New-SqlTestInstance), (New-SqlTestInstance))
+
+            # Assert
+            $Instance.Count | Should -Be 2
+            $Instance[0].DataSource | Should -Not -Be $Instance[1].DataSource -Because 'two instances must have unique names'
         }
     }
 }

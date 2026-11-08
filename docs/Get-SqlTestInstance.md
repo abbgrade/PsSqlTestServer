@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestInstance.html
 schema: 2.0.0
 ---
 
@@ -17,18 +17,24 @@ Get-SqlTestInstance [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks different versions of local db or creates a Docker container with a SQL server installed.
-Returns a object with the properties DataSource and ConnectionString.
+Checks whether LocalDB is available and returns its instance information.
+If unavailable, writes an error.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 Get-SqlTestInstance
-ConnectionString                                            DataSource
-----------------                                            ----------
-Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True (LocalDb)\MSSQLLocalDB
+Gets an available LocalDB instance. Requires PsSqlLocalDb and an installed LocalDB utility.
+Captured output (instance name and version vary by environment):
 ```
+
+Name             : \<redacted\>
+Version          : 15.0.4382.1
+DataSource       : (LocalDb)\\\<redacted\>
+ConnectTimeout   : 30
+ConnectionString : Data Source=(LocalDb)\\\<redacted\>;Connect Timeout=30;Integrated Security=True
+IsLocalDb        : True
 
 ## PARAMETERS
 
@@ -57,3 +63,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestInstance.html)
+

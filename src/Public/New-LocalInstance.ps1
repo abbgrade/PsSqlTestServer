@@ -3,21 +3,27 @@ function New-LocalInstance {
     <#
 
     .SYNOPSIS
-    Returns connection parameters to new localDb.
+    Creates a LocalDB instance and returns its connection parameters. Requires PsSqlLocalDb and an installed LocalDB utility.
 
     .DESCRIPTION
     Uses [SqlLocalDB Utility](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
 
     .EXAMPLE
-    PS> New-SqlTestLocalInstance
+    PS> $instance = New-SqlTestLocalInstance
+    Creates a temporary LocalDB instance. The selected SQL Server version depends on the versions installed locally.
+    Captured output (temporary instance name redacted; the installed version may vary):
 
-    [PSCustomObject]
+    Name             : test-<redacted>
+    Version          : 15.0.4382.1
+    DataSource       : (LocalDb)\test-<redacted>
+    ConnectTimeout   : 30
+    ConnectionString : Data Source=(LocalDb)\test-<redacted>;Connect Timeout=30;Integrated Security=True
+    IsLocalDb        : True
+    PS> $instance | Remove-SqlTestLocalInstance
+    Removes the LocalDB instance created by this example.
 
-    Name                           Value
-    ----                           -----
-    DataSource                     (LocalDb)\test-18f57083
-    ConnectionString               Data Source=(LocalDb)\test-18f57083;Integrated Security=True
-    Version                        v11.0
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestLocalInstance.html
 
     #>
 
@@ -32,20 +38,30 @@ function New-LocalInstance {
         [Parameter()]
         [System.Version] $Version,
 
-        # Speficies if a SqlClient connection should be created.
+        # Specifies whether a SqlClient connection should be created.
         [Parameter()]
         [switch] $Connected
     )
 
-    Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
+    $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.4 -PassThru
+    if ( -not $LocalDbModule ) {
+        return
+    }
 
     # create instance
     $Instance = New-LocalDbInstance -Name $Name -Version:$Version
+    if ( -not $Instance ) {
+        return
+    }
 
     # add metadata
     $Instance | Add-Member DataSource "(LocalDb)\$( $Instance.Name )"
     $Instance | Add-Member ConnectTimeout 30
-    $Instance | Add-Member ConnectionString "Data Source=$( $Instance.DataSource );Connect Timeout=$( $Instance.ConnectTimeout );Integrated Security=True"
+    $Instance | Add-Member ConnectionString ( New-SqlConnectionString `
+            -DataSource $Instance.DataSource `
+            -ConnectTimeout $Instance.ConnectTimeout `
+            -Authentication 'Integrated Security=True'
+    )
     $Instance | Add-Member IsLocalDb $true
 
     # connect instance if needed

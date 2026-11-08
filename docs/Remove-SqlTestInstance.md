@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html
 schema: 2.0.0
 ---
 
@@ -17,14 +17,16 @@ Remove-SqlTestInstance -Instance <Object> [-ProgressAction <ActionPreference>] [
 ```
 
 ## DESCRIPTION
-Removes a SQL server, in case it was created with \`New-SqlTestInstance\`.
+Removes a SQL Server instance created by New-SqlTestInstance, using its provider-specific removal command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 $Instance = New-SqlTestInstance
-PS> Remove-SqlTestInstance -Server $Instance
+PS> $Instance | Remove-SqlTestInstance
+Removes the instance created by this example.
+Illustrative output: the instance is removed; output depends on the selected provider.
 ```
 
 ## PARAMETERS
@@ -69,3 +71,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestInstance.html)
+

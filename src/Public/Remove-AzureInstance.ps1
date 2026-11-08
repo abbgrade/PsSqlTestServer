@@ -6,11 +6,17 @@ function Remove-AzureInstance {
     Removes a test Azure SQL Server.
 
     .DESCRIPTION
-    Removes a Azure SQL Server, in case it was created with `New-SqlTestAzureInstance`.
+    Removes an Azure SQL Server created by New-SqlTestAzureInstance. Requires Az modules and an authenticated Azure context.
 
     .EXAMPLE
-    PS> $instance = New-SqlTestAzureInstance -Subscription 'MyAzureSubscription'
+    PS> Connect-AzAccount
+    PS> $instance = New-SqlTestAzureInstance -Location 'westeurope'
     PS> $instance | Remove-SqlTestAzureInstance
+    Removes the Azure SQL Server created for this example. The resource group remains.
+    Illustrative output: server removal status depends on the Az module version.
+
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Remove-SqlTestAzureInstance.html
 
     #>
 

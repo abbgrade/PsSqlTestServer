@@ -7,7 +7,50 @@ Describe New-AzureDatabase -Tag Azure {
         if ( Get-Module Az.Accounts -ListAvailable ) {
             Import-Module Az.Accounts
         }
-        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -Force -ErrorAction Stop
+        Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
+    }
+
+    Context UnitTests -Tag UnitTest {
+        It 'returns a connection string with the database catalog' {
+            # Arrange
+            Mock New-AzSqlDatabase {
+                [pscustomobject]@{
+                    DatabaseName = 'test-database'
+                }
+            } -ModuleName PsSqlTestServer
+            $server = [pscustomobject]@{
+                ServerName = 'test-server'
+                ResourceGroupName = 'PsSqlTestServer'
+                FullyQualifiedDomainName = 'server.example.com'
+            }
+
+            # Act
+            $database = New-SqlTestAzureDatabase -Server $server
+
+            # Assert
+            $database.DataSource | Should -Be 'server.example.com'
+            $database.InitialCatalog | Should -Be 'test-database'
+            $database.ConnectTimeout | Should -Be 30
+            $database.ConnectionString | Should -Be 'Data Source=server.example.com;Connect Timeout=30;Initial Catalog=test-database'
+        }
+
+        It 'returns after a non-terminating database creation error' {
+            # Arrange
+            Mock New-AzSqlDatabase { Write-Error 'Database creation failed' } -ModuleName PsSqlTestServer
+            $server = [pscustomobject]@{
+                ServerName = 'test-server'
+                ResourceGroupName = 'PsSqlTestServer'
+                FullyQualifiedDomainName = 'server.example.com'
+            }
+            $errors = @()
+
+            # Act
+            $database = New-SqlTestAzureDatabase -Server $server -ErrorAction SilentlyContinue -ErrorVariable errors
+
+            # Assert
+            $database | Should -BeNullOrEmpty
+            $errors.Count | Should -Be 1
+        }
     }
 
     Context IntegrationTests -Tag IntegrationTest {
@@ -48,10 +91,15 @@ Describe New-AzureDatabase -Tag Azure {
                     }
                 }
 
-                It 'Returns values' {
+                BeforeDiscovery {
+                    $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
+                }
+
+                It 'returns Azure database metadata for a server' {
                     if ( -Not $AzureAvailable ) {
                         Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
                     }
+                    # Assert
                     $Database | Should -Not -BeNullOrEmpty
                     $Database.DataSource | Should -Not -BeNullOrEmpty
                     $Database.InitialCatalog | Should -Not -BeNullOrEmpty
@@ -59,41 +107,48 @@ Describe New-AzureDatabase -Tag Azure {
                     $Database.ConnectionString | Should -Not -BeNullOrEmpty
                 }
 
-                BeforeDiscovery {
-                    $PsSqlClient = Import-Module PsSqlClient -PassThru -ErrorAction SilentlyContinue
-                }
-
                 Context PsSqlClient -Skip:( -Not $PsSqlClient ) {
-
-                    It 'Connects by pipeline' {
-                        if ( -Not $AzureAvailable ) {
-                            Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
+                    AfterEach {
+                        if ( $SqlConnection ) {
+                            Disconnect-TSqlInstance -Connection $SqlConnection
                         }
-                        $SqlConnection = $Database | Connect-TSqlInstance -ErrorAction Stop
                     }
 
-                    It 'Connects by DataSource' {
+                    It 'connects using pipeline input' {
                         if ( -Not $AzureAvailable ) {
                             Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
                         }
+                        # Act
+                        $SqlConnection = $Database | Connect-TSqlInstance -ErrorAction Stop
+
+                        # Assert
+                        $SqlConnection | Should -Not -BeNullOrEmpty
+                    }
+
+                    It 'connects using the data source' {
+                        if ( -Not $AzureAvailable ) {
+                            Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
+                        }
+                        # Act
                         $SqlConnection = Connect-TSqlInstance `
                             -DataSource $Database.DataSource `
                             -InitialCatalog $Database.InitialCatalog `
                             -ConnectTimeout $Database.ConnectTimeout `
                             -ErrorAction Stop
+
+                        # Assert
+                        $SqlConnection | Should -Not -BeNullOrEmpty
                     }
 
-                    It 'Connects by ConnectionString' {
+                    It 'connects using the connection string' {
                         if ( -Not $AzureAvailable ) {
                             Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
                         }
+                        # Act
                         $SqlConnection = Connect-TSqlInstance -ConnectionString $Database.ConnectionString -ErrorAction Stop
-                    }
 
-                    AfterEach {
-                        if ( $SqlConnection ) {
-                            Disconnect-TSqlInstance -Connection $SqlConnection
-                        }
+                        # Assert
+                        $SqlConnection | Should -Not -BeNullOrEmpty
                     }
                 }
             }
@@ -113,10 +168,11 @@ Describe New-AzureDatabase -Tag Azure {
                 }
             }
 
-            It 'Returns values' {
+            It 'returns Azure database connection metadata' {
                 if ( -Not $AzureAvailable ) {
                     Set-ItResult -Skipped -Because 'Azure modules or an authenticated context are unavailable'
                 }
+                # Assert
                 $Database | Should -Not -BeNullOrEmpty
                 $Database.DataSource | Should -Not -BeNullOrEmpty
                 $Database.InitialCatalog | Should -Not -BeNullOrEmpty

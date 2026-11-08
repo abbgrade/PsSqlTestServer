@@ -3,21 +3,26 @@ function Get-LocalInstance {
     <#
 
     .SYNOPSIS
-    Returns connection parameters to a available localDb.
+    Returns connection parameters for an available LocalDB instance.
 
     .DESCRIPTION
-    Uses [SqlLocalDB Utility](https://docs.microsoft.com/en-us/sql/tools/sqllocaldb-utility?view=sql-server-ver15) to get info about the available local db.
+    Uses PsSqlLocalDb and the [SqlLocalDB utility](https://learn.microsoft.com/sql/tools/sqllocaldb-utility)
+    to retrieve available LocalDB instances.
 
     .EXAMPLE
     PS> Get-SqlTestLocalInstance
+    Gets the first available LocalDB instance. Requires PsSqlLocalDb and an installed LocalDB utility.
+    Captured output (instance name redacted; the installed version may vary):
 
-    [PSCustomObject]
+    Name             : <redacted>
+    Version          : 15.0.4382.1
+    DataSource       : (LocalDb)\<redacted>
+    ConnectTimeout   : 30
+    ConnectionString : Data Source=(LocalDb)\<redacted>;Connect Timeout=30;Integrated Security=True
+    IsLocalDb        : True
 
-    Name                           Value
-    ----                           -----
-    DataSource                     (LocalDb)\MSSQLLocalDB
-    ConnectionString               Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True
-    Version                        v11.0
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Get-SqlTestLocalInstance.html
 
     #>
 
@@ -32,7 +37,10 @@ function Get-LocalInstance {
         [System.Version] $Version
     )
 
-    Import-Module PsSqlLocalDb -MinimumVersion 0.4 -ErrorAction Stop
+    $LocalDbModule = Import-Module PsSqlLocalDb -MinimumVersion 0.4 -PassThru
+    if ( -not $LocalDbModule ) {
+        return
+    }
 
     $selectParam = @{}
     if ( $First ) {
@@ -45,7 +53,11 @@ function Get-LocalInstance {
         # add metadata
         $instance | Add-Member 'DataSource' "(LocalDb)\$( $instance.Name )"
         $instance | Add-Member 'ConnectTimeout' 30
-        $instance | Add-Member 'ConnectionString' "Data Source=$( $instance.DataSource );Connect Timeout=$( $instance.ConnectTimeout );Integrated Security=True"
+        $instance | Add-Member 'ConnectionString' ( New-SqlConnectionString `
+                -DataSource $instance.DataSource `
+                -ConnectTimeout $instance.ConnectTimeout `
+                -Authentication 'Integrated Security=True'
+        )
         $instance | Add-Member 'IsLocalDb' $true
 
         # return

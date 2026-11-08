@@ -1,7 +1,7 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestDocker.html
 schema: 2.0.0
 ---
 
@@ -17,16 +17,16 @@ Test-SqlTestDocker [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Checks if psdocker is installed, and if the Docker service is running.
+Checks whether psdocker is installed and the Docker service is running.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 Test-SqlTestDocker
+Checks whether a Docker-backed SQL Server can be created.
+Illustrative output: $true when Docker is available and running and $false otherwise.
 ```
-
-True
 
 ## PARAMETERS
 
@@ -56,3 +56,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestDocker.html](https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestDocker.html)
+

@@ -8,7 +8,7 @@ Describe Test-Azure -Tag Azure {
             Import-Module $PSScriptRoot\..\src\PsSqlTestServer.psd1 -ErrorAction Stop
         }
 
-        It 'works' {
+        It 'returns a boolean indicating Azure availability' {
             # Arrange
             if ( -Not $AzSqlModule ) {
                 Set-ItResult -Skipped -Because 'Az.Sql is unavailable'

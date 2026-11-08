@@ -6,12 +6,15 @@ function Test-Docker {
     Tests if a Docker-based SQL Server can be created.
 
     .DESCRIPTION
-    Checks if psdocker is installed, and if the Docker service is running.
+    Checks whether psdocker is installed and the Docker service is running.
 
     .EXAMPLE
     PS> Test-SqlTestDocker
+    Checks whether a Docker-backed SQL Server can be created.
+    Illustrative output: $true when Docker is available and running and $false otherwise.
 
-    True
+    .LINK
+    https://abbgrade.github.io/PsSqlTestServer/docs/Test-SqlTestDocker.html
 
     .OUTPUTS
     bool

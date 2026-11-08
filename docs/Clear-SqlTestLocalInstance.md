@@ -1,14 +1,14 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/Clear-SqlTestLocalInstance.html
 schema: 2.0.0
 ---
 
 # Clear-SqlTestLocalInstance
 
 ## SYNOPSIS
-Remove all localdb test instances
+Removes all LocalDB test instances created by this module.
 
 ## SYNTAX
 
@@ -17,21 +17,23 @@ Clear-SqlTestLocalInstance [-WhatIf] [-ProgressAction <ActionPreference>] [<Comm
 ```
 
 ## DESCRIPTION
-Remove all instances created by New-LocalInstance.
+Removes instances created by New-SqlTestLocalInstance.
 These are identified using the 'test-' prefix.
+Requires PsSqlLocalDb.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Clear-SqlTestLocalInstance
+Clear-SqlTestLocalInstance -WhatIf
+Previews removal of all matching LocalDB test instances without removing them.
+Illustrative output: no instances are removed; verbose output depends on the matching instances.
 ```
 
 ## PARAMETERS
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+Previews removal without removing matching instances.
 
 ```yaml
 Type: SwitchParameter
@@ -70,3 +72,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/Clear-SqlTestLocalInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/Clear-SqlTestLocalInstance.html)
+

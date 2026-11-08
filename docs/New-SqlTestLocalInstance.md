@@ -1,14 +1,15 @@
 ---
 external help file: PsSqlTestServer-help.xml
 Module Name: PsSqlTestServer
-online version:
+online version: https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestLocalInstance.html
 schema: 2.0.0
 ---
 
 # New-SqlTestLocalInstance
 
 ## SYNOPSIS
-Returns connection parameters to new localDb.
+Creates a LocalDB instance and returns its connection parameters.
+Requires PsSqlLocalDb and an installed LocalDB utility.
 
 ## SYNTAX
 
@@ -24,16 +25,19 @@ Uses \[SqlLocalDB Utility\](https://docs.microsoft.com/en-us/sql/tools/sqllocald
 
 ### EXAMPLE 1
 ```
-New-SqlTestLocalInstance
+$instance = New-SqlTestLocalInstance
+Creates a temporary LocalDB instance. The selected SQL Server version depends on the versions installed locally.
+Captured output (temporary instance name redacted; the installed version may vary):
 ```
 
-\[PSCustomObject\]
-
-Name                           Value
-----                           -----
-DataSource                     (LocalDb)\test-18f57083
-ConnectionString               Data Source=(LocalDb)\test-18f57083;Integrated Security=True
-Version                        v11.0
+Name             : test-\<redacted\>
+Version          : 15.0.4382.1
+DataSource       : (LocalDb)\test-\<redacted\>
+ConnectTimeout   : 30
+ConnectionString : Data Source=(LocalDb)\test-\<redacted\>;Connect Timeout=30;Integrated Security=True
+IsLocalDb        : True
+PS\> $instance | Remove-SqlTestLocalInstance
+Removes the LocalDB instance created by this example.
 
 ## PARAMETERS
 
@@ -68,7 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### -Connected
-Speficies if a SqlClient connection should be created.
+Specifies whether a SqlClient connection should be created.
 
 ```yaml
 Type: SwitchParameter
@@ -107,3 +111,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
+[https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestLocalInstance.html](https://abbgrade.github.io/PsSqlTestServer/docs/New-SqlTestLocalInstance.html)
+
