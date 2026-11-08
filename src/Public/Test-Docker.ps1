@@ -24,7 +24,7 @@ function Test-Docker {
     [CmdletBinding()]
     param ()
 
-    $psDockerModule = Import-Module psdocker -MinimumVersion '1.9.0' -PassThru -ErrorAction SilentlyContinue
+    $psDockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru -ErrorAction SilentlyContinue
 
     if ( $psDockerModule ) {
         Write-Verbose "psdocker $( $psDockerModule.Version ) is installed."

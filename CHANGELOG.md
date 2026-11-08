@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updated the psdocker dependency to 1.10.0.
 - Expanded comment-based help and refreshed generated Markdown help for all public commands.
 - Added captured LocalDB output to the `Get-SqlTestInstance` example.
 - Replaced illustrative output with captured output for locally runnable Get and New command examples.

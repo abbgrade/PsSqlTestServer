@@ -62,7 +62,7 @@ function New-DockerInstance {
         return
     }
 
-    $DockerModule = Import-Module psdocker -MinimumVersion '1.9.0' -PassThru
+    $DockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru
     if ( -not $DockerModule ) {
         return
     }
