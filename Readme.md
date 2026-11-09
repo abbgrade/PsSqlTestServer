@@ -20,31 +20,6 @@ This module can be installed from [PsGallery](https://www.powershellgallery.com/
 Install-Module -Name PsSqlTestServer -AllowPrerelease
 ```
 
-Azure functionality is optional. For an Az 14.0.0-compatible setup, install
-`Az.Accounts` 5.0.0, `Az.Resources` 8.0.0, and `Az.Sql` 6.0.4:
-
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 5.0.0 -Scope CurrentUser
-Install-Module -Name Az.Resources -RequiredVersion 8.0.0 -Scope CurrentUser
-Install-Module -Name Az.Sql -RequiredVersion 6.0.4 -Scope CurrentUser
-```
-
-Az 14.0.0 specifies `Az.Accounts` 5.0.0 or later, but compatibility with later
-versions is not established by that dependency alone.
-
-Az 12.0.0 specifies `Az.Accounts` 3.0.0 or later, `Az.Resources` 7.1.0, and
-`Az.Sql` 5.0.0. To install the corresponding baseline versions:
-
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 3.0.0 -Scope CurrentUser
-Install-Module -Name Az.Resources -RequiredVersion 7.1.0 -Scope CurrentUser
-Install-Module -Name Az.Sql -RequiredVersion 5.0.0 -Scope CurrentUser
-```
-
-These are the Az 12.0.0 dependencies; compatibility with PsSqlTestServer and
-its PsSqlClient dependency has not been established by the dependency metadata.
-The Az modules are not required to install or use non-Azure features.
-
 Alternatively it can be built and installed from the sources:
 
 1. Install the development dependencies
@@ -53,6 +28,48 @@ Alternatively it can be built and installed from the sources:
 
 ```powershell
 Invoke-Build Install
+```
+
+### Compatibility
+
+The Az modules are not required to install or use non-Azure features.
+
+| Module | [Az 12.0.0](https://www.powershellgallery.com/packages/Az/12.0.0) | [Az 12.5.0](https://www.powershellgallery.com/packages/Az/12.5.0) (latest 12.x) | [Az 14.0.0](https://www.powershellgallery.com/packages/Az/14.0.0) | [Az 14.6.0](https://www.powershellgallery.com/packages/Az/14.6.0) (latest 14.x) |
+| --- | --- | --- | --- | --- |
+| `Az.Accounts` | 3.0.0 or later | 3.0.5 or later | 5.0.0 or later | 5.3.0 or later |
+| `Az.Resources` | 7.1.0 | 7.6.0 | 8.0.0 | 8.1.1 |
+| `Az.Sql` | 5.0.0 | 5.3.0 | 6.0.4 | 6.3.0 |
+
+#### Az 14 (LTS) - latest
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 5.3.0
+Install-Module -Name Az.Resources -RequiredVersion 8.1.1
+Install-Module -Name Az.Sql -RequiredVersion 6.3.0
+```
+
+#### Az 14 (LTS)
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 5.0.0
+Install-Module -Name Az.Resources -RequiredVersion 8.0.0
+Install-Module -Name Az.Sql -RequiredVersion 6.0.4
+```
+
+#### Az 12 (LTS) - latest
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 3.0.0
+Install-Module -Name Az.Resources -RequiredVersion 7.1.0
+Install-Module -Name Az.Sql -RequiredVersion 5.0.0
+```
+
+#### Az 12 (LTS)
+
+```powershell
+Install-Module -Name Az.Accounts -RequiredVersion 3.0.5
+Install-Module -Name Az.Resources -RequiredVersion 7.6.0
+Install-Module -Name Az.Sql -RequiredVersion 5.3.0
 ```
 
 ## Development
@@ -100,7 +117,7 @@ Invoke-Build Install
 
 ### Build
 
-The build scripts require InvokeBuild. If it is not installed, install it with the command `Install-Module InvokeBuild -Scope CurrentUser`.
+The build scripts require InvokeBuild. If it is not installed, install it with the command `Install-Module InvokeBuild`.
 
 You can build the module using the VS Code build task or with the command `Invoke-Build Build`.
 
