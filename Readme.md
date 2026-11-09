@@ -59,17 +59,17 @@ Install-Module -Name Az.Sql -RequiredVersion 6.0.4
 #### Az 12 (LTS) - latest
 
 ```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 3.0.0
-Install-Module -Name Az.Resources -RequiredVersion 7.1.0
-Install-Module -Name Az.Sql -RequiredVersion 5.0.0
+Install-Module -Name Az.Accounts -RequiredVersion 3.0.5
+Install-Module -Name Az.Resources -RequiredVersion 7.6.0
+Install-Module -Name Az.Sql -RequiredVersion 5.3.0
 ```
 
 #### Az 12 (LTS)
 
 ```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 3.0.5
-Install-Module -Name Az.Resources -RequiredVersion 7.6.0
-Install-Module -Name Az.Sql -RequiredVersion 5.3.0
+Install-Module -Name Az.Accounts -RequiredVersion 3.0.0
+Install-Module -Name Az.Resources -RequiredVersion 7.1.0
+Install-Module -Name Az.Sql -RequiredVersion 5.0.0
 ```
 
 ## Development
