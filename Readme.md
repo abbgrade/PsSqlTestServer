@@ -48,7 +48,7 @@ Install-Module -Name Az.Resources -RequiredVersion 8.1.1
 Install-Module -Name Az.Sql -RequiredVersion 6.3.0
 ```
 
-#### Az 14 (LTS)
+#### Az 14 (LTS) - initial
 
 ```powershell
 Install-Module -Name Az.Accounts -RequiredVersion 5.0.0
@@ -64,7 +64,7 @@ Install-Module -Name Az.Resources -RequiredVersion 7.6.0
 Install-Module -Name Az.Sql -RequiredVersion 5.3.0
 ```
 
-#### Az 12 (LTS)
+#### Az 12 (LTS) - initial
 
 ```powershell
 Install-Module -Name Az.Accounts -RequiredVersion 3.0.0
