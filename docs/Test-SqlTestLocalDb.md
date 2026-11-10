@@ -19,13 +19,15 @@ Test-SqlTestLocalDb [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ## DESCRIPTION
 Checks whether PsSqlLocalDb and the \[SqlLocalDB utility\](https://learn.microsoft.com/sql/tools/sqllocaldb-utility)
 are available.
+Writes installed LocalDB versions to verbose output.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-SqlTestLocalDb
+Test-SqlTestLocalDb -Verbose
 Checks whether LocalDB instances can be used on this computer.
+Verbose output includes the installed LocalDB version names and numbers.
 Illustrative output: $true when the LocalDB utility is available and $false otherwise.
 ```
 

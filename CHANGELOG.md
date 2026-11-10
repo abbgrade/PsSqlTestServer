@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added verbose output showing the versions of the Az modules used by `Test-SqlTestAzure`.
+- Added verbose output showing installed LocalDB versions in `Test-SqlTestLocalDb`.
+
+### Changed
+
+- Clarified the optional dependencies and tested versions for the Azure SQL, Docker, and LocalDB backends in the README.
+
 ## [1.8.0] - 2026-11-08
 
 ### Changed

@@ -18,14 +18,15 @@ Test-SqlTestAzure [-ProgressAction <ActionPreference>] [<CommonParameters>]
 
 ## DESCRIPTION
 Checks whether the required Az modules are installed and an Azure account is authenticated.
+Writes the version of each required Az module to verbose output.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-SqlTestAzure
+Test-SqlTestAzure -Verbose
 Checks whether Azure-backed SQL Server operations can be used in the current session.
-Illustrative output: $true when requirements are met and $false otherwise; results depend on installed modules and authentication.
+Illustrative output includes the installed module versions and $true when requirements are met; results depend on installed modules and authentication.
 ```
 
 ## PARAMETERS

@@ -32,45 +32,22 @@ Invoke-Build Install
 
 ### Compatibility
 
-The Az modules are not required to install or use non-Azure features.
+Install only the optional dependencies for the backends you plan to use:
 
-| Module | [Az 12.0.0](https://www.powershellgallery.com/packages/Az/12.0.0) | [Az 12.5.0](https://www.powershellgallery.com/packages/Az/12.5.0) (latest 12.x) | [Az 14.0.0](https://www.powershellgallery.com/packages/Az/14.0.0) | [Az 14.6.0](https://www.powershellgallery.com/packages/Az/14.6.0) (latest 14.x) |
-| --- | --- | --- | --- | --- |
-| `Az.Accounts` | 3.0.0 or later | 3.0.5 or later | 5.0.0 or later | 5.3.0 or later |
-| `Az.Resources` | 7.1.0 | 7.6.0 | 8.0.0 | 8.1.1 |
-| `Az.Sql` | 5.0.0 | 5.3.0 | 6.0.4 | 6.3.0 |
+| Backend | Required dependency | Tested versions |
+| --- | --- | --- |
+| Azure SQL | Az modules (see versions below) | Az 12.2.0 and 16.4.0 |
+| SQL Server in Docker | psdocker | 1.10.0 or later |
+| SQL Server LocalDB | PsSqlLocalDb | 0.6.0 or later |
 
-#### Az 14 (LTS) - latest
+Non-Azure backends do not require the Az modules. The following Az module
+versions were tested:
 
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 5.3.0
-Install-Module -Name Az.Resources -RequiredVersion 8.1.1
-Install-Module -Name Az.Sql -RequiredVersion 6.3.0
-```
-
-#### Az 14 (LTS) - initial
-
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 5.0.0
-Install-Module -Name Az.Resources -RequiredVersion 8.0.0
-Install-Module -Name Az.Sql -RequiredVersion 6.0.4
-```
-
-#### Az 12 (LTS) - latest
-
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 3.0.5
-Install-Module -Name Az.Resources -RequiredVersion 7.6.0
-Install-Module -Name Az.Sql -RequiredVersion 5.3.0
-```
-
-#### Az 12 (LTS) - initial
-
-```powershell
-Install-Module -Name Az.Accounts -RequiredVersion 3.0.0
-Install-Module -Name Az.Resources -RequiredVersion 7.1.0
-Install-Module -Name Az.Sql -RequiredVersion 5.0.0
-```
+| Module | [Az 12.2.0](https://www.powershellgallery.com/packages/Az/12.2.0) | [Az 16.4.0](https://www.powershellgallery.com/packages/Az/16.4.0) |
+| --- | --- | --- |
+| `Az.Accounts` | 3.0.3 | 5.5.4 |
+| `Az.Resources` | 7.3.0 | 10.2.2 |
+| `Az.Sql` | 5.2.0 | 7.3.0 |
 
 ## Development
 
@@ -94,6 +71,7 @@ Install-Module -Name Az.Sql -RequiredVersion 5.0.0
   $env:PSSQLTESTSERVER_AZURE_SUBSCRIPTION = 'My Azure subscription'
   Invoke-Pester
   ```
+
 - Azure integration tests create SQL servers. Set `PSSQLTESTSERVER_AZURE_LOCATION`
   to a region where your subscription can create SQL servers (for example,
   `northeurope`). Without it, the existing resource group's location is used.
