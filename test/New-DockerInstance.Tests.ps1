@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe New-DockerInstance {
+Describe New-DockerInstance -Tag Docker {
 
     BeforeDiscovery {
         if ( Get-Module psdocker -ListAvailable ) {

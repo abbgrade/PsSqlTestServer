@@ -12,6 +12,10 @@ See [the command reference](./docs/) for descriptions and examples.
 
 See the [changelog](./CHANGELOG.md) file.
 
+## Architecture Decision Records
+
+See the [Architecture Decision Records](./adr/README.md).
+
 ## Installation
 
 This module can be installed from [PsGallery](https://www.powershellgallery.com/packages/PsSqlTestServer).
@@ -92,6 +96,7 @@ versions were tested:
 - This project uses [git-flow](https://github.com/nvie/gitflow).
 - This project uses [keep a changelog](https://keepachangelog.com/en/1.0.0/).
 - This project uses [PsBuildTasks](https://github.com/abbgrade/PsBuildTasks).
+- Architectural decisions are documented as [MADR](https://adr.github.io/madr/).
 
 ### Build
 

@@ -54,11 +54,11 @@
         {
             "label": "Update docs",
             "type": "shell",
-            "command": "Invoke-Build UpdateDocs",
+            "command": "Invoke-Build Doc.Update",
             "problemMatcher": []
         },
         {
-            "label": "Test",
+            "label": "All Tests",
             "group": "test",
             "type": "shell",
             "command": "Invoke-Pester",
@@ -73,10 +73,10 @@
             "dependsOn": "Build"
         },
         {
-            "label": "Test SqlLocalDB",
+            "label": "Unit Tests",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'SqlLocalDB' } }",
+            "command": "Invoke-Pester -Tag UnitTest",
             "options": {
                 "cwd": "${workspaceFolder}/test"
             },
@@ -88,10 +88,10 @@
             "dependsOn": "Build"
         },
         {
-            "label": "Test Docker",
+            "label": "Integration Tests",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Docker' } }",
+            "command": "Invoke-Pester -Tag IntegrationTest",
             "options": {
                 "cwd": "${workspaceFolder}/test"
             },
@@ -103,10 +103,10 @@
             "dependsOn": "Build"
         },
         {
-            "label": "Test Azure",
+            "label": "Unit Tests: Azure",
             "group": "test",
             "type": "shell",
-            "command": "Invoke-Pester -Configuration @{ Filter = @{ Tag = 'Azure' } }",
+            "command": "Invoke-Pester -TagFilter Azure -ExcludeTagFilter IntegrationTest",
             "options": {
                 "cwd": "${workspaceFolder}/test"
             },
@@ -117,5 +117,80 @@
             },
             "dependsOn": "Build"
         },
+        {
+            "label": "Integration Tests: Azure",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -TagFilter Azure -ExcludeTagFilter UnitTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "Unit Tests: Docker",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -TagFilter Docker -ExcludeTagFilter IntegrationTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "Integration Tests: Docker",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -TagFilter Docker -ExcludeTagFilter UnitTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "Unit Tests: LocalDB",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -TagFilter SqlLocalDB -ExcludeTagFilter IntegrationTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        },
+        {
+            "label": "Integration Tests: LocalDB",
+            "group": "test",
+            "type": "shell",
+            "command": "Invoke-Pester -TagFilter SqlLocalDB -ExcludeTagFilter UnitTest",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "echo": false,
+                "showReuseMessage": false
+            },
+            "dependsOn": "Build"
+        }
     ]
 }

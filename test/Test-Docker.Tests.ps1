@@ -1,6 +1,6 @@
 #Requires -Modules @{ ModuleName='Pester'; ModuleVersion='5.0.0' }
 
-Describe Test-Docker {
+Describe Test-Docker -Tag Docker {
 
     BeforeDiscovery {
         $PsDockerModule = Import-Module psdocker -MinimumVersion '1.10.0' -PassThru -ErrorAction SilentlyContinue
